@@ -1,196 +1,472 @@
 /* 页面样式 */
 .page {
-    background-color: #f5f5f5;
-    padding: 16rpx;
-    position: relative;
-    min-height: 100vh;
-  }
-  
-  /* 标题区域 */
-  .header {
-    background-color: #ffffff;
-    padding: 16rpx;
-    border-radius: 8rpx;
-  }
-  
-  .title {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* 地图展示区域 */
-  .map-container {
-    margin-top: 16rpx;
-    background-color: #f5f5f5;
-    padding: 20rpx;
-    border-radius: 8rpx;
-  }
-  
-  .map {
-    width: 100%;
-    height: 500rpx;
-  }
-  
-  /* AI 思考中的状态 */
-  .ai-thinking-container {
-    text-align: center;
-    margin-top: 40rpx;
-  }
-  
-  .ai-avatar {
-    background-color: #FFD700;
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
-    margin: 0 auto;
-  }
-  
-  .thinking-text {
-    margin-top: 12rpx;
-    font-size: 28rpx;
-    color: #333;
-  }
-  
-  /* 问题选择区域容器 - 移除弹窗样式 */
-  .overlay {
-    margin-top: 32rpx;
-    padding: 0 16rpx;
-    padding-bottom: 120rpx; /* 为底部按钮留出空间 */
-  }
-  
-  /* 问题选择区域 */
-  .question-selection {
-    background-color: #ffffff;
-    padding: 32rpx;
-    border-radius: 16rpx;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
-  }
-  
-  /* 标题区域：问题选择标题和AI头像的容器 */
-  .question-title-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 32rpx;
-  }
-  
-  /* AI头像样式 */
-  .ai-avatar {
-    width: 48rpx;
-    height: 48rpx;
-    border-radius: 50%;
-    margin-right: 16rpx;
-    background-color: #FFD700;
-  }
-  
-  /* 问题标题样式 */
-  .question-title {
-    font-size: 32rpx;
-    color: #333;
-    font-weight: 500;
-    flex: 1;
-  }
-  
-  /* 问题列表 */
-  .question-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16rpx;
-  }
-  
-  /* 每个问题项 */
-  .question-item {
-    display: flex;
-    flex-direction: column;
-    padding: 24rpx;
-    background-color: #f8f8f8;
-    border-radius: 12rpx;
-    position: relative;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  /* 选中问题时背景变色 */
-  .question-item.selected {
-    background-color: #FFD700; /* 黄色背景表示选中 */
-  }
+  min-height: 100vh;
+  background: #FFFFFF;
+  position: relative;
+}
 
-  /* 选中状态下的文本样式 */
-  .question-item.selected .question-text {
-    color: #333;
-    font-weight: bold;
-  }
+/* 标题区域 */
+.header {
+  padding: 20rpx 30rpx;
+  position: relative;
+}
 
-  .question-item.selected .question-desc {
-    color: #666;
-  }
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 
-  .question-item.selected .arrow {
-    color: #333;
+/* 地图容器 */
+.map-container {
+  position: relative;
+  margin: 0;
+  height: 45vh; /* 增加地图高度 */
+  min-height: 300rpx; /* 减少最小高度确保其他内容有空间 */
+  border-radius: 25rpx; /* 添加圆角，与卡片风格保持一致 */
+  overflow: hidden;
+  box-shadow: none;
+  background: #f5f5f5; /* 添加背景色，便于调试 */
+  flex-shrink: 0; /* 防止地图被压缩 */
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  border-radius: 25rpx; /* 添加圆角，与容器保持一致 */
+}
+
+
+
+/* 返回按钮样式调整 */
+.back-btn {
+  position: absolute;
+  left: 30rpx;
+  top: 60rpx;
+  width: 70rpx;
+  height: 70rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+  margin-top: 35rpx;
+}
+
+.back-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 1);
+}
+
+.back-arrow {
+  font-size: 36rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+/* ===== 状态1: 初始加载状态 ===== */
+.loading-state {
+  margin: 30rpx;
+}
+
+.loading-container {
+  background: white;
+  border-radius: 30rpx;
+  padding: 60rpx 40rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.loading-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.loading-header .ai-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 20rpx;
+}
+
+.loading-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 15rpx;
+  margin-bottom: 30rpx;
+}
+
+.loading-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #FFD700;
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loadingPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
   }
-  
-  /* 鼠标悬停时的效果 */
-  .question-item:hover {
-    background-color: #f0f0f0;
+  50% { 
+    transform: scale(1.3);
+    opacity: 0.7;
   }
-  
-  /* 问题标题文本 */
-  .question-text {
-    font-size: 28rpx;
-    color: #333;
-    font-weight: 500;
-    margin-bottom: 8rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* ===== 状态2: 问题选择状态 ===== */
+.question-selection-state {
+  margin: 40rpx 30rpx 30rpx 30rpx; /* 增加顶部边距，与地图保持更多间距 */
+}
+
+.question-container {
+  background: white;
+  border-radius: 35rpx; /* 增加圆角，让卡片更圆润 */
+  padding: 40rpx 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 30rpx;
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #F5F5F5;
+}
+
+.ai-avatar {
+  width: 56rpx;
+  height: 56rpx;
+  margin-right: 18rpx;
+  border-radius: 50%;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.question-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.question-list {
+  margin-bottom: 35rpx;
+}
+
+.question-item {
+  display: flex;
+  align-items: center;
+  padding: 35rpx 0;
+  margin-bottom: 30rpx;
+  border-bottom: 1rpx solid #F0F0F0;
+  transition: all 0.3s ease;
+}
+
+.question-item:last-child {
+  border-bottom: none;
+}
+
+.question-item.selected {
+  background: #FFF3CD;
+  border-radius: 15rpx;
+  padding: 35rpx 20rpx;
+  margin: 0 -20rpx 30rpx -20rpx;
+  border: 2rpx solid #FFD700;
+}
+
+.question-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 60rpx;
+}
+
+.question-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.question-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.arrow {
+  font-size: 28rpx;
+  color: #999;
+  margin-left: 15rpx;
+}
+
+/* 底部按钮区域 */
+.bottom-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.debug-info {
+  flex: 0 0 auto;
+  padding: 10rpx 20rpx;
+  background: #F0F0F0;
+  border-radius: 15rpx;
+  margin-right: 20rpx;
+}
+
+.debug-info text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.confirm-btn-wrapper {
+  flex: 0 0 auto;
+}
+
+.confirm-btn-wrapper .btn {
+  width: 200rpx;
+  padding: 20rpx 30rpx;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.confirm {
+  background: #FFD700;
+  color: #333;
+}
+
+.btn.confirm:active {
+  background: #FFC107;
+  transform: scale(0.98);
+}
+
+.change-batch-btn {
+  flex: 1;
+  text-align: right;
+  padding: 20rpx;
+}
+
+.btn-text {
+  font-size: 26rpx;
+  color: #666;
+  text-decoration: underline;
+}
+
+.confirm-btn-container {
+  margin-bottom: 30rpx;
+}
+
+.btn {
+  width: 100%;
+  padding: 25rpx;
+  border-radius: 25rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* ===== 状态3: 问题确认状态 ===== */
+.confirm-state {
+  margin: 30rpx;
+}
+
+.confirm-container {
+  background: white;
+  border-radius: 30rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.confirm-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.confirm-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.selected-questions {
+  margin-bottom: 40rpx;
+}
+
+.selected-question-item {
+  background: #FFF3CD;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  border-radius: 20rpx;
+  border-left: 8rpx solid #FFD700;
+}
+
+.selected-question-text {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.confirm-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+
+.confirm-buttons .btn {
+  flex: 1;
+}
+
+.btn.cancel {
+  background: #F8F9FA;
+  color: #666;
+  border: 2rpx solid #E0E0E0;
+}
+
+.btn.cancel:active {
+  background: #E9ECEF;
+  transform: scale(0.98);
+}
+
+/* ===== 状态4: AI思考状态 ===== */
+.thinking-state {
+  margin: 30rpx;
+}
+
+.thinking-container {
+  background: white;
+  border-radius: 30rpx;
+  padding: 40rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.thinking-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.thinking-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.thinking-problems {
+  margin-bottom: 40rpx;
+}
+
+.thinking-problem-item {
+  background: #FFF3CD;
+  padding: 25rpx;
+  margin-bottom: 20rpx;
+  border-radius: 20rpx;
+  border-left: 8rpx solid #FFD700;
+}
+
+.thinking-problem-text {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.thinking-loading {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.thinking-dots {
+  display: flex;
+  justify-content: center;
+  gap: 15rpx;
+}
+
+.thinking-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+  background: #FFD700;
+  animation: thinkingPulse 1.5s ease-in-out infinite;
+}
+
+.thinking-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes thinkingPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
   }
-  
-  /* 问题描述文本 */
-  .question-desc {
-    font-size: 24rpx;
-    color: #999;
+  50% { 
+    transform: scale(1.3);
+    opacity: 0.7;
   }
-  
-  /* 箭头 */
-  .arrow {
-    position: absolute;
-    right: 24rpx;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 32rpx;
-    color: #999;
-  }
-  
-  /* 确认按钮 */
-  .confirm-btn-container {
-    margin-top: 40rpx;
-    text-align: center;
-  }
-  
-  .confirm {
-    background-color: #FFD700;
-    color: rgb(17, 16, 16);
-    padding: 12rpx 24rpx;
-    font-size: 28rpx;
-    border-radius: 20rpx;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.1);
-    position: absolute;
-  }
-  
-  /* 都不是，换一批 按钮 */
-  .change-batch-btn {
-    position: fixed;
-    bottom: 70rpx;
-    right: 40rpx;
-    background-color: #FFD700;
-    border-radius:20rpx;
-    padding: 16rpx 32rpx;
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
-    z-index: 100;
-  }
-  
-  .btn-text {
-    font-size: 28rpx;
-    color: #333;
-    font-weight: 500;
-  }
-  
+}
+
+.thinking-instruction {
+  background: #F8F9FA;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  margin-bottom: 40rpx;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.thinking-buttons {
+  text-align: center;
+}
+
+.thinking-buttons .btn {
+  width: 100%;
+  max-width: 300rpx;
+}
+
+

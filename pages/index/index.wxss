@@ -493,7 +493,7 @@ button[open-type="share"]:active .action-btn {
   padding: 8rpx 0;
   z-index: 1000;
   background-color:rgb(255, 255, 255);
-  border-top: 2rpx solid #e5e7eb;;
+  border-top: 2rpx solid #e5e7eb;
   width: 100%;
   max-width: 750rpx;
   box-sizing: border-box;

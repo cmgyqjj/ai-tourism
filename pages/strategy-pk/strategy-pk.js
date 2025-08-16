@@ -1,12 +1,14 @@
 Page({
   data: {
     currentTab: 0,
-    budgetExpanded: false,
-    exclusiveExpanded: false,
-    accommodationExpanded: false,
-    transportationExpanded: false,
-    coreDifferencesExpanded: false,
-    
+    budgetExpanded: true,
+    exclusiveExpanded: true,
+    accommodationExpanded: true,
+    transportationExpanded: true,
+
+    // 差异点展开状态
+    coreDifferencesExpanded: true,
+
     // 已有方案数据
     existingPlans: [
       {
@@ -68,35 +70,20 @@ Page({
     ],
 
     // 预算价格数据
-    // budgetItems: [
-    //   {
-    //     label: '总价',
-    //     values: ['¥ 5.8w', '¥ 1.5w', '¥ 3.2w', '¥ 4.5w']
-    //   },
-    //   {
-    //     label: '餐饮预算',
-    //     values: ['¥ 1.2w', '¥ 4000', '¥ 8000', '¥ 6000']
-    //   },
-    //   {
-    //     label: '酒店预算',
-    //     values: ['¥ 3w', '¥ 6000', '¥ 1.5w', '¥ 2.2w']
-    //   }
-    // ],
-
-          budgetItems: [
-            {
-              label: '总价',
-              values: ['¥ 5.8w', '¥ 1.5w', '¥ 3.2w', '¥ 4.5w', '¥ 4.5w']
-            },
-            {
-              label: '餐饮预算',
-              values: ['¥ 1.2w', '¥ 4000', '¥ 8000','¥ 6000', '¥ 4.5w']
-            },
-            {
-              label: '酒店预算',
-              values: ['¥ 3w', '¥ 6000', '¥ 1.5w', '¥ 2.2w', '¥ 4.5w']
-            }
-          ],
+    budgetItems: [
+      {
+        label: '总价',
+        values: ['¥ 5.8w', '¥ 1.5w', '¥ 3.2w', '¥ 4.5w', '¥ 4.5w']
+      },
+      {
+        label: '餐饮预算',
+        values: ['¥ 1.2w', '¥ 4000', '¥ 8000','¥ 6000', '¥ 4.5w']
+      },
+      {
+        label: '酒店预算',
+        values: ['¥ 3w', '¥ 6000', '¥ 1.5w', '¥ 2.2w', '¥ 4.5w']
+      }
+    ],
 
     // 独家体验数据
     exclusiveItems: [
@@ -114,7 +101,7 @@ Page({
       }
     ],
 
-    // 核心差异数据 - 改为类似budget的结构
+    // 核心差异对比
     coreDifferences: [
       {
         label: '消费感受',
@@ -269,7 +256,7 @@ Page({
       //       this.setData({
       //         budgetItems: compareData.budgetItems || this.data.budgetItems,
       //         exclusiveItems: compareData.exclusiveItems || this.data.exclusiveItems,
-      //         coreDifferences: compareData.coreDifferences || this.data.coreDifferences,
+      
       //         accommodationItems: compareData.accommodationItems || this.data.accommodationItems,
       //         transportationItems: compareData.transportationItems || this.data.transportationItems
       //       });
@@ -399,22 +386,19 @@ Page({
     });
   },
 
-  // 切换预算价格展开状态
-//   toggleBudget: function() {
-//     this.setData({
-//       budgetExpanded: !this.data.budgetExpanded
-//     });
-//     console.log('budgetExpanded:', this.data.budgetExpanded); 
-//   },
+  // 切换核心差异展开状态
+  toggleCoreDifferences: function() {
+    this.setData({
+      coreDifferencesExpanded: !this.data.coreDifferencesExpanded
+    });
+  },
 
-    // 切换预算价格展开状态
-    toggleBudget: function() {
-      this.setData({
-        budgetExpanded: !this.data.budgetExpanded
-      });
-    },
-  
-  
+  // 切换预算价格展开状态
+  toggleBudget: function() {
+    this.setData({
+      budgetExpanded: !this.data.budgetExpanded
+    });
+  },
 
   // 切换独家体验展开状态
   toggleExclusive: function() {
@@ -434,13 +418,6 @@ Page({
   toggleTransportation: function() {
     this.setData({
       transportationExpanded: !this.data.transportationExpanded
-    });
-  },
-
-  // 切换核心差异展开状态
-  toggleCoreDifferences: function() {
-    this.setData({
-      coreDifferencesExpanded: !this.data.coreDifferencesExpanded
     });
   },
 
@@ -490,8 +467,6 @@ Page({
       title: '行程PK对比 - 找到最适合的旅行方案'
     };
   },
-
-
 
   // 生成AI融合方案
   generateFusionPlan: function() {
