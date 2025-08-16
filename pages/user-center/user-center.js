@@ -4,7 +4,8 @@ Page({
     userInfo: {
       avatar: 'https://ai-public.mastergo.com/ai/img_res/c1f76d3ef0a0d573caf9c713106c45f1.jpg',
       name: '小8的买买买',
-      tag: '旅行遍布 27 个国家和地区'
+      tag: '旅行遍布 27 个国家和地区',
+      userId: '' // 用户ID
     },
     
     // 导航标签
@@ -74,11 +75,13 @@ Page({
     try {
       const userAvatar = wx.getStorageSync('userAvatar');
       const userInfo = wx.getStorageSync('userInfo');
+      const userId = wx.getStorageSync('userId');
       
       if (userAvatar && userInfo) {
         this.setData({
           'userInfo.avatar': userAvatar,
-          'userInfo.name': userInfo.nickName || '微信用户'
+          'userInfo.name': userInfo.nickName || '微信用户',
+          'userInfo.userId': userId || userInfo.userId || '未获取到用户ID'
         });
       }
     } catch (e) {

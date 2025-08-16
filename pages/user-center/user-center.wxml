@@ -7,6 +7,7 @@
         <view class="info">
           <view class="name">{{userInfo.name}}</view>
           <view class="tag">{{userInfo.tag}}</view>
+          <view class="user-id">用户ID: {{userInfo.userId}}</view>
         </view>
       </view>
       <view class="setting" bindtap="onSettingTap">

@@ -101,8 +101,8 @@ Page({
         avatarUrl: avatarUrl,
         loginTime: new Date().getTime(),
         isLoggedIn: true,
-        userId: `user_${Date.now()}`, // 生成用户ID
-        nickName: '微信用户' // 默认昵称
+        userId: wx.getStorageSync('userId') || `user_${Date.now()}`, // 优先使用缓存的真实用户ID，没有则生成临时ID
+        nickName: 'welcome!爱玩!' // 默认昵称
       };
       
       // 分别缓存头像和用户信息
@@ -141,25 +141,55 @@ Page({
   navigateAfterLogin() {
     console.log('登录成功，准备跳转');
     
-    // 在重定向之前调用接口
-    this.callTestEnvApi(() => {
+    // 在重定向之前调用用户登录接口
+    this.callUserLoginApi(() => {
       // 接口调用完成后的回调，执行重定向逻辑
       this.executeRedirect();
     });
   },
 
   /**
-   * 调用test/env接口
+   * 调用用户登录接口
    */
-  callTestEnvApi(callback) {
-    console.log('开始调用localhost:10000/test/env接口');
+  callUserLoginApi(callback) {
+    // 获取用户头像作为code参数
+    const userAvatar = wx.getStorageSync('userAvatar') || this.data.avatarUrl;
+    
+    if (!userAvatar) {
+      console.error('用户头像信息不存在');
+      // 即使没有头像信息，也继续执行重定向
+      if (callback && typeof callback === 'function') {
+        callback();
+      }
+      return;
+    }
+    
+    console.log('开始调用用户登录接口，头像参数:', userAvatar);
     
     wx.request({
-      url: 'http://localhost:10000/test/env',
-      method: 'GET',
+      url: `https://meituan.mynatapp.cc/api/users/login?code=${encodeURIComponent(userAvatar)}`,
+      method: 'POST',
       success: (res) => {
-        console.log('test/env接口调用成功，返回值:', res.data);
+        console.log('用户登录接口调用成功，返回值:', res.data);
         console.log('完整响应对象:', res);
+        
+        // 处理返回的用户信息，存储userId到缓存
+        if (res.data && res.data.code === 0 && res.data.data && res.data.data.userId) {
+          const userId = res.data.data.userId;
+          console.log('获取到用户ID:', userId);
+          
+          // 将userId存储到缓存中
+          wx.setStorageSync('userId', userId);
+          console.log('用户ID已缓存:', userId);
+          
+          // 同时更新本地用户信息中的userId
+          const userInfo = wx.getStorageSync('userInfo') || {};
+          userInfo.userId = userId;
+          wx.setStorageSync('userInfo', userInfo);
+          console.log('用户信息已更新，新的用户ID:', userId);
+        } else {
+          console.log('接口返回数据中没有有效的userId');
+        }
         
         // 调用回调函数继续执行重定向
         if (callback && typeof callback === 'function') {
@@ -167,7 +197,7 @@ Page({
         }
       },
       fail: (error) => {
-        console.error('test/env接口调用失败:', error);
+        console.error('用户登录接口调用失败:', error);
         
         // 即使接口调用失败，也继续执行重定向
         if (callback && typeof callback === 'function') {

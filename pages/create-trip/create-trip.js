@@ -12,6 +12,8 @@ Page({
     searchKeyword: '',
     currentCategory: 'current',
     currentCategoryName: '当前位置',
+    currentTeamId: '', // 当前团队ID
+    hasCreatedTeam: false, // 是否已经通过分享创建了团队
     // 多选目的地相关数据
     selectedDestinations: [], // 多选模式下已选择的目的地
     // 时间选择器相关数据
@@ -981,19 +983,176 @@ Page({
 
     // 获取当前用户信息
     const userInfo = wx.getStorageSync('userInfo') || {}
+    const userId = wx.getStorageSync('userId')
     
+    if (!userId) {
+      wx.showToast({
+        title: '用户信息不完整，请重新登录',
+        icon: 'none'
+      })
+      return
+    }
+    
+    // 检查是否已经通过分享创建了团队
+    if (this.data.hasCreatedTeam) {
+      console.log('团队已通过分享创建，直接跳转')
+      this.navigateToQuestions()
+      return
+    }
+    
+    // 只有在搭子数=0时才调用创建团队接口
+    if (companionCount === 0) {
+      // 显示加载提示
+      wx.showLoading({
+        title: '创建行程中...',
+        mask: true
+      })
+      
+      // 调用创建团队接口
+      this.createTeam(userId, companionCount+1, this.data.flexibleDurationText, this.data.selectedDestination)
+    } else {
+      // 搭子数>0时，直接跳转，不调用接口
+      this.navigateToQuestions()
+    }
+  },
+
+  /**
+   * 调用创建团队接口
+   */
+  createTeam(creatorId, maxMembers, expireTime, place) {
+    console.log('开始调用创建团队接口，参数:', { creatorId, maxMembers, expireTime, place })
+    
+    wx.request({
+      url: `https://meituan.mynatapp.cc/api/teams/create?creatorId=${creatorId}&maxMembers=${maxMembers}&expireTime=${encodeURIComponent(expireTime)}&place=${encodeURIComponent(place)}`,
+      method: 'POST',
+      success: (res) => {
+        console.log('创建团队接口调用成功，返回值:', res.data)
+        console.log('完整响应对象:', res)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        // 处理接口返回结果
+        if (res.data && res.data.code === 0) {
+          wx.showToast({
+            title: '行程创建成功',
+            icon: 'success',
+            duration: 1500
+          })
+          
+          // 构建行程信息
+          const tripInfo = {
+            destination: this.data.selectedDestination,
+            duration: this.data.flexibleDurationText,
+            companionCount: this.data.companionCount,
+            currentUser: {
+              avatarUrl: wx.getStorageSync('userInfo')?.avatarUrl || '',
+              nickName: wx.getStorageSync('userInfo')?.nickName || '我'
+            },
+            teamId: res.data.data?.teamId || null // 保存团队ID
+          }
+          
+          // 延迟跳转，让用户看到成功提示
+          setTimeout(() => {
+            wx.navigateTo({
+              url: `/pages/trip-questions-1/trip-questions-1?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
+            })
+          }, 1500)
+        } else {
+          wx.showToast({
+            title: res.data?.msg || '创建行程失败',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: (error) => {
+        console.error('创建团队接口调用失败:', error)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        wx.showToast({
+          title: '网络请求失败，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  /**
+   * 为分享功能调用创建团队接口
+   */
+  createTeamForShare(creatorId, maxMembers, expireTime, place) {
+    console.log('开始为分享调用创建团队接口，参数:', { creatorId, maxMembers, expireTime, place })
+    
+    wx.request({
+      url: `https://meituan.mynatapp.cc/api/teams/create?creatorId=${creatorId}&maxMembers=${maxMembers}&expireTime=${encodeURIComponent(expireTime)}&place=${encodeURIComponent(place)}`,
+      method: 'POST',
+      success: (res) => {
+        console.log('分享创建团队接口调用成功，返回值:', res.data)
+        console.log('完整响应对象:', res)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        // 处理接口返回结果
+        if (res.data && res.data.code === 0) {
+          wx.showToast({
+            title: '行程创建成功，可以开始分享了',
+            icon: 'success',
+            duration: 2000
+          })
+          
+          // 保存团队ID到页面数据中，供分享使用
+          if (res.data.data && res.data.data.teamId) {
+            this.setData({
+              currentTeamId: res.data.data.teamId,
+              hasCreatedTeam: true // 标记已经创建了团队
+            })
+            console.log('团队ID已保存:', res.data.data.teamId)
+            console.log('团队已创建标记:', true)
+          }
+        } else {
+          wx.showToast({
+            title: res.data?.msg || '创建行程失败',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: (error) => {
+        console.error('分享创建团队接口调用失败:', error)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        wx.showToast({
+          title: '网络请求失败，请重试',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  /**
+   * 直接跳转到问题页面（不调用接口）
+   */
+  navigateToQuestions() {
     // 构建行程信息
     const tripInfo = {
       destination: this.data.selectedDestination,
       duration: this.data.flexibleDurationText,
       companionCount: this.data.companionCount,
       currentUser: {
-        avatarUrl: userInfo.avatarUrl || '',
-        nickName: userInfo.nickName || '我'
+        avatarUrl: wx.getStorageSync('userInfo')?.avatarUrl || '',
+        nickName: wx.getStorageSync('userInfo')?.nickName || '我'
       }
     }
     
-    // 跳转到第一个问题页面，并传递行程信息
+    // 直接跳转到第一个问题页面
     wx.navigateTo({
       url: `/pages/trip-questions-1/trip-questions-1?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
     })
@@ -1009,6 +1168,44 @@ Page({
         imageUrl: '/images/img.png'
       }
     }
+
+    // 检查搭子数量，分享队伍至少需要有一个搭子
+    const companionCount = parseInt(this.data.companionCount)
+    if (companionCount === 0) {
+      wx.showToast({
+        title: '分享队伍至少需要有一个搭子',
+        icon: 'none',
+        duration: 2000
+      })
+      return {
+        title: '邀请你一起规划旅行',
+        path: '/pages/create-trip/create-trip',
+        imageUrl: '/images/img.png'
+      }
+    }
+
+    // 获取当前用户信息
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
+      wx.showToast({
+        title: '用户信息不完整，请重新登录',
+        icon: 'none'
+      })
+      return {
+        title: '邀请你一起规划旅行',
+        path: '/pages/create-trip/create-trip',
+        imageUrl: '/images/img.png'
+      }
+    }
+
+    // 显示加载提示
+    wx.showLoading({
+      title: '创建行程中...',
+      mask: true
+    })
+
+    // 调用创建团队接口
+    this.createTeamForShare(userId, companionCount+1, this.data.flexibleDurationText, this.data.selectedDestination)
 
     // 使用已经保存的行程ID，如果没有则生成新的
     let tripId = this.data.currentTripId

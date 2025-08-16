@@ -182,18 +182,26 @@ Page({
   initPageData() {
     // 从缓存中恢复已选择的选项
     const savedOptions = wx.getStorageSync('tripQuestions12SelectedOptions') || []
+    console.log('从缓存恢复选项:', savedOptions)
+    
     if (savedOptions.length > 0) {
+      // 提取ID列表用于恢复选中状态
+      const savedOptionIds = savedOptions.map(option => option.id)
+      
       const updatedOptions = this.data.question.options.map(option => ({
         ...option,
-        selected: savedOptions.includes(option.id)
+        selected: savedOptionIds.includes(option.id)
       }))
       
       this.setData({
         question: { ...this.data.question, options: updatedOptions },
-        selectedOptions: savedOptions
+        selectedOptions: savedOptionIds
       })
       
-      console.log('恢复已选择的选项:', savedOptions)
+      console.log('恢复已选择的选项ID:', savedOptionIds)
+      console.log('恢复已选择的选项详情:', savedOptions)
+    } else {
+      console.log('没有缓存的选项，所有选项都是未选择状态')
     }
   },
 
@@ -225,10 +233,19 @@ Page({
       selectedOptions: newSelectedOptions
     })
     
-    // 保存到缓存
-    wx.setStorageSync('tripQuestions12SelectedOptions', newSelectedOptions)
+    // 保存到缓存 - 存储完整的选项信息
+    const selectedOptionDetails = this.data.question.options
+      .filter(option => newSelectedOptions.includes(option.id))
+      .map(option => ({
+        id: option.id,
+        text: option.text,
+        icon: option.icon
+      }))
+    
+    wx.setStorageSync('tripQuestions12SelectedOptions', selectedOptionDetails)
     
     console.log('选择选项:', optionId, '已选择数量:', newSelectedOptions.length)
+    console.log('保存到缓存的选项详情:', selectedOptionDetails)
     
     // 检查是否所有问题都已完成
     this.checkCompletionStatus()
@@ -250,38 +267,195 @@ Page({
   generateTrip() {
     console.log('生成行程')
     
-    // 直接生成行程，不需要等待好友完成
-    wx.showToast({
-      title: '正在生成行程...',
-      icon: 'loading',
-      duration: 2000
-    })
+    // 收集所有问题的答案
+    const allAnswers = this.collectAllQuestionAnswers()
+    console.log('收集到的所有问题答案:', allAnswers)
     
-    // 模拟生成行程的过程
-    setTimeout(() => {
+    // 获取用户ID
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
       wx.showToast({
-        title: '行程生成成功！',
-        icon: 'success',
+        title: '用户信息不完整，请重新登录',
+        icon: 'none',
         duration: 2000
       })
-      
-      // 准备行程数据
-      const tripData = {
-        days: this.generateTripDays(),
-        dayInfo: this.generateDayInfo(),
-        tripInfo: this.data.tripInfo // 传递完整的行程信息
+      return
+    }
+    
+    // 显示加载提示
+    wx.showLoading({
+      title: '正在生成行程...',
+      mask: true
+    })
+    
+    // 调用生成行程接口
+    this.callGenerateTripApi(userId, allAnswers)
+  },
+
+  /**
+   * 收集所有问题的答案
+   */
+  collectAllQuestionAnswers() {
+    // 动态收集所有缓存的问题和答案
+    const allAnswers = {}
+    
+    // 遍历所有可能的问题页面缓存键
+    for (let i = 1; i <= 12; i++) {
+      let cacheKey = ''
+      if (i === 3) {
+        // 处理3.5的情况
+        cacheKey = 'tripQuestions3_5SelectedOptions'
+        const answers = wx.getStorageSync(cacheKey) || []
+        if (answers.length > 0) {
+          const answerTexts = answers.map(answer => {
+            if (typeof answer === 'object' && answer.text) {
+              return answer.text
+            } else if (typeof answer === 'string') {
+              return answer
+            } else if (typeof answer === 'object') {
+              return answer.content || answer.name || answer.value || JSON.stringify(answer)
+            } else {
+              return String(answer)
+            }
+          }).join('、')
+          
+          const questionTitle = this.getQuestionTitle(3.5)
+          allAnswers[questionTitle] = answerTexts
+          console.log(`${questionTitle}的答案:`, answerTexts)
+        } else {
+          const questionTitle = this.getQuestionTitle(3.5)
+          allAnswers[questionTitle] = '未回答'
+          console.log(`${questionTitle}: 未回答`)
+        }
+        
+        // 处理第3个问题
+        cacheKey = 'tripQuestions3SelectedOptions'
+      } else {
+        cacheKey = `tripQuestions${i}SelectedOptions`
       }
       
-      console.log('准备跳转，行程数据:', tripData);
-      console.log('tripInfo详情:', this.data.tripInfo);
-      
-      // 跳转到新的行程详情地图页面
-      setTimeout(() => {
-        wx.redirectTo({
-          url: '/pages/trip-detail-map/trip-detail-map?tripData=' + encodeURIComponent(JSON.stringify(tripData))
+      const answers = wx.getStorageSync(cacheKey) || []
+      if (answers.length > 0) {
+        // 获取选项框里面的具体内容
+        const answerTexts = answers.map(answer => {
+          // 如果answer是对象，获取其text属性（选项框的内容）
+          if (typeof answer === 'object' && answer.text) {
+            return answer.text
+          }
+          // 如果answer是字符串，直接使用
+          else if (typeof answer === 'string') {
+            return answer
+          }
+          // 其他情况，尝试获取其他可能的属性
+          else if (typeof answer === 'object') {
+            return answer.content || answer.name || answer.value || JSON.stringify(answer)
+          }
+          // 最后兜底
+          else {
+            return String(answer)
+          }
+        }).join('、')
+        
+        // 使用问题页面的实际标题作为键
+        const questionTitle = this.getQuestionTitle(i)
+        allAnswers[questionTitle] = answerTexts
+        console.log(`${questionTitle}的答案:`, answerTexts)
+      } else {
+        const questionTitle = this.getQuestionTitle(i)
+        allAnswers[questionTitle] = '未回答'
+        console.log(`${questionTitle}: 未回答`)
+      }
+    }
+    
+    return allAnswers
+  },
+
+  /**
+   * 根据问题编号获取对应的标题
+   */
+  getQuestionTitle(questionNumber) {
+    const titles = {
+      1: '宝，你们想去哪里？',
+      2: '你的旅行性格标签是? (可多选)',
+      3: '本次以哪种交通方式为主? (多选)',
+      3.5: '宝，你们想要什么主题的旅行？',
+      4: '本次旅行有哪些是你个人特别想去的「人生必去景点」?(多选)',
+      5: '以下哪些体验会严重影响你的旅行心情? (Ai将优化行程,避免踩雷)',
+      6: '住宿你最关注的点 (可多选):',
+      7: '希望如何安排住宿预算?',
+      8: '宝，你们的住宿预算范围是？',
+      9: '每日就餐你最在意的是?',
+      10: '在外每餐预算是?',
+      11: '你的每日活动倾向: (单选)',
+      12: '是否有需要特别照顾的情况？'
+    }
+    return titles[questionNumber] || `问题${questionNumber}`
+  },
+
+  /**
+   * 调用生成行程接口
+   */
+  callGenerateTripApi(userId, content) {
+    console.log('开始调用生成行程接口，参数:', { userId, content })
+    
+    // 将content转换为JSON字符串
+    const contentJson = JSON.stringify(content)
+    
+    wx.request({
+      url: `https://meituan.mynatapp.cc/api/preferences/user?content=${encodeURIComponent(contentJson)}&userId=${userId}&ext=null`,
+      method: 'POST',
+      success: (res) => {
+        console.log('生成行程接口调用成功，返回值:', res.data)
+        console.log('完整响应对象:', res)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        // 处理接口返回结果
+        if (res.data && res.data.code === 0) {
+          wx.showToast({
+            title: '行程生成成功！',
+            icon: 'success',
+            duration: 2000
+          })
+          
+          // 准备行程数据
+          const tripData = {
+            days: this.generateTripDays(),
+            dayInfo: this.generateDayInfo(),
+            tripInfo: this.data.tripInfo // 传递完整的行程信息
+          }
+          
+          console.log('准备跳转，行程数据:', tripData)
+          console.log('tripInfo详情:', this.data.tripInfo)
+          
+          // 延迟跳转，让用户看到成功提示
+          setTimeout(() => {
+            wx.redirectTo({
+              url: '/pages/trip-detail-map/trip-detail-map?tripData=' + encodeURIComponent(JSON.stringify(tripData))
+            })
+          }, 2000)
+        } else {
+          wx.showToast({
+            title: res.data?.msg || '生成行程失败',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: (error) => {
+        console.error('生成行程接口调用失败:', error)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        wx.showToast({
+          title: '网络请求失败，请重试',
+          icon: 'none',
+          duration: 2000
         })
-      }, 2000)
-    }, 3000)
+      }
+    })
   },
 
   // 生成行程天数数据

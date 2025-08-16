@@ -227,10 +227,19 @@ Page({
       selectedOptions: newSelectedOptions
     })
     
-    // 保存到缓存
-    wx.setStorageSync('tripQuestionsThemeSelectedOptions', newSelectedOptions)
+    // 保存到缓存 - 存储完整的选项信息
+    const selectedOptionDetails = this.data.question.options
+      .filter(option => newSelectedOptions.includes(option.id))
+      .map(option => ({
+        id: option.id,
+        text: option.text,
+        icon: option.icon
+      }))
+    
+    wx.setStorageSync('tripQuestions3_5SelectedOptions', selectedOptionDetails)
     
     console.log('选择选项:', optionId, '已选择数量:', newSelectedOptions.length)
+    console.log('保存到缓存的选项详情:', selectedOptionDetails)
   },
 
   // 下一步
@@ -275,7 +284,7 @@ Page({
     console.log('跳转URL:', nextPageUrl)
     
     // 跳转到下一个问题页面
-    wx.navigateTo({
+    wx.redirectTo({
       url: nextPageUrl,
       success: function() {
         console.log('跳转成功')

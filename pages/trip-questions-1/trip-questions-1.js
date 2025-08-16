@@ -177,18 +177,26 @@ Page({
   initPageData() {
     // 从缓存中恢复已选择的选项
     const savedOptions = wx.getStorageSync('tripQuestions1SelectedOptions') || []
+    console.log('从缓存恢复选项:', savedOptions)
+    
     if (savedOptions.length > 0) {
+      // 提取ID列表用于恢复选中状态
+      const savedOptionIds = savedOptions.map(option => option.id)
+      
       const updatedOptions = this.data.question.options.map(option => ({
         ...option,
-        selected: savedOptions.includes(option.id)
+        selected: savedOptionIds.includes(option.id)
       }))
       
       this.setData({
         question: { ...this.data.question, options: updatedOptions },
-        selectedOptions: savedOptions
+        selectedOptions: savedOptionIds
       })
       
-      console.log('恢复已选择的选项:', savedOptions)
+      console.log('恢复已选择的选项ID:', savedOptionIds)
+      console.log('恢复已选择的选项详情:', savedOptions)
+    } else {
+      console.log('没有缓存的选项，所有选项都是未选择状态')
     }
   },
 
@@ -220,10 +228,19 @@ Page({
       selectedOptions: newSelectedOptions
     })
     
-    // 保存到缓存
-    wx.setStorageSync('tripQuestions1SelectedOptions', newSelectedOptions)
+    // 保存到缓存 - 存储完整的选项信息
+    const selectedOptionDetails = this.data.question.options
+      .filter(option => newSelectedOptions.includes(option.id))
+      .map(option => ({
+        id: option.id,
+        text: option.text,
+        icon: option.icon
+      }))
+    
+    wx.setStorageSync('tripQuestions1SelectedOptions', selectedOptionDetails)
     
     console.log('选择选项:', optionId, '已选择数量:', newSelectedOptions.length)
+    console.log('保存到缓存的选项详情:', selectedOptionDetails)
   },
 
   // 下一步
@@ -249,8 +266,19 @@ Page({
     const nextPageUrl = `/pages/trip-questions-2/trip-questions-2?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
     
     // 跳转到下一个问题页面
-    wx.navigateTo({
-      url: nextPageUrl
+    wx.redirectTo({
+      url: nextPageUrl,
+      success: () => {
+        console.log('跳转到第2个问题页面成功')
+      },
+      fail: (error) => {
+        console.error('跳转到第2个问题页面失败:', error)
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     })
   },
 

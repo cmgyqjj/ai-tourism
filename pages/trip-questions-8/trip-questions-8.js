@@ -24,14 +24,14 @@ Page({
     
     // 问题数据
     question: {
-      title: '住宿1晚你接受的价格区间是?',
+      title: '宝，你们的住宿预算范围是？',
       options: [
-        { id: 1, text: '¥ 100–500', selected: false },
-        { id: 2, text: '¥ 500–1000', selected: false },
-        { id: 3, text: '¥ 1000–1500', selected: false },
-        { id: 4, text: '¥ 1500–2000', selected: false },
-        { id: 5, text: '¥ 2000–4000', selected: false },
-        { id: 6, text: '¥ 4000以上', selected: false }
+        { id: 1, text: '¥ 100–500 (经济型)', selected: false },
+        { id: 2, text: '¥ 500–1000 (性价比型)', selected: false },
+        { id: 3, text: '¥ 1000–1500 (舒适型)', selected: false },
+        { id: 4, text: '¥ 1500–2000 (品质型)', selected: false },
+        { id: 5, text: '¥ 2000–4000 (高端型)', selected: false },
+        { id: 6, text: '¥ 4000以上 (奢华型)', selected: false }
       ]
     },
     
@@ -178,6 +178,8 @@ Page({
   initPageData() {
     // 从缓存中恢复已选择的选项
     const savedOptions = wx.getStorageSync('tripQuestions8SelectedOptions') || []
+    console.log('从缓存恢复选项:', savedOptions)
+    
     if (savedOptions.length > 0) {
       const updatedOptions = this.data.question.options.map(option => ({
         ...option,
@@ -190,6 +192,9 @@ Page({
       })
       
       console.log('恢复已选择的选项:', savedOptions)
+      console.log('选项状态已恢复，下一步按钮应该可用')
+    } else {
+      console.log('没有缓存的选项，所有选项都是未选择状态')
     }
   },
 
@@ -197,6 +202,8 @@ Page({
   selectOption(e) {
     const { optionId } = e.currentTarget.dataset
     const { question, selectedOptions } = this.data
+    
+    console.log('点击选项:', optionId, '当前已选择:', selectedOptions)
     
     // 更新选项状态
     const updatedOptions = question.options.map(option => {
@@ -221,10 +228,20 @@ Page({
       selectedOptions: newSelectedOptions
     })
     
-    // 保存到缓存
-    wx.setStorageSync('tripQuestions8SelectedOptions', newSelectedOptions)
+    // 保存到缓存 - 存储完整的选项信息
+    const selectedOptionDetails = this.data.question.options
+      .filter(option => newSelectedOptions.includes(option.id))
+      .map(option => ({
+        id: option.id,
+        text: option.text,
+        icon: option.icon
+      }))
     
-    console.log('选择选项:', optionId, '已选择数量:', newSelectedOptions.length)
+    wx.setStorageSync('tripQuestions8SelectedOptions', selectedOptionDetails)
+    
+    console.log('选择选项:', optionId, '已选择数量:', newSelectedOptions.length, '新选择列表:', newSelectedOptions)
+    console.log('保存到缓存的选项详情:', selectedOptionDetails)
+    console.log('选项状态已更新，下一步按钮应该变为可用状态')
   },
 
   // 下一步
@@ -244,15 +261,26 @@ Page({
       .filter(option => selectedOptions.includes(option.id))
       .map(option => option.text)
     
-    console.log('选择的住宿价格区间:', selectedTexts)
+    console.log('选择的住宿预算范围:', selectedTexts)
     
     // 将行程信息传递给下一个页面
-      const nextPageUrl = '/pages/trip-questions-9/trip-questions-9?tripInfo=' + encodeURIComponent(JSON.stringify(tripInfo))
-      
-      // 跳转到下一个问题页面
-      wx.navigateTo({
-        url: nextPageUrl
-      })
+    const nextPageUrl = '/pages/trip-questions-9/trip-questions-9?tripInfo=' + encodeURIComponent(JSON.stringify(tripInfo))
+    
+    // 跳转到下一个问题页面
+    wx.redirectTo({
+      url: nextPageUrl,
+      success: () => {
+        console.log('跳转到第9个问题页面成功')
+      },
+      fail: (error) => {
+        console.error('跳转到第9个问题页面失败:', error)
+        wx.showToast({
+          title: '页面跳转失败',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
   },
 
   // 返回上一页

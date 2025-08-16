@@ -40,7 +40,7 @@
       </view>
 
       <!-- 选项网格 -->
-      <view class="options-list">
+      <view class="options-grid">
         <view class="option-item {{item.selected ? 'selected' : ''}}" 
               wx:for="{{question.options}}" 
               wx:key="id"
