@@ -2,12 +2,12 @@ Page({
   data: {
     currentTab: 0,
     budgetExpanded: true,
-    exclusiveExpanded: false,
-    accommodationExpanded: false,
-    transportationExpanded: false,
+    exclusiveExpanded: true,
+    accommodationExpanded: true,
+    transportationExpanded: true,
 
     // 差异点展开状态
-    coreDifferencesExpanded: false,
+    coreDifferencesExpanded: true,
 
     // 已有方案数据
     existingPlans: [

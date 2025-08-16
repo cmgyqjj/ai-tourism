@@ -2,22 +2,37 @@
   <!-- 地图展示区域 -->
   <view class="map-container">
     <map 
-      longitude="121.4737" 
-      latitude="31.2304"
-      scale="12"
-      show-compass="true"
-      show-scale="true"
+      id="routeMap"
+      class="map"
+      longitude="{{mapCenter.longitude}}" 
+      latitude="{{mapCenter.latitude}}"
+      scale="{{mapScale}}"
       markers="{{markers}}"
       polyline="{{polyline}}"
-      class="map">
+      show-location="{{true}}"
+      enable-3D="{{false}}"
+      show-compass="{{false}}"
+      enable-overlooking="{{false}}"
+      enable-zoom="{{true}}"
+      enable-scroll="{{true}}"
+      enable-rotate="{{false}}"
+      bindload="onMapLoad"
+      binderror="onMapError"
+      bindmarkertap="onMarkerTap"
+      bindregionchange="onRegionChange">
     </map>
+    
+
     
     <!-- 返回按钮放在地图左上角 -->
     <view class="back-btn" bindtap="goBack">
       <text class="back-arrow">←</text>
     </view>
     
-    <view class="map-label">地图区域 (实际可接入google 地图/高德)</view>
+    <!-- 调试按钮 -->
+    <!-- <view class="debug-btn" bindtap="testMap">
+      <text class="debug-text">测试地图</text>
+    </view> -->
   </view>
 
   <!-- 状态1: 初始加载状态 -->
