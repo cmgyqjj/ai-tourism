@@ -1,0 +1,1173 @@
+/* 行程PK页面样式 */
+.strategy-pk-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  /* 导航栏 */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 62rpx 32rpx 24rpx;
+    background-color: #fff;
+    position: relative;
+    z-index: 100;
+  }
+  
+  .nav-left, .nav-right {
+    width: 48rpx;
+    height: 48rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .back-icon, .close-icon {
+    display: inline-block;
+    font-size: 32rpx;
+    line-height: 32rpx;
+  }
+  
+  .nav-title {
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  /* 标签页导航 */
+  .tab-nav {
+    display: flex;
+    background-color: #fff;
+    padding: 0 32rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+  }
+  
+  .tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 32rpx 0;
+    position: relative;
+    color: #666;
+    font-size: 32rpx;
+  }
+  
+  .tab-item.active {
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .tab-underline {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60rpx;
+    height: 6rpx;
+    background-color: #FFD700;
+    border-radius: 3rpx;
+  }
+  
+  /* 内容区域 */
+  .content-area {
+    flex: 1;
+    padding: 0 0 160rpx 0;
+  }
+  
+  .basic-info-content {
+    padding: 10rpx;
+  }
+  
+  /* 通用section样式 */
+  .section {
+    margin-bottom: 48rpx;
+    background-color: #fff;
+    border-radius: 16rpx;
+    overflow: hidden;
+  }
+  
+  
+  /* 预算价格section收起时的间距调整 */
+  .budget-section {
+    margin-bottom: 24rpx;
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+    justify-content: flex-start; /* 左对齐 */
+  }
+  
+  .section-title {
+    width:100px;
+    margin-right: 10px; /* 调整标题和滚动视图之间的间距 */
+    font-size: 32rpx;
+  }
+
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32rpx 32rpx 24rpx;
+    cursor: pointer;
+    min-height: 88rpx;
+  }
+  
+  .arrow-icon {
+    font-size: 18rpx;
+    color: rgb(22, 21, 21);
+    transition: transform 0.3s ease;
+    transform-origin: center;
+    margin-left: 16rpx;
+    line-height: 1;
+    /* transform: translateX(-460rpx); */
+  }
+  
+  .arrow-icon.expanded {
+    transform: rotate(180deg);
+  }
+  
+  /* 已有方案 */
+  .existing-plans {
+    background-color: transparent;
+    margin-bottom: 24rpx;
+  }
+  
+  
+  .plans-container {
+    white-space: nowrap;
+    padding: 0 32rpx;
+    height: 400rpx;
+  }
+  
+  .plans-wrapper {
+    display: inline-flex;
+    gap: 20rpx;
+    padding-right: 32rpx;
+  }
+  
+  .plan-card {
+    flex: 1;
+    min-width: 240rpx;
+    max-width: 320rpx;
+    background-color: #fff;
+    border-radius: 16rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+    height: 400rpx;
+    margin-right:24rpx ;
+  }
+  
+  .plan-status {
+    padding: 16rpx 55rpx;
+    background-color: #f8f8f8;
+    transform: translateX(-20rpx); 
+  }
+  
+  
+  .status-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+  }
+  
+  .status-badge.not-voted {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .status-badge.voted {
+    background-color: #FFD700;
+    color: #333;
+  }
+  
+  .check-icon {
+    display: inline-block;
+    font-size: 22rpx;
+    margin-right: 8rpx;
+  }
+  
+  .plan-content {
+    padding: 85rpx 24rpx;
+    text-align: center;
+  }
+  
+  .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12rpx;
+    margin-bottom: 16rpx;
+    margin-top: 50rpx;
+  }
+  
+  .plan-icon {
+    width: 48rpx;
+    height: 48rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .plan-icon .icon {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* text icon inside plan card */
+  .plan-icon .icon-text {
+    font-size: 40rpx;
+    line-height: 1;
+    margin-top: 40rpx;
+  }
+  
+  .plan-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+    margin-top: 50rpx;
+  }
+  
+  .plan-subtitle {
+    font-size: 28rpx;
+    color: #999;
+    margin-bottom: 24rpx;
+    margin-top: -20rpx;
+  }
+  
+  .vote-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .avatar {
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 50%;
+  }
+  
+  .vote-btn {
+    display: flex;
+    align-items: center;
+    padding: 8rpx 16rpx;
+    font-size: 24rpx;
+    color: #666;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    text-decoration-color: #007AFF;
+    text-underline-offset: 4rpx;
+  }
+  
+  .vote-btn.voted {
+    color: #ff6b35;
+    background: none;
+    border: none;
+    text-decoration: none;
+  }
+  
+  .vote-btn:active {
+    opacity: 0.7;
+  }
+  
+  .avatar-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  
+  .vote-icon {
+    display: inline-block;
+    font-size: 22rpx;
+    margin-right: 8rpx;
+  }
+  
+  /* text share icon */
+  .share-icon {
+    display: inline-block;
+    font-size: 26rpx;
+    margin-right: 8rpx;
+  }
+  
+  /* 方案亮点 */
+  .plan-highlights {
+    background-color: transparent;
+    margin-bottom: 24rpx;
+  }
+  
+  .highlights-container {
+    white-space: nowrap;
+    padding: 0 32rpx;
+    height: 280rpx;
+  }
+  
+  .highlights-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* 保证标签可以换行 */
+    gap: 24rpx;
+    justify-content: flex-start;
+    width: 100%; /* 确保宽度充足 */
+  }
+  
+  .highlight-card {
+    width: 280rpx;
+    flex-shrink: 0;
+    background-color: #fff;
+    border-radius: 16rpx;
+    padding: 32rpx 24rpx;
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+    /* gap: 24rpx; */
+  }
+  
+  .highlight-content {
+    font-size: 26rpx;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 24rpx;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: normal; /* 允许换行 */
+  }
+  
+  .highlight-tags {
+    display: flex;
+    flex-wrap: wrap; /* 允许标签换行 */
+    gap: 8rpx;
+    justify-content: flex-start;
+    width: 100%; /* 确保宽度足够容纳标签 */
+  }
+  
+  .tag {
+    background-color: #FFD700;
+    color: #333;
+    font-size: 22rpx;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    white-space: normal;
+    margin-bottom: 8rpx;
+  }
+  
+
+  /* 可展开section内容 */
+  .budget-content,
+  .exclusive-content,
+  .accommodation-content,
+  .transportation-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .budget-content.expanded,
+  .exclusive-content.expanded,
+  .accommodation-content.expanded,
+  .transportation-content.expanded {
+    max-height: none;
+    padding-bottom: 32rpx;
+  }
+  
+  .budget-content.collapsed,
+  .exclusive-content.collapsed,
+  .accommodation-content.collapsed,
+  .transportation-content.collapsed {
+    max-height: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+
+  }
+  
+  /* 预算价格收起时减少底部间距 */
+  .budget-content.collapsed {
+    margin-bottom: -24rpx;
+  }
+  
+  /* 横向滑动容器 */
+  .budget-container,
+  .exclusive-container,
+  .accommodation-container,
+  .transportation-container {
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 0 32rpx;
+    min-height: 400rpx;
+  }
+  
+  .budget-wrapper,
+  .exclusive-wrapper,
+  .accommodation-wrapper,
+  .transportation-wrapper {
+    display: flex;
+    min-width: 100%;
+    gap: 0;
+    padding-right: 32rpx;
+    width: 100%;
+    flex-direction: column;
+    min-height: 300rpx;
+  }
+  
+  /* 预算价格行 */
+/* 预算价格section收起时的间距调整 */
+.budget-section {
+    margin-bottom: 24rpx;
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center; /* 垂直居中对齐 */
+    justify-content: flex-start; /* 左对齐 */
+  }
+  
+  .section-title {
+    width:100px;
+    margin-right: 10px; /* 调整标题和滚动视图之间的间距 */
+    font-size: 32rpx;
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32rpx 32rpx 24rpx;
+    cursor: pointer;
+    min-height: 88rpx;
+  }
+  
+  .arrow-icon {
+    font-size: 18rpx;
+    color: rgb(22, 21, 21);
+    transition: transform 0.3s ease;
+    transform-origin: center;
+    margin-left: 16rpx;
+    line-height: 1;
+  }
+  
+  .arrow-icon.expanded {
+    transform: rotate(180deg);
+  }
+  
+  /* 预算价格内容展开和收起 */
+/* 通用内容样式 */
+/* 通用内容展开/收起样式 */
+/* 展开内容 */
+.content {
+    max-height: none; /* 动态计算，不限制最大高度 */
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  /* 展开时显示内容 */
+  .content.expanded {
+    padding-bottom: 32rpx;
+  }
+  
+  /* 收起时隐藏内容 */
+  .content.collapsed {
+    max-height: 0;
+    padding-bottom: 0;
+  }
+  
+  /* 内容容器 */
+  .container {
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 0 32rpx;
+    height: auto; /* 根据内容自动调整高度 */
+  }
+  
+  /* 包装器 */
+  .wrapper {
+    display: flex;
+    flex-wrap: wrap; /* 自动换行 */
+    gap: 16rpx;
+    width: 100%;
+  }
+  
+  /* 行 */
+  /* 行容器，确保内容能自适应 */
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* 允许换行 */
+    padding: 16rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
+    width: 100%;
+    word-break: break-word;  /* 强制文字换行 */
+  }
+  
+  .row:last-child {
+    border-bottom: none;
+  }
+  
+  /* 标签 */
+  .label {
+    width: 120rpx;
+    font-size: 28rpx;
+    color: #666;
+    flex-shrink: 0;
+    margin-right: 16rpx;  /* 给标签增加一些右边距 */
+  }
+  
+  /* 内容值 */
+  .values {
+    display: flex;
+    flex-wrap: wrap; /* 允许值内容换行 */
+    gap: 12rpx;  /* 调整项之间的间距 */
+    flex: 1;
+    padding: 8rpx;
+    border-radius: 8rpx;
+    overflow-x: auto;
+    white-space: normal;  /* 允许内容换行 */
+    justify-content: flex-start;
+  }
+  
+  /* 每个值项 */
+  .value {
+    font-size: 26rpx;
+    color: #333;
+    text-align: center;
+    width: auto;  /* 自适应宽度 */
+    padding: 8rpx;
+    white-space: nowrap;
+    word-break: break-word;  /* 允许文字断行 */
+  }
+  
+  
+  
+  /* 针对每个部分（budget, exclusive, accommodation, transportation）定义的特定类 */
+  
+  /* 预算 */
+  .budget-content,
+  .exclusive-content,
+  .accommodation-content,
+  .transportation-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .budget-content.expanded,
+  .exclusive-content.expanded,
+  .accommodation-content.expanded,
+  .transportation-content.expanded {
+    max-height: 1000rpx;
+    padding-bottom: 32rpx;
+  }
+  
+  .budget-content.collapsed,
+  .exclusive-content.collapsed,
+  .accommodation-content.collapsed,
+  .transportation-content.collapsed {
+    max-height: 0;
+    padding-bottom: 0;
+  }
+  
+  /* 每个部分的容器样式 */
+  .budget-container,
+  .exclusive-container,
+  .accommodation-container,
+  .transportation-container {
+    white-space: nowrap;
+    overflow-x: auto;
+    padding: 0 32rpx;
+    height: 400rpx;
+  }
+  
+  /* 每个部分的包装样式 */
+  .budget-wrapper,
+  .exclusive-wrapper,
+  .accommodation-wrapper,
+  .transportation-wrapper {
+    display: flex;
+    gap: 24rpx;
+    width: 100%;
+  }
+  
+  /* 每个部分的行样式 */
+  .budget-row,
+  .exclusive-row,
+  .accommodation-row,
+  .transportation-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 16rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
+    width: 100%;
+    min-height: 60rpx;
+  }
+  
+  .budget-row:last-child,
+  .exclusive-row:last-child,
+  .accommodation-row:last-child,
+  .transportation-row:last-child {
+    border-bottom: none;
+  }
+  
+  /* 每个部分的标签样式 */
+  .budget-label,
+  .exclusive-label,
+  .accommodation-label,
+  .transportation-label {
+    width: 120rpx;
+    font-size: 28rpx;
+    color: #666;
+    flex-shrink: 0;
+    margin-right: 16rpx;
+    padding-top: 8rpx;
+  }
+  
+  /* 每个部分的值容器样式 */
+  .budget-values,
+  .exclusive-values,
+  .accommodation-values,
+  .transportation-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16rpx;
+    flex: 1;
+    padding: 8rpx;
+    border-radius: 8rpx;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  
+  /* 每个部分的单项值样式 */
+  .budget-value,
+  .exclusive-value,
+  .accommodation-value,
+  .transportation-value {
+    font-size: 26rpx;
+    color: #333;
+    text-align: center;
+    min-width: 80rpx;
+    max-width: 200rpx;
+    width: auto;
+    padding: 8rpx 12rpx;
+    background-color: #f8f8f8;
+    border-radius: 8rpx;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* 底部按钮 */
+  .bottom-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    padding: 24rpx 32rpx;
+    background-color: #fff;
+    border-top: 1rpx solid #f0f0f0;
+    gap: 24rpx;
+  }
+  
+  .action-btn {
+    flex: 1;
+    height: 88rpx;
+    border-radius: 44rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28rpx;
+    font-weight: 600;
+  }
+  
+  .action-btn.secondary {
+    background-color:#9a919194;
+    color: #666;
+    border: 1rpx solid #e0e0e0;
+  }
+  
+  .action-btn.primary {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .share-icon {
+    width: 24rpx;
+    height: 24rpx;
+    margin-right: 8rpx;
+  }
+  
+  /* 差异点页面 */
+/* 差异页面样式 *//* 核心差异表格容器 *//* 核心差异表格容器 */
+/* 核心差异表格容器 */
+.core-differences {
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  margin-bottom: 24rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx;
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.arrow-icon {
+  font-size: 18rpx;
+  color: rgb(22, 21, 21);
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* 核心差异内容区域 *//* 差异项内容的收缩和展开 */
+.differences-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .differences-content.expanded {
+    max-height: 1000rpx;
+    padding-bottom: 32rpx;
+  }
+  
+  .differences-content.collapsed {
+    max-height: 0;
+    padding-bottom: 0;
+  }
+  
+  /* 核心差异内容容器 */
+  .differences-container {
+    padding: 16rpx 32rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+    /* 增加 flex-wrap 确保内容自适应 */
+    flex-wrap: wrap;
+    height: 400rpx;
+  }
+  
+  /* 差异项行 */
+  .differences-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    width: 100%; /* 确保差异项占满全宽 */
+    gap: 8rpx; /* 行之间的间隔 */
+  }
+  
+  /* 最后一行 */
+  .differences-row:last-child {
+    border-bottom: none;
+  }
+  
+  /* 差异项标签（左侧列） */
+  .diff-label {
+    flex: 1;
+    font-size: 26rpx;
+    color: #666;
+    white-space: normal; /* 允许换行 */
+    text-align: left;
+    padding-right: 16rpx;
+    word-wrap: break-word; /* 自动换行 */
+  }
+  
+  /* 列项值（右侧列） */
+  .diff-value {
+    font-size: 26rpx;
+    color: #333;
+    text-align: center;
+    flex: 1;
+    padding: 8rpx;
+    white-space: normal; /* 允许换行 */
+    word-wrap: break-word; /* 自动换行 */
+  }
+  
+  /* 响应式设计：对于小屏设备调整样式 */
+  @media (max-width: 375px) {
+    /* 调整整体字体大小 */
+    .section-title {
+      font-size: 28rpx;
+    }
+  
+    /* 为了适应小屏幕，调整差异项标签和项值字体大小 */
+    .diff-label, .diff-value {
+      font-size: 22rpx;
+    }
+  
+    /* 增加容器内的间距，使得小屏幕下的显示更加清晰 */
+    .differences-container {
+      padding: 8rpx 16rpx;
+    }
+  
+    /* 减小行的上下间距 */
+    .differences-row {
+      padding: 8rpx 0;
+    }
+  
+    /* 限制列宽，使得每个差异项的列能更好显示 */
+    .differences-row .diff-label,
+    .differences-row .diff-value {
+      width:100%;
+    }
+  }
+  
+
+  
+  
+  
+  
+  /* .diff-value1,
+  .diff-value2 {
+    flex: 1;
+    text-align: center;
+    font-size: 26rpx;
+    color: #333;
+  } */
+  
+  /* AI融合页面 */
+  .ai-fusion-content {
+    padding: 8rpx 16rpx 120rpx;
+    min-height: calc(100vh - 200rpx);
+  }
+  
+  
+  .fusion-plan-card {
+    background-color: #fff;
+    border-radius: 16rpx;
+    overflow: hidden;
+    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+    height: 480rpx;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+  }
+  
+  /* AI融合页面卡片内容样式 - 复用通用样式 */
+  .fusion-plan-card .plan-status {
+    position: absolute;
+    top: 8rpx;
+    left: 8rpx;
+    padding: 0;
+    background-color: transparent;
+    transform: none;
+  }
+  
+  /* 缩小投票徽标尺寸，做成左上角小胶囊 */
+  .fusion-plan-card .plan-status .status-badge {
+    padding: 4rpx 12rpx;
+    font-size: 20rpx; /* 再缩小一半视觉体量 */
+    border-radius: 24rpx;
+  }
+  .fusion-plan-card .plan-status .status-badge .check-icon {
+    font-size: 18rpx;
+    margin-right: 6rpx;
+  }
+  
+  .fusion-plan-card .plan-content {
+    flex: 1;
+    padding: 64rpx 20rpx 20rpx; /* 徽标与第一行标题留出更明显距离 */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .fusion-plan-card .title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12rpx;
+    margin-bottom: 4rpx; /* 第一行与第二行更近一些 */
+  }
+  
+  .fusion-plan-card .plan-icon {
+    width: 40rpx;
+    height: 40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .fusion-plan-card .icon-text {
+    font-size: 32rpx;
+    line-height: 1;
+    margin-top: 50rpx;
+  }
+  
+  .fusion-plan-card .plan-title {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.2;
+  }
+  
+  .fusion-plan-card .plan-subtitle {
+    font-size: 24rpx;
+    color: #999;
+    margin-top: 2rpx;
+    margin-bottom: 10rpx; /* 再微调与标题距离 */
+    line-height: 1.2;
+  }
+  
+  .fusion-plan-card .vote-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .fusion-plan-card .avatar-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .fusion-plan-card .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+  
+  .fusion-plan-card .vote-btn {
+    display: flex;
+    align-items: center;
+    padding: 6rpx 12rpx;
+    font-size: 22rpx;
+    color: #666;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    text-decoration-color: #007AFF;
+    text-underline-offset: 4rpx;
+  }
+  
+  .fusion-plan-card .vote-btn.voted {
+    color: #ff6b35;
+    text-decoration: none;
+  }
+  
+  .fusion-plan-card .vote-icon {
+    display: inline-block;
+    font-size: 20rpx;
+    margin-right: 6rpx;
+  }
+  
+  
+  
+  /* AI融合按钮 */
+  .ai-fusion-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24rpx 32rpx 24rpx 32rpx;
+    background-color: #fff;
+    border-top: 1rpx solid #f0f0f0;
+    padding-top: 40rpx;
+  }
+  
+  .ai-fusion-btn {
+    width: 100%;
+    height: 88rpx;
+    border-radius: 44rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+    gap: 16rpx;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ai-fusion-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  .captain-call-bubble {
+    width: 300rpx;
+    height: 80rpx;
+    margin: 0 0 0 auto;
+    display: block;
+    position: relative;
+    z-index: 3;
+    margin-bottom: -20rpx;
+       margin-left: 400rpx;
+  }
+  
+  .ai-fusion-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16rpx;
+    z-index: 2;
+    position: relative;
+  }
+  
+  .ai-logo {
+    width: 48rpx;
+    height: 48rpx;
+    background-color: #333;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24rpx;
+    font-weight: bold;
+  }
+  
+  /* 动态布局支持 - 基本信息和差异点页面的横向滚动布局 */
+  .plans-wrapper.one-plan .plan-card { flex: 1; min-width: 320rpx; max-width: 400rpx; }
+  .plans-wrapper.two-plans .plan-card { flex: 1; min-width: 300rpx; max-width: 400rpx; }
+  .plans-wrapper.three-plans .plan-card { flex: 1; min-width: 260rpx; max-width: 350rpx; }
+  .plans-wrapper.four-plans .plan-card { flex: 1; min-width: 240rpx; max-width: 320rpx; }
+  .plans-wrapper.five-plus .plan-card { flex: 1; min-width: 220rpx; max-width: 300rpx; }
+  
+  
+  /* 响应式调整 */
+  @media (max-width: 375px) {
+    .plan-card {
+      width: 240rpx;
+    }
+    
+    .highlight-card {
+      width: 260rpx;
+    }
+    
+    .nav-title {
+      font-size: 32rpx;
+    }
+    
+    .tab-item {
+      font-size: 28rpx;
+    }
+    
+    .fusion-plans-grid { gap: 12rpx; padding: 12rpx; }
+    .fusion-plan-card { height: 320rpx; min-height: 300rpx; }
+    .fusion-plans-grid.three-plans .fusion-plan-card:nth-child(3),
+    .fusion-plans-grid.five-plus .fusion-plan-card:last-child:nth-child(odd) { max-width: 250rpx; }
+  }
+  
+  /* 确保滚动容器在移动端有更好的体验 */
+  .plans-container {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* AI融合页面的布局（使用flex实现，兼容性更好） */
+  .fusion-plans-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40rpx;
+    padding: 24rpx;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: stretch;
+    margin-top: -600rpx;
+    row-gap: 40rpx;
+  }
+  
+  /* 默认两列 */
+  .fusion-plans-grid .fusion-plan-card {
+    box-sizing: border-box;
+    width: calc(50% - 20rpx);
+    margin-bottom: 8rpx;
+  }
+  
+  /* 1个方案：居中显示 */
+  .fusion-plans-grid.one-plan {
+    justify-content: center;
+  }
+  .fusion-plans-grid.one-plan .fusion-plan-card {
+    width: 80%;
+    max-width: 520rpx;
+  }
+  
+  /* 2个方案：左右并排 */
+  .fusion-plans-grid.two-plans .fusion-plan-card {
+    width: calc(50% - 12rpx);
+  }
+  
+  /* 3个方案：前两张并排，最后一张居中 */
+  .fusion-plans-grid.three-plans .fusion-plan-card {
+    width: calc(50% - 12rpx);
+  }
+  .fusion-plans-grid.three-plans .fusion-plan-card:nth-child(3) {
+    width: 60%;
+    max-width: 520rpx;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16rpx;
+  }
+  
+  /* 4个方案：2x2 */
+  .fusion-plans-grid.four-plans .fusion-plan-card {
+    width: calc(50% - 12rpx);
+  }
+  
+  /* 5个及以上：保持两列，若为奇数最后一张居中 */
+  .fusion-plans-grid.five-plus .fusion-plan-card {
+    width: calc(50% - 12rpx);
+  }
+  .fusion-plans-grid.five-plus .fusion-plan-card:last-child:nth-child(odd) {
+    width: 60%;
+    max-width: 520rpx;
+    margin-left: auto;
+    margin-right: auto;
+  }

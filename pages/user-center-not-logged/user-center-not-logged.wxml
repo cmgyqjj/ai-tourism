@@ -1,0 +1,10 @@
+<view class="not-logged-container">
+  <!-- 全屏图片 -->
+  <view class="image-container" bindtap="onImageTap">
+    <image 
+      class="full-screen-image" 
+      src="/images/user-center/use-center-not-log.png" 
+      mode="aspectFill">
+    </image>
+  </view>
+</view> 

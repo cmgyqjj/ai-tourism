@@ -1,0 +1,60 @@
+<view class="welcome-container">
+  <!-- 背景图片 -->
+
+  
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 顶部GIF图片区域 -->
+    <view class="top-gif-container">
+      <image class="gif-image" src="/images/denglu/logo.png" mode="aspectFit"></image>
+    </view>
+    
+    <!-- 手机号显示区域 -->
+    <view class="phone-display" wx:if="{{isPhoneLogin}}">
+      <text class="phone-text">{{phoneNumber}}</text>
+    </view>
+    
+
+    <!-- 微信头像选择登录按钮 -->
+    <button 
+      class="main-login-btn" 
+      open-type="chooseAvatar"
+      bindchooseavatar="onChooseAvatar">
+      <image class="login-btn-image" src="/images/denglu/wechatLogin.png" mode="scaleToFill"></image>
+    </button>
+    
+    
+    <!-- 底部登录选项 -->
+    <view class="login-options">
+      <view class="option-item" bindtap="onAiwanLogin">
+        <image class="option-image" src="/images/denglu/Ai.png" mode="aspectFit"></image>
+      </view>
+      
+      <view class="option-item" bindtap="onWechatLogin">
+        <image class="option-image" src="/images/denglu/wechat.png" mode="aspectFit"></image>
+      </view>
+      
+      <view class="option-item" bindtap="onPhoneLogin">
+        <image class="option-image" src="/images/denglu/Phone.png" mode="aspectFit"></image>
+      </view>
+      
+      <view class="option-item" bindtap="onOtherLogin">
+        <image class="option-image" src="/images/denglu/QQ.png" mode="aspectFit"></image>
+      </view>
+      
+      <view class="option-item" bindtap="onAppleLogin">
+        <image class="option-image" src="/images/denglu/apple.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 底部协议区域 -->
+    <view class="agreement">
+      <view class="agreement-checkbox {{agreed ? 'checked' : ''}}" bindtap="onAgreementToggle">
+        <text class="checkbox-icon">{{agreed ? '✓' : ''}}</text>
+      </view>
+      <text class="agreement-text">
+        我已阅读并同意<text class="link-text" bindtap="onPrivacyPolicy">隐私政策</text>和<text class="link-text" bindtap="onUserAgreement">用户协议</text>
+      </text>
+    </view>
+  </view>
+</view> 

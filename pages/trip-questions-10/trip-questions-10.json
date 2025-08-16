@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "就餐预算",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#facc15",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false
+}

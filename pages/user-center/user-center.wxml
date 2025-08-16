@@ -1,0 +1,96 @@
+<view class="page">
+  <view class="container">
+    <!-- 顶部个人信息区 -->
+    <view class="header">
+      <view class="user-info">
+        <image class="avatar" src="{{userInfo.avatar}}" />
+        <view class="info">
+          <view class="name">{{userInfo.name}}</view>
+          <view class="tag">{{userInfo.tag}}</view>
+        </view>
+      </view>
+      <view class="setting" bindtap="onSettingTap">
+        <text class="setting-icon">⚙️</text>
+      </view>
+    </view>
+
+    <!-- Banner区域 -->
+    <view class="banner">
+      <view class="banner-content">
+        <view class="banner-left">
+          <view class="banner-title">Whatever</view>
+          <view class="banner-subtitle">我特爱玩!1分钟搞定你的旅行~</view>
+        </view>
+        <button class="create-btn" bindtap="onCreateTripTap">立即制作</button>
+      </view>
+    </view>
+
+    <!-- 导航标签栏 -->
+    <view class="nav-tabs">
+      <view class="main-tabs">
+        <view 
+          class="tab {{item.active ? 'active' : ''}}" 
+          wx:for="{{mainTabs}}" 
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onMainTabTap">
+          {{item.name}}
+        </view>
+      </view>
+      <scroll-view class="year-tabs" scroll-x>
+        <view 
+          class="year-tab {{item.active ? 'active' : ''}}" 
+          wx:for="{{yearTabs}}" 
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="onYearTabTap">
+          {{item.name}}
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 行程内容展示区 -->
+    <scroll-view class="content" scroll-y>
+      <!-- 空状态显示 -->
+      <view class="empty-state" wx:if="{{!tripList || tripList.length === 0}}">
+        <image class="empty-image" src="https://p0.inf.test.sankuai.com/haikesong/个人页啥也没有" mode="aspectFit" />
+        <view class="empty-text">暂无内容</view>
+      </view>
+      
+      <!-- 行程列表 -->
+      <view class="trip-list" wx:if="{{tripList && tripList.length > 0}}">
+        <view 
+          class="trip-card" 
+          wx:for="{{tripList}}" 
+          wx:key="id"
+          data-index="{{index}}"
+          data-trip-id="{{item.id}}"
+          bindtap="onTripCardTap">
+          <image class="trip-image" src="{{item.image}}" />
+          <view class="trip-info">
+            <view class="trip-title">{{item.title}}</view>
+            <view class="trip-date">
+              <view class="days">{{item.days}}</view>
+              <view class="date">{{item.date}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 底部导航栏 -->
+<view class="bottom-nav">
+  <view class="nav-item" bindtap="onTabBarTap" data-type="plan">
+    <image class="nav-image" src="/images/shoye/btn-trip-plan.png" mode="aspectFit" />
+  </view>
+  
+  <view class="nav-item" bindtap="onTabBarTap" data-type="ai">
+    <image class="nav-image-center" src="/images/shoye/btn-ai-strategy.png" mode="aspectFit" />
+  </view>
+  
+  <view class="nav-item active">
+    <image class="nav-image" src="/images/shoye/btn-user-center.png" mode="aspectFit" />
+  </view>
+</view> 

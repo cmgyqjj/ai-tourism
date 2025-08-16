@@ -1,0 +1,56 @@
+<view class="page">
+  <!-- 标题区域 -->
+  <view class="header">
+    <view class="title">路线优化</view>
+  </view>
+
+  <!-- 地图展示区域 -->
+  <view class="map-container">
+    <map 
+      longitude="121.4737" 
+      latitude="31.2304"
+      scale="12"
+      show-compass="true"
+      show-scale="true"
+      markers="{{markers}}"
+      polyline="{{polyline}}"
+      class="map">
+    </map>
+  </view>
+
+  <!-- AI思考中的加载状态 -->
+  <view class="ai-thinking-container" wx:if="{{isThinking}}">
+    <image class="ai-avatar" src="/images/route-optimization/ai.png" />
+    <text class="thinking-text">Ai正在思考中...</text>
+  </view>
+
+  <!-- 问题选择区域 -->
+  <view class="overlay" wx:if="{{!isThinking}}">
+    <view class="question-selection">
+      <view class="question-title-container">
+        <image class="ai-avatar" src="/images/route-optimization/ai.png" />
+        <text class="question-title">选择需要优化的问题：</text>
+      </view>
+      
+      <view class="question-list">
+        <view wx:for="{{questions}}" wx:key="index" 
+              class="question-item {{isQuestionSelected(index) ? 'selected' : ''}}" 
+              bindtap="selectQuestion" data-index="{{index}}">
+          <text class="question-text">{{item.title}}</text>
+          <text class="question-desc">{{item.desc}}</text>
+          <text class="arrow">→</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 确认按钮 -->
+    <view wx:if="{{hasSelectedQuestions()}}" class="confirm-btn-container">
+      <button class="btn confirm" bindtap="startThinking">确认选择</button>
+    </view>
+    
+    <!-- 都不是，换一批 按钮 -->
+    <view class="change-batch-btn" bindtap="changeBatch">
+      <text class="btn-text">都不是，换一批</text>
+    </view>
+  </view>
+</view>

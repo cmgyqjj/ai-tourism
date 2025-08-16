@@ -1,0 +1,293 @@
+<!--create-trip.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <view class="main-content">
+    <!-- 搜索区域 -->
+    <view class="search-section">
+      <view class="search-question">
+        <text>宝，你们想去哪里？</text>
+      </view>
+      <view class="search-bar" bindtap="showDestinationSelector">
+        <view class="search-icon">🔍</view>
+        <view class="search-input">
+          <text class="placeholder" wx:if="{{!selectedDestination}}">输入目的地、景点、活动等</text>
+          <text class="selected-text" wx:else>{{selectedDestination}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 时间选择区域 - 只有在选择了目的地后才显示 -->
+
+
+    <!-- 灵活天数输入区域 - 只有在选择了目的地后才显示 -->
+    <view class="flexible-duration-section" wx:if="{{selectedDestination}}">
+      <view class="flexible-duration-question">
+        <text>宝，你们想要玩多久？</text>
+      </view>
+      <view class="flexible-duration-input-container">
+        <view class="flexible-duration-icon">📅</view>
+        <input 
+          class="flexible-duration-input" 
+          placeholder="选择旅行天数或日期" 
+          value="{{flexibleDurationText}}"
+          bindtap="showTimeSelector"
+          disabled="true"
+        />
+      </view>
+    </view>
+
+    <!-- 旅行搭子数量输入区域 - 只有在选择了时间或灵活天数后才显示 -->
+    <view class="companion-section" wx:if="{{flexibleDurationText}}">
+      <view class="companion-question">
+        <text>宝，本次旅行几个搭子？</text>
+      </view>
+      <view class="companion-input-container">
+        <view class="companion-icon">👥</view>
+        <input 
+          class="companion-input" 
+          placeholder="输入搭子数量 (最多3人)" 
+          value="{{companionCount}}"
+          bindinput="onCompanionInput"
+          maxlength="1"
+          type="number"
+        />
+      </view>
+    </view>
+
+    <!-- 分享好友区域 - 只有在输入了搭子数量后才显示 -->
+    <view class="share-section" wx:if="{{companionCount}}">
+      <view class="share-title">
+        <text>分享好友，免费解锁AI智能规划</text>
+      </view>
+      <view class="share-avatars">
+        <view class="current-user-avatar">
+          <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="avatar-image" />
+          <view wx:else class="avatar-placeholder">👤</view>
+        </view>
+        <view class="add-friends">
+          <view class="add-icon">+</view>
+          <text class="add-text">+{{remainingCompanions}}</text>
+        </view>
+      </view>
+      <view class="share-buttons">
+        <button class="share-wechat-btn" open-type="share">分享微信群</button>
+        <button class="do-myself-btn" bindtap="doItMyself">
+          <text class="do-myself-text">自己搞定</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 目的地选择器 -->
+  <view class="destination-selector" wx:if="{{showSelector}}" bindtap="hideDestinationSelector">
+    <view class="selector-content" catchtap="stopPropagation">
+      <!-- 选择器头部 -->
+      <view class="selector-header">
+        <view class="header-left" bindtap="goBack">
+          <text class="back-icon">←</text>
+        </view>
+        <view class="header-tabs">
+          <view class="tab-item {{tabType === 'single' ? 'active' : ''}}" bindtap="switchTab" data-type="single">
+            <text>单选目的地</text>
+          </view>
+          <view class="tab-item {{tabType === 'multiple' ? 'active' : ''}}" bindtap="switchTab" data-type="multiple">
+            <text>多选目的地</text>
+          </view>
+        </view>
+        <view class="header-right" bindtap="hideDestinationSelector">
+          <text class="close-icon">✕</text>
+        </view>
+      </view>
+
+      <!-- 搜索栏 -->
+      <view class="selector-search">
+        <view class="search-input-container">
+          <text class="search-icon-small">🔍</text>
+          <input class="search-input-field" placeholder="搜索机场、城市、国家..." value="{{searchKeyword}}" bindinput="onSearchInput" />
+        </view>
+      </view>
+
+      <!-- 主要内容区域 -->
+      <view class="selector-main">
+        <!-- 左侧分类列表 -->
+        <scroll-view class="category-sidebar" 
+              id="categorySidebar"
+              scroll-y="true"
+              enhanced="true"
+              show-scrollbar="true"
+              bindtouchstart="onTouchStart"
+              bindtouchmove="onTouchMove"
+              bindtouchend="onTouchEnd">
+          <view class="category-item {{currentCategory === item.key ? 'active' : ''}}" 
+                wx:for="{{categories}}" 
+                wx:key="key" 
+                bindtap="selectCategory" 
+                data-category="{{item.key}}">
+            <text>{{item.name}}</text>
+          </view>
+        </scroll-view>
+
+        <!-- 右侧目的地列表 -->
+        <scroll-view class="destination-list" 
+              id="destinationList"
+              scroll-y="true"
+              enhanced="true"
+              show-scrollbar="true"
+              bindtouchstart="onTouchStart"
+              bindtouchmove="onTouchMove"
+              bindtouchend="onTouchEnd">
+          <view class="list-header">
+            <text class="list-title">{{currentCategoryName}}</text>
+            <!-- 多选模式下显示已选择数量 -->
+            <text class="selected-count" wx:if="{{tabType === 'multiple'}}">已选择 {{selectedDestinations.length}} 个</text>
+          </view>
+          
+          <!-- 多选模式下显示已选择目的地的预览 -->
+          <view class="selected-preview" wx:if="{{tabType === 'multiple' && selectedDestinations.length > 0}}">
+            <view class="preview-title">已选择的目的地：</view>
+            <view class="selected-tags">
+              <view class="selected-tag" 
+                    wx:for="{{selectedDestinations}}" 
+                    wx:key="id">
+                <text class="tag-text">{{item.name}}</text>
+                <text class="tag-remove" 
+                      bindtap="removeDestination" 
+                      data-destination-id="{{item.id}}">×</text>
+              </view>
+            </view>
+          </view>
+          
+          <view class="destination-items">
+            <view class="destination-item {{item.selected ? 'selected' : ''}}" 
+                  wx:for="{{currentDestinations}}" 
+                  wx:key="id" 
+                  bindtap="selectDestination" 
+                  data-destination="{{item}}">
+              <view class="destination-info">
+                <text class="destination-name">{{item.name}}</text>
+                <text class="destination-codes">{{item.codes}}</text>
+              </view>
+              <view class="destination-check" wx:if="{{tabType === 'multiple'}}">
+                <text class="check-icon" wx:if="{{item.selected}}">✓</text>
+                <view class="check-placeholder" wx:else></view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 多选模式下的确定按钮 -->
+      <view class="confirm-section" wx:if="{{tabType === 'multiple'}}">
+        <button class="confirm-button {{selectedDestinations.length > 0 ? 'active' : 'disabled'}}" 
+                bindtap="confirmMultipleDestinations"
+                disabled="{{selectedDestinations.length === 0}}">
+          确定选择 ({{selectedDestinations.length}})
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 时间选择器 -->
+  <view class="time-selector" wx:if="{{showTimeSelector}}" bindtap="hideTimeSelector">
+    <view class="time-selector-content" catchtap="stopPropagation">
+      <!-- 选择器头部 -->
+      <view class="time-selector-header">
+        <view class="header-title-section">
+          <text class="header-title">你想去多久？</text>
+          <view class="date-type-toggle">
+            <view class="toggle-button {{isFlexible ? 'active' : ''}}" bindtap="switchDateType" data-type="flexible">
+              <text>灵活天数</text>
+            </view>
+            <view class="toggle-button {{!isFlexible ? 'active' : ''}}" bindtap="switchDateType" data-type="fixed">
+              <text>固定日期</text>
+            </view>
+          </view>
+        </view>
+        <view class="header-right" bindtap="hideTimeSelector">
+          <text class="close-icon">✕</text>
+        </view>
+      </view>
+      
+      <!-- 灵活天数的天数选择 -->
+      <view class="flexible-days" wx:if="{{isFlexible && !selectedDays}}">
+        <view class="days-grid">
+          <view class="day-item {{selectedDays === item ? 'active' : ''}}" 
+                wx:for="{{[2,3,4,5,6,7,8]}}" 
+                wx:key="*this" 
+                bindtap="selectDays" 
+                data-days="{{item}}">
+            <text>{{item}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 日历区域 - 只在固定日期模式下显示 -->
+      <view class="calendar-section" wx:if="{{!isFlexible}}">
+        <view class="calendar-header">
+          <view class="calendar-nav" bindtap="previousMonth">
+            <text class="nav-icon">‹</text>
+          </view>
+          <view class="calendar-title">
+            <text>{{currentYear}}年{{currentMonth}}月</text>
+          </view>
+          <view class="calendar-nav" bindtap="nextMonth">
+            <text class="nav-icon">›</text>
+          </view>
+        </view>
+
+        <!-- 星期标题 -->
+        <view class="weekdays">
+          <view class="weekday" wx:for="{{['日','一','二','三','四','五','六']}}" wx:key="*this">
+            <text>{{item}}</text>
+          </view>
+        </view>
+
+        <!-- 日期网格 -->
+        <view class="calendar-grid">
+          <view class="calendar-day {{item.isCurrentMonth ? '' : 'other-month'}} {{item.isSelected ? 'selected' : ''}} {{item.isInRange ? 'in-range' : ''}} {{item.isToday ? 'today' : ''}}"
+                wx:for="{{calendarDays}}" 
+                wx:key="date"
+                bindtap="{{item.isCurrentMonth ? 'selectDate' : ''}}" 
+                data-date="{{item.date}}"
+                data-is-current-month="{{item.isCurrentMonth}}">
+            <view class="day-number">{{item.day}}</view>
+            <text class="holiday-mark" wx:if="{{item.isHoliday}}">休</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 选择的日期显示 - 只在固定日期模式下显示 -->
+      <view class="selected-date-display" wx:if="{{!isFlexible && selectedRange.start}}">
+        <view class="date-info">
+          <view class="date-label">旅行日期</view>
+          <view class="date-range">{{selectedRange.display}}</view>
+        </view>
+        <view class="date-duration" wx:if="{{selectedRange.days}}">
+          <text>{{selectedRange.days}}天</text>
+        </view>
+      </view>
+
+      <!-- 灵活天数确认显示 -->
+      <view class="flexible-duration-display" wx:if="{{isFlexible && selectedDays > 0}}">
+        <view class="flexible-duration-info">
+          <view class="flexible-duration-label">选择的旅行天数</view>
+          <view class="flexible-duration-value">{{selectedDays}}天</view>
+        </view>
+      </view>
+
+      <!-- 确定按钮 -->
+      <button class="confirm-button {{(isFlexible && selectedDays > 0) || (!isFlexible && selectedRange.end) ? 'active' : 'disabled'}}" 
+              bindtap="confirmTimeSelection" 
+              disabled="{{(isFlexible && selectedDays <= 0) || (!isFlexible && !selectedRange.end)}}">
+        确定
+      </button>
+    </view>
+  </view>
+</view> 

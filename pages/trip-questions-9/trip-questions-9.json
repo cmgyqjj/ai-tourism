@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "就餐偏好",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#facc15",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false
+}

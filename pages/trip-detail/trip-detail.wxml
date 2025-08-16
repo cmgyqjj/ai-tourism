@@ -1,0 +1,115 @@
+<!--trip-detail.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="nav-title">行程详情</view>
+    <view class="nav-right">
+      <button class="share-btn" open-type="share">
+        <text class="share-icon">📤</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 行程详情内容 -->
+  <view class="trip-content" wx:if="{{!isLoading && tripInfo}}">
+    <!-- 行程基本信息 -->
+    <view class="trip-header">
+      <view class="destination-title">{{tripInfo.destination}}</view>
+      <view class="trip-meta">
+        <text class="duration">{{tripInfo.duration}}</text>
+        <text class="date-range">{{tripInfo.startDate}} - {{tripInfo.endDate}}</text>
+      </view>
+      <view class="budget">预算：{{tripInfo.budget}}</view>
+    </view>
+
+    <!-- 标签 -->
+    <view class="tags-section">
+      <view class="tag" wx:for="{{tripInfo.tags}}" wx:key="*this">
+        <text>{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 行程描述 -->
+    <view class="description-section">
+      <view class="section-title">行程描述</view>
+      <view class="description-text">{{tripInfo.description}}</view>
+    </view>
+
+    <!-- 行程安排 -->
+    <view class="itinerary-section">
+      <view class="section-title">行程安排</view>
+      <view class="itinerary-list">
+        <view class="itinerary-item" wx:for="{{tripInfo.itinerary}}" wx:key="day">
+          <view class="day-header">
+            <text class="day-number">第{{item.day}}天</text>
+            <text class="day-title">{{item.title}}</text>
+          </view>
+          <view class="activities">
+            <text class="activity" wx:for="{{item.activities}}" wx:key="*this" wx:for-item="activity">{{activity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 成员信息 -->
+    <view class="members-section">
+      <view class="section-title">成员信息 ({{tripInfo.currentCompanions}}/{{tripInfo.companionCount}})</view>
+      <view class="members-list">
+        <view class="member-item" wx:for="{{companions}}" wx:key="id">
+          <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view class="member-info">
+            <text class="member-name">{{item.name}}</text>
+            <text class="member-role" wx:if="{{item.isCreator}}">创建者</text>
+          </view>
+        </view>
+        
+        <!-- 空位显示 -->
+        <view class="empty-slots" wx:if="{{tripInfo.currentCompanions < tripInfo.companionCount}}">
+          <view class="empty-slot" wx:for="{{tripInfo.companionCount - tripInfo.currentCompanions}}" wx:key="*this">
+            <text class="empty-icon">+</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加入按钮 -->
+    <view class="action-section" wx:if="{{!isJoined && tripInfo.currentCompanions < tripInfo.companionCount}}">
+      <button class="join-btn" bindtap="joinTrip">加入行程</button>
+    </view>
+
+    <!-- 已加入状态 -->
+    <view class="joined-status" wx:if="{{isJoined}}">
+      <text class="joined-text">✅ 已成功加入行程</text>
+    </view>
+  </view>
+
+  <!-- 加入确认弹窗 -->
+  <view class="modal-overlay" wx:if="{{showJoinModal}}" bindtap="cancelJoin">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">确认加入</text>
+      </view>
+      <view class="modal-body">
+        <text class="modal-text">确定要加入这个旅行计划吗？</text>
+        <view class="trip-summary">
+          <text class="summary-item">目的地：{{tripInfo.destination}}</text>
+          <text class="summary-item">时长：{{tripInfo.duration}}</text>
+          <text class="summary-item">时间：{{tripInfo.startDate}} - {{tripInfo.endDate}}</text>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="cancel-btn" bindtap="cancelJoin">取消</button>
+        <button class="confirm-btn" bindtap="confirmJoin">确认加入</button>
+      </view>
+    </view>
+  </view>
+</view> 

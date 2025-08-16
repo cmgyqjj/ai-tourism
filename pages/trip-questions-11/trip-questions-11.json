@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "每日活动倾向",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#facc15",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false
+}

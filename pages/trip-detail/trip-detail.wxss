@@ -1,0 +1,502 @@
+/* trip-detail.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding-bottom: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 导航栏 */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 88rpx;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20rpx;
+  padding-top: 44rpx;
+  z-index: 1000;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.back-icon {
+  font-size: 36rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-left: 20rpx;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.share-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.share-btn::after {
+  border: none;
+}
+
+.share-icon {
+  font-size: 32rpx;
+  color: #007aff;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  margin-top: 88rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #f3f3f3;
+  border-top: 4rpx solid #007aff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 行程内容 */
+.trip-content {
+  margin-top: 88rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 行程头部 */
+.trip-header {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.destination-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+  word-break: break-all;
+}
+
+.trip-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.duration {
+  background-color: #007aff;
+  color: #ffffff;
+  padding: 6rpx 12rpx;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+  white-space: nowrap;
+}
+
+.date-range {
+  font-size: 26rpx;
+  color: #666;
+  word-break: break-all;
+}
+
+.budget {
+  font-size: 26rpx;
+  color: #ff6b35;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+/* 标签 */
+.tags-section {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #f0f8ff;
+  color: #007aff;
+  padding: 6rpx 12rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  margin-right: 12rpx;
+  margin-bottom: 8rpx;
+  word-break: break-all;
+}
+
+/* 通用区块样式 */
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+/* 行程描述 */
+.description-section {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.description-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+/* 行程安排 */
+.itinerary-section {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.itinerary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.itinerary-item {
+  border-left: 4rpx solid #007aff;
+  padding-left: 20rpx;
+}
+
+.day-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.day-number {
+  background-color: #007aff;
+  color: #ffffff;
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.day-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+  word-break: break-all;
+}
+
+.activities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.activity {
+  background-color: #f8f9fa;
+  color: #666;
+  padding: 6rpx 12rpx;
+  border-radius: 10rpx;
+  font-size: 22rpx;
+  word-break: break-all;
+}
+
+/* 成员信息 */
+.members-section {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.members-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.member-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 80rpx;
+}
+
+.member-avatar {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  margin-bottom: 8rpx;
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100rpx;
+}
+
+.member-name {
+  font-size: 22rpx;
+  color: #333;
+  margin-bottom: 4rpx;
+  word-break: break-all;
+  text-align: center;
+}
+
+.member-role {
+  font-size: 18rpx;
+  color: #007aff;
+  background-color: #f0f8ff;
+  padding: 2rpx 6rpx;
+  border-radius: 6rpx;
+  white-space: nowrap;
+}
+
+.empty-slots {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.empty-slot {
+  width: 70rpx;
+  height: 70rpx;
+  border: 2rpx dashed #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.empty-icon {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 操作区域 */
+.action-section {
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.join-btn {
+  width: 100%;
+  height: 80rpx;
+  background-color: #007aff;
+  color: #ffffff;
+  border: none;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.join-btn::after {
+  border: none;
+}
+
+/* 已加入状态 */
+.joined-status {
+  text-align: center;
+  padding: 20rpx;
+}
+
+.joined-text {
+  font-size: 26rpx;
+  color: #52c41a;
+  font-weight: 500;
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  width: 100%;
+  max-width: 560rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.modal-header {
+  padding: 24rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal-body {
+  padding: 24rpx;
+}
+
+.modal-text {
+  font-size: 26rpx;
+  color: #666;
+  text-align: center;
+  margin-bottom: 20rpx;
+}
+
+.trip-summary {
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+
+.summary-item {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+  word-break: break-all;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.cancel-btn, .confirm-btn {
+  flex: 1;
+  height: 80rpx;
+  border: none;
+  border-radius: 0;
+  font-size: 30rpx;
+}
+
+.cancel-btn {
+  background-color: #f8f9fa;
+  color: #666;
+}
+
+.confirm-btn {
+  background-color: #007aff;
+  color: #ffffff;
+}
+
+.cancel-btn::after, .confirm-btn::after {
+  border: none;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+  .trip-content {
+    padding: 16rpx;
+  }
+  
+  .trip-header,
+  .tags-section,
+  .description-section,
+  .itinerary-section,
+  .members-section {
+    padding: 16rpx 20rpx;
+    margin-bottom: 16rpx;
+  }
+  
+  .destination-title {
+    font-size: 36rpx;
+  }
+  
+  .section-title {
+    font-size: 28rpx;
+  }
+  
+  .description-text,
+  .day-title,
+  .member-name {
+    font-size: 24rpx;
+  }
+  
+  .tag,
+  .activity,
+  .member-role {
+    font-size: 20rpx;
+  }
+} 

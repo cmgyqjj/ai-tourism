@@ -1,0 +1,8 @@
+<view class="login-placeholder-container">
+  <!-- 全屏背景图片 -->
+  <image 
+    class="background-image" 
+    src="{{currentImage}}" 
+    mode="aspectFill">
+  </image>
+</view> 

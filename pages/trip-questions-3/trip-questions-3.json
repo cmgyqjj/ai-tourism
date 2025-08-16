@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "交通方式选择",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#facc15",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false
+} 

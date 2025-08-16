@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "人生必去景点",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#facc15",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false
+} 

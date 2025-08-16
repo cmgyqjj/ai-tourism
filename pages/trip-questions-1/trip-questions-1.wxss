@@ -1,0 +1,295 @@
+/* trip-questions-1.wxss */
+page {
+  background: linear-gradient(180deg, #facc15 0%, #fef3c7 100%);
+  min-height: 100vh;
+}
+
+.container {
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+/* 顶部导航栏 */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 96rpx;
+  background-color: #ffffff;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.nav-left {
+  position: absolute;
+  left: 24rpx;
+  top: 56rpx;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 40rpx;
+  color: #000000;
+  font-weight: bold;
+}
+
+.nav-title {
+  flex: 1;
+  top: 56rpx;
+  right:20%;
+  text-align: center;
+}
+
+.nav-title text {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #000000;
+}
+
+.nav-right {
+  position: absolute;
+  right: 32rpx;
+  top: 32rpx;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatars {
+  display: flex;
+  top:100rpx;
+  right:120rpx;
+  align-items: center;
+  position: relative;
+}
+
+.user-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #e5e7eb;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.user-avatar:nth-child(2) {
+  margin-left: -15rpx;
+  z-index: 2;
+}
+
+.user-avatar:nth-child(3) {
+  margin-left: -15rpx;
+  z-index: 3;
+}
+
+.user-avatar:nth-child(4) {
+  margin-left: -15rpx;
+  z-index: 4;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.avatar-icon {
+  font-size: 32rpx;
+}
+
+/* 主要内容区域 */
+.main-content {
+  bottom: 350rpx;
+  padding: 32rpx 48rpx;
+  padding-top: 160rpx; /* 为固定导航栏留出空间 */
+  position: relative;
+  left: 20rpx;
+}
+
+/* 进度指示器 */
+.progress-badge {
+  position: absolute;
+  top: 160rpx;
+  right: 80rpx;
+  background-color: transparent;
+  padding: 12rpx 24rpx;
+  border-radius: 20rpx;
+  border: 2rpx solid #000000;
+}
+
+.progress-badge text {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #000000;
+}
+
+/* 问题区域 */
+.question-section {
+  margin-top: 0; /* 减少顶部边距 */
+  background-color: transparent;
+  border-radius: 32rpx;
+  padding: 48rpx 0;
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 48rpx;
+  gap: 24rpx;
+}
+
+.question-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  background-color: transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-right: 20rpx;
+}
+
+.question-avatar .avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.question-avatar .avatar-icon {
+  font-size: 48rpx;
+}
+
+.question-content {
+  flex: 1;
+}
+
+.question-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #000000;
+  line-height: 1.4;
+}
+
+/* 选项网格 - 流式布局 */
+.options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+
+.option-item {
+  background-color: #ffffff;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 50rpx;
+  padding: 20rpx 28rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  min-height: 58rpx;
+  min-width: 150rpx;
+  flex-shrink: 0;
+  margin: 0 20rpx 20rpx 0;
+  text-align: center;
+}
+
+.option-item:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+.option-item.selected {
+  background-color: #000000;
+  border-color: #000000;
+  color: #ffffff;
+  text-align: center;
+}
+
+.option-icon {
+  font-size: 32rpx;
+  margin-right: 8rpx;
+}
+
+.option-text {
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.option-item.selected .option-text {
+  color: #ffffff;
+  text-align: center;
+}
+
+/* 固定在底部的下一步按钮 */
+.fixed-bottom-section {
+  position: fixed;
+  bottom: 40rpx;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 48rpx;
+  background: transparent;
+}
+
+.next-button {
+  width: 100%;
+  height: 96rpx;
+  background-color: #e5e7eb;
+  border: none;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.next-button.active {
+  background-color: #000000;
+}
+
+.next-button text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.next-button.active text {
+  color: #ffffff;
+}
+
+.next-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 响应式调整 */
+@media (max-width: 750rpx) {
+  .option-item {
+    min-height: 70rpx;
+    padding: 16rpx 20rpx;
+  }
+} 

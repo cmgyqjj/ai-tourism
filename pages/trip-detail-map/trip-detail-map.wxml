@@ -1,0 +1,187 @@
+<view class="trip-detail-container">
+  <!-- 顶部退出按钮 -->
+  <view class="back-button" bindtap="goBack">
+    <text class="back-icon">←</text>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <view class="main-content">
+    <!-- 地图区域 - 占屏幕1/3 -->
+    <view class="map-section">
+      <map 
+        id="tripMap"
+        class="trip-map"
+        longitude="{{mapCenter.longitude}}"
+        latitude="{{mapCenter.latitude}}"
+        scale="{{mapScale}}"
+        markers="{{mapMarkers}}"
+        polyline="{{mapPolyline}}"
+        show-location="true"
+        bindmarkertap="onMarkerTap"
+        bindregionchange="onRegionChange">
+      </map>
+    </view>
+
+    <!-- 行程标题区域 - 移动到地图下面 -->
+    <view class="trip-header">
+      <view class="trip-title">
+        <text class="title-text">我的：{{tripTitle}}</text>
+        <view class="trip-duration" bindtap="viewTripDetails">
+          <text class="duration-text">{{tripDuration}}</text>
+          <text class="arrow">></text>
+        </view>
+      </view>
+      <view class="participants">
+        <view class="participant-avatar" wx:for="{{participants}}" wx:key="index">
+          <image class="avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <view class="checkmark" wx:if="{{item.isCurrentUser}}">✓</view>
+        </view>
+        <view class="more-participants" wx:if="{{participants.length > 3}}">
+          <text class="more-text">+{{participants.length - 3}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 行程内容区域 - 占屏幕2/3 -->
+    <view class="trip-content">
+      <!-- 左侧日期列表 -->
+      <view class="date-list">
+        <scroll-view class="date-scroll" scroll-y="true">
+          <view class="date-item {{selectedDay === item.day ? 'active' : ''}}" 
+                wx:for="{{tripDays}}" 
+                wx:key="day"
+                bindtap="selectDay"
+                data-day="{{item.day}}">
+            <view class="date-icon">
+              <text class="day-number">{{item.day}}</text>
+              <text class="weather-icon">{{item.weather}}</text>
+            </view>
+            <view class="date-info">
+              <text class="date-text">{{item.date}}</text>
+              <text class="route-text">{{item.route}}</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 右侧行程详情 -->
+      <scroll-view class="trip-details" scroll-y="true">
+        <view class="day-header">
+          <text class="day-title">第{{selectedDay}}天 | {{currentDayInfo.route}}</text>
+        </view>
+
+        <!-- 航班信息 -->
+        <view class="detail-section" wx:if="{{currentDayInfo.flight}}">
+          <view class="section-header">
+            <text class="section-title">航班信息</text>
+          </view>
+          <view class="section-content">
+            <text class="flight-info">{{currentDayInfo.flight}}</text>
+          </view>
+        </view>
+
+        <!-- 住宿建议 -->
+        <view class="detail-section">
+          <view class="section-header">
+            <text class="section-title">住宿建议</text>
+            <text class="expand-icon" bindtap="toggleAccommodation">▼</text>
+          </view>
+          <view class="section-content">
+            <text class="accommodation-info">{{currentDayInfo.accommodation}}</text>
+          </view>
+        </view>
+
+        <!-- 美食推荐 -->
+        <view class="detail-section" wx:for="{{currentDayInfo.food}}" wx:key="index">
+          <view class="section-header">
+            <view class="category-icon food-icon">🍽️</view>
+            <text class="category-label">美食</text>
+          </view>
+          <view class="section-content">
+            <view class="item-card">
+              <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+              <view class="item-info">
+                <text class="item-name">{{item.name}}</text>
+                <text class="item-price">人均: ¥{{item.price}}</text>
+                <view class="item-distance" bindtap="navigateToLocation" data-location="{{item.location}}">
+                  <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟</text>
+                  <text class="navigate-arrow">></text>
+                </view>
+              </view>
+              <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
+                <text class="menu-icon">☰</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 景点推荐 -->
+        <view class="detail-section" wx:for="{{currentDayInfo.attractions}}" wx:key="index">
+          <view class="section-header">
+            <view class="category-icon attraction-icon">🏔️</view>
+            <text class="category-label">景点</text>
+          </view>
+          <view class="section-content">
+            <view class="item-card">
+              <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+              <view class="item-info">
+                <text class="item-number">{{index + 1}}.{{item.name}}</text>
+                <text class="item-desc">{{item.description}}</text>
+                <view class="item-distance" bindtap="navigateToLocation" data-location="{{item.location}}">
+                  <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟</text>
+                  <text class="navigate-arrow">></text>
+                </view>
+              </view>
+              <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
+                <text class="menu-icon">☰</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 住宿推荐 -->
+        <view class="detail-section" wx:for="{{currentDayInfo.hotels}}" wx:key="index">
+          <view class="section-header">
+            <view class="category-icon hotel-icon">🛏️</view>
+            <text class="category-label">住宿推荐</text>
+          </view>
+          <view class="section-content">
+            <view class="item-card">
+              <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+              <view class="item-info">
+                <text class="item-name">{{item.name}}</text>
+                <text class="item-price">{{item.nights}}晚:¥{{item.price}}</text>
+              </view>
+              <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
+                <text class="menu-icon">☰</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 侧边栏 -->
+  <view class="sidebar {{sidebarOpen ? 'open' : ''}}">
+    <!-- 外框图片 -->
+    <!-- <image class="sidebar-frame" src="/images/travel-guide/sidebar.png" mode="aspectFit"></image>
+     -->
+    <!-- 内层背景图片 -->
+    <image class="sidebar-bg" src="/images/travel-guide/sidebar1.png" mode="aspectFit"></image>
+    
+    <!-- 四个功能按钮，覆盖在图片上对应的功能区域 -->
+    <view class="sidebar-btn route-optimization" bindtap="onRouteOptimization"></view>
+    <view class="sidebar-btn strategy-pk" bindtap="onStrategyPK"></view>
+    <view class="sidebar-btn team-strategy" bindtap="onTeamStrategy"></view>
+    <view class="sidebar-btn share-friends" bindtap="onShareFriends"></view>
+  </view>
+
+  <!-- 加号按钮 -->
+  <view class="add-button" bindtap="toggleSidebar">
+    <text class="add-icon">+</text>
+  </view>
+
+  <!-- 侧边栏遮罩 -->
+  <view class="sidebar-overlay {{sidebarOpen ? 'show' : ''}}" bindtap="toggleSidebar"></view>
+</view> 

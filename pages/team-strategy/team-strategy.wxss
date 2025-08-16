@@ -1,0 +1,501 @@
+/* team-strategy.wxss */
+.trip-detail-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+}
+
+/* 顶部退出按钮 */
+.back-button {
+  position: fixed;
+  top: 94rpx;
+  left: 32rpx;
+  z-index: 1000;
+  width: 60rpx;
+  height: 60rpx;
+  background: rgba(249, 245, 245, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10rpx);
+}
+
+.back-icon {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 行程标题区域 */
+.trip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 32rpx;
+  background: white;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin: 0 32rpx;
+}
+
+.trip-title {
+  flex: 1;
+}
+
+.title-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.trip-duration {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.duration-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.arrow {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.participants {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.participant-avatar {
+  position: relative;
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2rpx solid #fff;
+}
+
+.checkmark {
+  position: absolute;
+  bottom: -2rpx;
+  right: -2rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background: #07c160;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12rpx;
+  color: white;
+}
+
+.more-participants {
+  width: 60rpx;
+  height: 60rpx;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #fff;
+}
+
+.more-text {
+  font-size: 20rpx;
+  color: #666;
+}
+
+/* 主要内容区域 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  gap: 24rpx;
+  padding-top: 20rpx;
+}
+
+/* 地图区域 - 占更多空间 */
+.map-section {
+  height: 40vh;
+  border-radius: 24rpx;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.trip-map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 24rpx;
+  left: 24rpx;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 16rpx 24rpx;
+  border-radius: 16rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.map-title {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 8rpx;
+}
+
+.map-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 行程内容区域 - 占剩余空间 */
+.trip-content {
+  display: flex;
+  flex: 1;
+  gap: 24rpx;
+  margin: 0 32rpx;
+}
+
+/* 左侧日期列表 */
+.date-list {
+  width: 200rpx;
+  background: white;
+  border-right: 1rpx solid #eee;
+}
+
+.date-scroll {
+  height: 100%;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 16rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+  transition: background-color 0.3s ease;
+}
+
+.date-item.active {
+  background: #e3f2fd;
+  border-left: 4rpx solid #2196f3;
+}
+
+.date-item:active {
+  background: #f0f0f0;
+}
+
+.date-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 16rpx;
+}
+
+.day-number {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4rpx;
+}
+
+.weather-icon {
+  font-size: 20rpx;
+}
+
+.date-info {
+  flex: 1;
+}
+
+.date-text {
+  font-size: 20rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.route-text {
+  font-size: 18rpx;
+  color: #999;
+  display: block;
+}
+
+/* 右侧行程详情 */
+.trip-details {
+  flex: 1;
+  padding: 20rpx;
+  height: 100%;
+}
+
+.day-header {
+  margin-bottom: 30rpx;
+}
+
+.day-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 详情部分 */
+.detail-section {
+  background: white;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-bottom: 1rpx solid #eee;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.expand-icon {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.category-icon {
+  width: 32rpx;
+  height: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6rpx;
+  margin-right: 12rpx;
+}
+
+.food-icon {
+  background: #fff3e0;
+}
+
+.attraction-icon {
+  background: #e8f5e8;
+}
+
+.hotel-icon {
+  background: #f3e5f5;
+}
+
+.category-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.section-content {
+  padding: 20rpx;
+}
+
+.flight-info,
+.accommodation-info {
+  font-size: 26rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* 项目卡片 */
+.item-card {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.item-card:last-child {
+  border-bottom: none;
+}
+
+.item-image {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 8rpx;
+  margin-right: 16rpx;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name,
+.item-number {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.item-desc {
+  font-size: 22rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.item-price {
+  font-size: 22rpx;
+  color: #ff6b35;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.item-distance {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.distance-text {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.navigate-arrow {
+  font-size: 16rpx;
+  color: #999;
+}
+
+.item-menu {
+  padding: 8rpx;
+}
+
+.menu-icon {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 底部添加按钮 */
+.add-button {
+  position: fixed;
+  bottom: 40rpx;
+  right: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: #ffd700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(255, 215, 0, 0.3);
+  z-index: 1000;
+}
+
+.add-button:active {
+  transform: scale(0.95);
+}
+
+.add-icon {
+  font-size: 48rpx;
+  color: #000;
+  font-weight: bold;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  position: fixed;
+  bottom: 160rpx;
+  right: 40rpx;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(20rpx);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  width: 280rpx;
+  height: 360rpx;
+  background: transparent;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.sidebar.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 内层背景图片 */
+.sidebar-bg {
+  width: calc(100% - 40rpx);
+  height: calc(100% - 80rpx);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background: #ffffff;
+  border: 2rpx solid #ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 功能按钮样式 */
+.sidebar-btn {
+  position: absolute;
+  width: 200rpx;
+  height: 45rpx;
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 路线优化按钮位置 */
+.route-optimization {
+  top: 45rpx;
+  left: 50rpx;
+}
+
+/* 攻略PK按钮位置 */
+.strategy-pk {
+  top: 126rpx;
+  left: 50rpx;
+}
+
+/* 团队攻略按钮位置 */
+.team-strategy {
+  top: 208rpx;
+  left: 50rpx;
+}
+
+/* 分享好友按钮位置 */
+.share-friends {
+  top: 289rpx;
+  left: 50rpx;
+}
+
+/* 侧边栏遮罩 */
+.sidebar-overlay {
+  display: none;
+}

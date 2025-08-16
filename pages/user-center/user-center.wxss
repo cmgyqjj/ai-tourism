@@ -1,0 +1,304 @@
+page {
+  height: 100%;
+}
+
+.page {
+  height: 100%;
+  background: linear-gradient(180deg, #FFF9C4 0%, #FFFFFF 100%);
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 120rpx; /* 为底部导航栏留出空间 */
+}
+
+.header {
+  padding: 32rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.avatar {
+  width: 15vw; /* 适配屏幕宽度 */
+  height: 15vw;
+  min-width: 120rpx;
+  max-width: 200rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  border: 4rpx solid #FFE347;
+  box-shadow: 0 4rpx 16rpx rgba(255, 227, 71, 0.3);
+}
+
+.info {
+  flex: 1;
+}
+
+.info .name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.info .tag {
+  font-size: 28rpx;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+.setting {
+  padding: 16rpx;
+}
+
+.setting-icon {
+  font-size: 48rpx;
+  color: #666;
+}
+
+.banner {
+  margin: 20rpx 32rpx;
+  background-color: #FFE347;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(255, 227, 71, 0.3);
+}
+
+.banner-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.banner-left {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.banner-title {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.banner-subtitle {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.create-btn {
+  background-color: #333;
+  color: #fff;
+  font-size: 28rpx;
+  padding: 20rpx 40rpx;
+  border-radius: 60rpx;
+  border: none;
+  line-height: 1;
+  white-space: nowrap;
+  min-width: 120rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.2);
+}
+
+.nav-tabs {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40rpx 0;
+  margin: 0 32rpx;
+  border-radius: 24rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.main-tabs {
+  display: flex;
+  padding: 0 32rpx;
+  margin-bottom: 40rpx;
+}
+
+.main-tabs .tab {
+  margin-right: 80rpx;
+  font-size: 32rpx;
+  color: #666;
+  padding: 20rpx 0;
+  position: relative;
+}
+
+.main-tabs .tab.active {
+  color: #333;
+  font-weight: bold;
+}
+
+.main-tabs .tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -20rpx;
+  left: 0;
+  width: 100%;
+  height: 12rpx;
+  background-color: #FFE347;
+  border-radius: 6rpx;
+}
+
+.year-tabs {
+  white-space: nowrap;
+  padding: 0 32rpx;
+}
+
+.year-tab {
+  display: inline-block;
+  padding: 20rpx 60rpx;
+  margin-right: 40rpx;
+  font-size: 28rpx;
+  color: #666;
+  background-color: #f5f5f5;
+  border-radius: 60rpx;
+}
+
+.year-tab.active {
+  background-color: #FFE347;
+  color: #333;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  padding: 32rpx;
+}
+
+.trip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+.trip-card {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 32rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10rpx);
+}
+
+.trip-image {
+  width: 100%;
+  height: 400rpx;
+  object-fit: cover;
+}
+
+.trip-info {
+  padding: 40rpx;
+}
+
+.trip-title {
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 32rpx;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.trip-date {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.days {
+  background-color: #FFE347;
+  padding: 8rpx 32rpx;
+  border-radius: 40rpx;
+  font-size: 24rpx;
+  color: #333;
+  margin-right: 32rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.date {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+/* 底部导航栏样式 - 与首页保持一致 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #ffffff;
+  border-top: 1rpx solid #e5e7eb;
+  padding: 8rpx 0;
+  z-index: 1000;
+  background-color: #f0f0f0;
+  border-top: 2rpx solid #d0d0d0;
+  width: 100%;
+  max-width: 750rpx;
+  box-sizing: border-box;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx;
+}
+
+.nav-image {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  transition: transform 0.2s;
+}
+
+.nav-image-center {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 32rpx;
+  transition: transform 0.2s;
+  margin-top: -60rpx;
+}
+
+.nav-item:active .nav-image,
+.nav-item:active .nav-image-center {
+  transform: scale(0.95);
+}
+
+/* 空状态样式 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+}
+
+.empty-image {
+  width: 400rpx;
+  height: 300rpx;
+  margin-bottom: 40rpx;
+  border-radius: 24rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+  font-weight: 500;
+}
+
+/* 行程卡片样式 */ 

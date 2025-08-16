@@ -1,0 +1,64 @@
+<!--trip-questions-3.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="nav-title">
+      <text>{{pageTitle}}</text>
+    </view>
+    <view class="nav-right">
+      <view class="user-avatars">
+        <view class="user-avatar" wx:for="{{userAvatars}}" wx:key="id">
+          <image wx:if="{{item.avatarUrl}}" src="{{item.avatarUrl}}" class="avatar-image" mode="aspectFill" />
+          <view wx:else class="avatar-icon">
+            {{item.isCurrentUser ? '👤' : '👥'}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主要内容区域 -->
+  <view class="main-content">
+    <!-- 进度指示器 -->
+    <view class="progress-badge">
+      <text>{{currentStep}}/{{totalSteps}}</text>
+    </view>
+
+    <!-- 问题区域 -->
+    <view class="question-section">
+      <view class="question-header">
+        <view class="question-avatar">
+          <image wx:if="{{tripInfo.currentUser.avatarUrl}}" src="{{tripInfo.currentUser.avatarUrl}}" class="avatar-image" mode="aspectFill" />
+          <view wx:else class="avatar-icon">👤</view>
+        </view>
+        <view class="question-content">
+          <text class="question-title">{{question.title}}</text>
+        </view>
+      </view>
+
+      <!-- 选项网格 -->
+      <view class="options-grid">
+        <view class="option-item {{item.selected ? 'selected' : ''}}" 
+              wx:for="{{question.options}}" 
+              wx:key="id"
+              bindtap="selectOption"
+              data-option-id="{{item.id}}">
+          <text class="option-icon" wx:if="{{item.icon}}">{{item.icon}}</text>
+          <text class="option-text">{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 固定在底部的下一步按钮 -->
+  <view class="fixed-bottom-section">
+    <button class="next-button {{selectedOptions.length > 0 ? 'active' : 'disabled'}}" 
+            bindtap="nextStep"
+            disabled="{{selectedOptions.length === 0}}">
+      <text>下一步</text>
+    </button>
+  </view>
+</view> 

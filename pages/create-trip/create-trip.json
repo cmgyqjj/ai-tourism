@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "创建行程",
+  "navigationBarBackgroundColor": "#facc15",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#facc15",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false,
+  "disableScroll": false
+} 

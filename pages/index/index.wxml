@@ -1,0 +1,158 @@
+<!--index.wxml-->
+<scroll-view class="page-scroll" scroll-y="true" enhanced="true" show-scrollbar="false">
+  <view class="container">
+    <!-- 导航栏 -->
+    <view class="nav-bar">
+      <view class="nav-left">
+        <view class="logo-container">
+          <text class="logo-text">去哪</text>
+          <view class="logo-underline"></view>
+        </view>
+        <text class="brand-text">Whatever</text>
+      </view>
+      <view class="search-btn">
+        <text class="search-icon">🔍</text>
+      </view>
+    </view>
+
+    <view class="main-content">
+      <!-- 灵感专题 -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">灵感专题</text>
+          <view class="more-btn">
+            <text>更多</text>
+            <text class="arrow">></text>
+          </view>
+        </view>
+        
+        <scroll-view class="topic-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
+          <view class="topic-item">
+            <view class="topic-image embassy-bg"></view>
+            <view class="topic-content">
+              <text class="topic-title">外国驻京办地图</text>
+              <view class="topic-btn">
+                <text>查看详情</text>
+                <text class="arrow">></text>
+              </view>
+            </view>
+          </view>
+          
+          <view class="topic-item">
+            <view class="topic-image hutong-bg"></view>
+            <view class="topic-content">
+              <text class="topic-title">胡同咖啡馆指南</text>
+              <view class="topic-btn">
+                <text>查看详情</text>
+                <text class="arrow">></text>
+              </view>
+            </view>
+          </view>
+          
+          <view class="topic-item">
+            <view class="topic-image museum-bg"></view>
+            <view class="topic-content">
+              <text class="topic-title">小众博物馆巡礼</text>
+              <view class="topic-btn">
+                <text>查看详情</text>
+                <text class="arrow">></text>
+              </view>
+            </view>
+          </view>
+
+        </scroll-view>
+      </view>
+
+      <!-- 我的行程 -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">我的行程</text>
+          <view class="add-btn">
+            <text class="add-icon">+</text>
+          </view>
+        </view>
+        
+        <view class="trip-list">
+          <!-- 法意12日游 -->
+          <view class="trip-item">
+            <view class="trip-image-container">
+              <image class="trip-image" src="/images/8697ecc0-3128-45f6-a9a1-ee57a5fc0e31.png" mode="aspectFill"></image>
+              <view class="trip-duration">12天</view>
+            </view>
+            <view class="trip-info">
+              <text class="trip-title">法意 12 日舒适游</text>
+              <view class="trip-actions">
+                <view class="detail-btn" bindtap="viewTripDetailMap">查看详情</view>
+                <view class="action-buttons">
+                  <button open-type="share" class="share-btn">分享更多</button>
+                </view>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 日本7日游 -->
+          <view class="trip-item">
+            <view class="trip-image-container">
+              <image class="trip-image" src="/images/8697ecc0-3128-45f6-a9a1-ee57a5fc0e31.png" mode="aspectFill"></image>
+              <view class="trip-duration">7天</view>
+            </view>
+            <view class="trip-info">
+              <text class="trip-title">日本 7 日深度游</text>
+              <view class="trip-actions">
+                <view class="detail-btn">查看详情</view>
+                <view class="action-buttons">
+                  <button open-type="share" class="share-btn">分享更多</button>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 底部导航栏 -->
+<view class="bottom-nav">
+  <view class="nav-item" bindtap="goToPlan">
+    <image class="nav-image" src="/images/shoye/btn-trip-plan.png" mode="aspectFit" />
+  </view>
+  
+  <view class="nav-item active" bindtap="showAiModal">
+    <image class="nav-image-center" src="/images/shoye/btn-ai-strategy.png" mode="aspectFit" />
+  </view>
+  
+  <view class="nav-item" bindtap="goToLogin">
+    <image class="nav-image" src="/images/shoye/btn-user-center.png" mode="aspectFit" />
+  </view>
+</view>
+
+<!-- 悬浮框遮罩层 -->
+<view class="modal-overlay" wx:if="{{showModal}}" bindtap="hideModal">
+  <!-- 创建新行程卡片 -->
+  <view class="modal-card white-card" catchtap="createNewTrip">
+    <view class="card-content">
+      <view class="card-title">创建新行程</view>
+      <view class="card-subtitle">支持多人协作、交通信息查询</view>
+    </view>
+    <view class="card-button">
+      <text class="plus-icon">+</text>
+    </view>
+  </view>
+  
+  <!-- 编辑过往方案卡片 -->
+  <view class="modal-card black-card" catchtap="editPastPlans">
+    <view class="card-content">
+      <view class="card-title">编辑过往方案</view>
+      <view class="card-subtitle">支持多人协作、交通信息查询</view>
+    </view>
+    <view class="card-button">
+      <text class="edit-icon">✏️</text>
+    </view>
+  </view>
+  
+  <!-- 关闭按钮 -->
+  <view class="close-button" bindtap="hideModal">
+    <text class="close-icon">✕</text>
+  </view>
+</view>

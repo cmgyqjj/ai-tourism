@@ -1,0 +1,281 @@
+.welcome-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 0 40rpx;
+}
+
+/* 顶部GIF图片区域 */
+.top-gif-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.gif-image {
+  width: 100%;
+  height: 100%;
+  max-width: 700rpx;
+  max-height: 700rpx;
+  min-width: 700rpx;
+  min-height: 700rpx;
+}
+
+/* 微信手机号快速登录按钮 */
+.main-login-btn {
+  width: 100% !important;
+  height: 120rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 0 80rpx 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  min-height: 120rpx !important;
+  max-height: 120rpx !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.main-login-btn::after {
+  border: none !important;
+  outline: none !important;
+}
+
+.main-login-btn:active {
+  transform: scale(0.98);
+}
+
+.main-login-btn[disabled] {
+  opacity: 0.4;
+  transform: none;
+  background: transparent !important;
+  pointer-events: none;
+  filter: grayscale(100%);
+}
+
+.main-login-btn[disabled]::after {
+  border: none !important;
+}
+
+.main-login-btn[disabled] .login-btn-image {
+  filter: grayscale(100%);
+  opacity: 0.4;
+}
+
+.login-btn-image {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 60rpx;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* 微信一键登录按钮 */
+.wechat-one-click-btn {
+  width: 100% !important;
+  height: 100rpx !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 0 40rpx 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background: #07C160 !important;
+  border: none !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  border-radius: 50rpx !important;
+  box-shadow: 0 4rpx 12rpx rgba(7, 193, 96, 0.3) !important;
+  outline: none !important;
+  cursor: pointer !important;
+  min-height: 100rpx !important;
+  max-height: 100rpx !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  gap: 20rpx;
+}
+
+.wechat-one-click-btn::after {
+  border: none !important;
+  outline: none !important;
+}
+
+.wechat-one-click-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(7, 193, 96, 0.4) !important;
+}
+
+.wechat-one-click-btn[disabled] {
+  opacity: 0.6;
+  transform: none;
+  background: #07C160 !important;
+}
+
+.wechat-one-click-btn[disabled]::after {
+  border: none !important;
+}
+
+.wechat-btn-image {
+  width: 60rpx !important;
+  height: 60rpx !important;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.wechat-btn-text {
+  font-size: 32rpx;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 隐藏的头像选择按钮 */
+.hidden-avatar-btn {
+  position: absolute !important;
+  left: -9999rpx !important;
+  top: -9999rpx !important;
+  width: 1rpx !important;
+  height: 1rpx !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 手机号显示区域 */
+.phone-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.phone-text {
+  font-size: 48rpx;
+  color: #333;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 16rpx 32rpx;
+  border-radius: 20rpx;
+}
+
+/* 底部登录选项 */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20rpx;
+  margin-bottom: 120rpx;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 0%;
+}
+
+/* 底部协议区域 */
+.agreement {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0 60rpx;
+  gap: 20rpx;
+}
+
+.agreement-checkbox {
+  width: 32rpx;
+  height: 32rpx;
+  border: 2rpx solid #ccc;
+  border-radius: 6rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.agreement-checkbox.checked {
+  background: #007AFF;
+  border-color: #007AFF;
+}
+
+.checkbox-icon {
+  font-size: 20rpx;
+  color: #fff;
+  font-weight: bold;
+}
+
+.agreement-text {
+  top: -20rpx;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+  width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.link-text {
+  color: #007AFF;
+  text-decoration: underline;
+}
+
+/* 按钮点击效果 */
+.wechat-login-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 10rpx rgba(255, 215, 0, 0.3);
+}
+
+.other-login-btn:active {
+  transform: scale(0.98);
+  background-color: #EBEBEB;
+} 
