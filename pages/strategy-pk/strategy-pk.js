@@ -2,9 +2,9 @@ Page({
   data: {
     currentTab: 0,
     budgetExpanded: true,
-    exclusiveExpanded: true,
-    accommodationExpanded: true,
-    transportationExpanded: true,
+    exclusiveExpanded: false,
+    accommodationExpanded: false,
+    transportationExpanded: false,
 
     // 差异点展开状态
     coreDifferencesExpanded: true,

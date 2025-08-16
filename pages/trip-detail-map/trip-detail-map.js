@@ -2,6 +2,12 @@
     data: {
         selectedDay: 1,
         sidebarOpen: false, // 侧边栏开关状态
+        showShareModal: false, // 分享弹窗状态
+        shareStats: {
+            wechatCount: 0,    // 微信分享次数
+            timelineCount: 0,  // 朋友圈分享次数
+            copyCount: 0       // 复制链接次数
+        },
         
         // 行程标题和时长
         tripTitle: '法意12日游',
@@ -586,28 +592,279 @@
      */
     onShareFriends() {
         console.log('点击分享好友');
+        this.setData({
+            showShareModal: true
+        });
+        this.toggleSidebar(); // 关闭侧边栏
+    },
+
+    // 显示分享弹窗
+    showShareModal() {
+        console.log('显示分享弹窗')
+        this.setData({
+            showShareModal: true
+        })
+    },
+
+    // 隐藏分享弹窗
+    hideShareModal() {
+        this.setData({
+            showShareModal: false
+        })
+    },
+
+    // 分享给好友
+    shareToFriend() {
+        console.log('分享给好友')
+        
+        // 隐藏分享弹窗
+        this.hideShareModal()
+        
+        // 显示分享提示
         wx.showToast({
-        title: '正在跳转分享好友...',
-        icon: 'loading',
-        duration: 1500
+            title: '请点击分享按钮',
+            icon: 'none',
+            duration: 2000
+        })
+    },
+
+    // 分享到朋友圈
+    shareToTimeline() {
+        console.log('分享到朋友圈')
+        const { tripTitle, tripDuration } = this.data
+        
+        // 隐藏分享弹窗
+        this.hideShareModal()
+
+        // 启用朋友圈分享
+        wx.showShareMenu({
+            withShareTicket: true,
+            menus: ['shareTimeline'],
+            success: () => {
+                wx.showToast({
+                    title: '请点击右上角分享到朋友圈',
+                    icon: 'none',
+                    duration: 3000
+                })
+            },
+            fail: (err) => {
+                console.error('朋友圈分享失败', err)
+                wx.showToast({
+                    title: '朋友圈分享暂时不可用',
+                    icon: 'none'
+                })
+            }
+        })
+    },
+
+    // 复制链接
+    copyLink() {
+        console.log('复制链接')
+        const { tripTitle, tripDuration, tripDays, participants } = this.data
+        
+        // 隐藏分享弹窗
+        this.hideShareModal()
+
+        // 生成更丰富的分享内容
+        const shareUrl = `https://miniprogram.com/pages/trip-detail-map/trip-detail-map?tripId=${Date.now()}&shared=true&type=copy`
+        let shareText = `${tripTitle} - 详细行程攻略，包含地图路线和景点推荐`
+        
+        // 如果有队友，显示团队信息
+        if (participants && participants.length > 1) {
+            shareText = `【团队攻略】${tripTitle} - ${participants.length}人同行，${tripDays ? tripDays.length : 0}天行程`
+        }
+        
+        // 添加更多攻略信息
+        if (tripDays && tripDays.length > 0) {
+            shareText += `\n\n行程亮点：`
+            shareText += `\n• ${tripDays.length}天${tripDays.length - 1}晚精心规划`
+            shareText += `\n• 地图路线导航`
+            shareText += `\n• 景点推荐攻略`
+            shareText += `\n• 美食住宿建议`
+        }
+        
+        wx.setClipboardData({
+            data: `${shareText}\n\n查看详情：${shareUrl}`,
+            success: () => {
+                // 记录复制链接行为
+                this.recordShareAction('copy');
+                
+                wx.showModal({
+                    title: '链接已复制',
+                    content: '攻略链接已复制到剪贴板，你可以粘贴到其他应用分享给朋友',
+                    showCancel: false,
+                    confirmText: '知道了'
+                })
+            },
+            fail: (err) => {
+                console.error('复制失败', err)
+                wx.showToast({
+                    title: '复制失败，请重试',
+                    icon: 'none'
+                })
+            }
+        })
+    },
+
+    // 阻止事件冒泡
+    stopPropagation() {
+        // 空函数，用于阻止事件冒泡
+    },
+
+    // 记录分享行为
+    recordShareAction(shareType) {
+        const { tripTitle, tripDuration, tripDays, participants } = this.data;
+        
+        // 更新分享统计
+        const shareStats = { ...this.data.shareStats };
+        switch (shareType) {
+            case 'wechat':
+                shareStats.wechatCount++;
+                break;
+            case 'timeline':
+                shareStats.timelineCount++;
+                break;
+            case 'copy':
+                shareStats.copyCount++;
+                break;
+        }
+        
+        this.setData({ shareStats });
+        
+        console.log('分享行为记录:', {
+            type: shareType,
+            tripTitle,
+            tripDuration,
+            tripDays: tripDays ? tripDays.length : 0,
+            participants: participants ? participants.length : 0,
+            shareStats,
+            timestamp: new Date().toISOString()
         });
         
-        setTimeout(() => {
-        this.toggleSidebar(); // 关闭侧边栏
-        // 跳转到分享好友页面
-        wx.navigateTo({
-            url: '/pages/share-friends/share-friends',
-            success: () => {
-            console.log('跳转分享好友页面成功');
-            },
-            fail: (error) => {
-            console.error('跳转分享好友页面失败:', error);
-            wx.showToast({
-                title: '页面跳转失败',
-                icon: 'none'
-            });
-            }
+        // 这里可以添加数据统计或上报逻辑
+        // 比如记录分享次数、分享类型等
+    },
+
+    // 处理分享后的回调
+    onShareSuccess(shareType) {
+        wx.showToast({
+            title: '分享成功！',
+            icon: 'success',
+            duration: 2000
         });
-        }, 1500);
+        
+        // 记录分享成功
+        this.recordShareAction(shareType);
+        
+        // 隐藏分享弹窗
+        this.hideShareModal();
+    },
+
+    // 分享按钮点击事件（调试用）
+    onShareButtonTap() {
+        console.log('🎯 分享按钮被点击了！');
+        console.log('当前分享弹窗状态:', this.data.showShareModal);
+        console.log('当前页面数据:', {
+            tripTitle: this.data.tripTitle,
+            tripDuration: this.data.tripDuration,
+            tripDays: this.data.tripDays,
+            participants: this.data.participants
+        });
+        
+        // 显示提示
+        wx.showToast({
+            title: '准备分享...',
+            icon: 'loading',
+            duration: 1000
+        });
+    },
+
+    // 分享功能 - 微信分享接口
+    onShareAppMessage() {
+        console.log('=== 分享函数被调用了 ===');
+        console.log('当前页面数据:', this.data);
+        
+        const { tripTitle, tripDuration, tripDays, participants } = this.data;
+        
+        // 检查必要数据是否存在
+        if (!tripTitle || !tripDuration) {
+            console.log('⚠️ 分享数据不完整:', { tripTitle, tripDuration });
+            console.log('使用默认分享内容');
+            
+            return {
+                title: 'AI智能路线规划',
+                desc: '基于AI算法的智能旅行攻略生成器',
+                path: '/pages/trip-detail-map/trip-detail-map',
+                imageUrl: '/images/avatar1.png'
+            };
+        }
+        
+        console.log('✅ 分享数据完整:', { tripTitle, tripDuration, tripDays, participants });
+        
+        // 生成更吸引人的分享标题
+        let shareTitle = `${tripTitle} - ${tripDuration}详细攻略`
+        
+        // 如果有队友，显示团队信息
+        if (participants && participants.length > 1) {
+            shareTitle = `【团队攻略】${tripTitle} - ${participants.length}人同行`
+        }
+        
+        // 生成分享描述
+        let shareDesc = `详细行程攻略，包含地图路线和景点推荐`
+        if (tripDays && tripDays.length > 0) {
+            shareDesc = `${tripDays.length}天${tripDays.length - 1}晚详细攻略，地图路线+景点推荐+美食住宿`
+        }
+        
+        const shareData = {
+            title: shareTitle,
+            desc: shareDesc,
+            path: `/pages/trip-detail-map/trip-detail-map?tripId=${Date.now()}&shared=true`,
+            imageUrl: '/images/avatar1.png'
+        };
+        
+        console.log('📤 返回分享数据:', shareData);
+        
+        // 注意：不要在这里记录分享行为，因为这只是准备分享内容
+        // 真正的分享成功应该在用户选择好友并发送后
+        // this.recordShareAction('wechat');
+        
+        return shareData;
+    },
+
+    // 分享成功回调 - 当用户真正分享成功后会被调用
+    onShareAppMessageSuccess(res) {
+        console.log('🎉 分享真正成功了！', res);
+        
+        // 记录分享成功
+        this.recordShareAction('wechat');
+        
+        // 显示成功提示
+        wx.showToast({
+            title: '分享成功！',
+            icon: 'success',
+            duration: 2000
+        });
+        
+        // 隐藏分享弹窗
+        this.hideShareModal();
+    },
+
+    // 分享到朋友圈 - 朋友圈分享接口
+    onShareTimeline() {
+        const { tripTitle, tripDuration, tripDays, participants } = this.data
+        
+        // 生成朋友圈分享标题
+        let timelineTitle = `${tripTitle} - ${tripDuration}详细攻略`
+        
+        // 如果有队友，显示团队信息
+        if (participants && participants.length > 1) {
+            timelineTitle = `【团队攻略】${tripTitle} - ${participants.length}人同行，${tripDays ? tripDays.length : 0}天行程`
+        }
+        
+        return {
+            title: timelineTitle,
+            imageUrl: '/images/avatar1.png',
+            query: `tripId=${Date.now()}&shared=true&type=timeline`
+        }
     }
-    }); 
+});
