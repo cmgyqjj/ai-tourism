@@ -128,10 +128,10 @@
     /* transform: translateX(-460rpx); */
   }
   
-  .arrow-icon.expanded {
+  /* .arrow-icon.expanded {
     transform: rotate(180deg);
   }
-  
+   */
   /* 已有方案 */
   .existing-plans {
     background-color: transparent;
@@ -392,8 +392,6 @@
   .transportation-content.collapsed {
     max-height: 0;
     padding-bottom: 0;
-    overflow: hidden;
-
   }
   
   /* 预算价格收起时减少底部间距 */
@@ -641,8 +639,8 @@
   .accommodation-values,
   .transportation-values {
     display: flex;
-    flex-wrap: wrap;
-    gap: 16rpx;
+    flex-wrap: wrap; /* 允许值内容换行 */
+    gap: 16rpx;  /* 调整项之间的间距 */
     flex: 1;
     padding: 8rpx;
     border-radius: 8rpx;
@@ -727,105 +725,7 @@
     margin-right: 8rpx;
   }
   
-  /* 差异点页面 */
-/* 差异页面样式 *//* 核心差异表格容器 *//* 核心差异表格容器 */
-/* 核心差异表格容器 */
-.core-differences {
-  background-color: #fff;
-  border-radius: 16rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
-  margin-bottom: 24rpx;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24rpx;
-  cursor: pointer;
-}
-
-.section-title {
-  font-size: 32rpx;
-  color: #333;
-}
-
-.arrow-icon {
-  font-size: 18rpx;
-  color: rgb(22, 21, 21);
-  transition: transform 0.3s ease;
-}
-
-.arrow-icon.expanded {
-  transform: rotate(180deg);
-}
-
-/* 核心差异内容区域 *//* 差异项内容的收缩和展开 */
-.differences-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
   
-  .differences-content.expanded {
-    max-height: 1000rpx;
-    padding-bottom: 32rpx;
-  }
-  
-  .differences-content.collapsed {
-    max-height: 0;
-    padding-bottom: 0;
-  }
-  
-  /* 核心差异内容容器 */
-  .differences-container {
-    padding: 16rpx 32rpx;
-    display: flex;
-    flex-direction: column;
-    gap: 16rpx;
-    /* 增加 flex-wrap 确保内容自适应 */
-    flex-wrap: wrap;
-    height: 400rpx;
-  }
-  
-  /* 差异项行 */
-  .differences-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8rpx;
-    border-bottom: 1rpx solid #f0f0f0;
-    width: 100%; /* 确保差异项占满全宽 */
-    gap: 8rpx; /* 行之间的间隔 */
-  }
-  
-  /* 最后一行 */
-  .differences-row:last-child {
-    border-bottom: none;
-  }
-  
-  /* 差异项标签（左侧列） */
-  .diff-label {
-    flex: 1;
-    font-size: 26rpx;
-    color: #666;
-    white-space: normal; /* 允许换行 */
-    text-align: left;
-    padding-right: 16rpx;
-    word-wrap: break-word; /* 自动换行 */
-  }
-  
-  /* 列项值（右侧列） */
-  .diff-value {
-    font-size: 26rpx;
-    color: #333;
-    text-align: center;
-    flex: 1;
-    padding: 8rpx;
-    white-space: normal; /* 允许换行 */
-    word-wrap: break-word; /* 自动换行 */
-  }
   
   /* 响应式设计：对于小屏设备调整样式 */
   @media (max-width: 375px) {
@@ -834,26 +734,7 @@
       font-size: 28rpx;
     }
   
-    /* 为了适应小屏幕，调整差异项标签和项值字体大小 */
-    .diff-label, .diff-value {
-      font-size: 22rpx;
-    }
-  
-    /* 增加容器内的间距，使得小屏幕下的显示更加清晰 */
-    .differences-container {
-      padding: 8rpx 16rpx;
-    }
-  
-    /* 减小行的上下间距 */
-    .differences-row {
-      padding: 8rpx 0;
-    }
-  
-    /* 限制列宽，使得每个差异项的列能更好显示 */
-    .differences-row .diff-label,
-    .differences-row .diff-value {
-      width:100%;
-    }
+
   }
   
 
@@ -861,13 +742,7 @@
   
   
   
-  /* .diff-value1,
-  .diff-value2 {
-    flex: 1;
-    text-align: center;
-    font-size: 26rpx;
-    color: #333;
-  } */
+
   
   /* AI融合页面 */
   .ai-fusion-content {
@@ -1170,4 +1045,70 @@
     max-width: 520rpx;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  /* 核心差异对比样式 */
+  .core-differences-section {
+    margin-bottom: 40rpx;
+  }
+
+  .core-differences-content {
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .core-differences-content.collapsed {
+    height: 0;
+  }
+
+  .core-differences-content.expanded {
+    height: auto;
+  }
+
+  .core-differences-container {
+    height: 400rpx;
+    white-space: nowrap;
+  }
+
+  .core-differences-wrapper {
+    display: inline-block;
+    min-width: 100%;
+  }
+
+  .core-differences-row {
+    display: flex;
+    align-items: center;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
+  }
+
+  .core-differences-row:last-child {
+    border-bottom: none;
+  }
+
+  .core-differences-label {
+    width: 160rpx;
+    font-size: 28rpx;
+    color: #333;
+    font-weight: 500;
+    flex-shrink: 0;
+    padding-right: 20rpx;
+  }
+
+  .core-differences-values {
+    display: flex;
+    flex: 1;
+    gap: 20rpx;
+  }
+
+  .core-differences-value {
+    min-width: 200rpx;
+    padding: 15rpx 20rpx;
+    background: #f8f9fa;
+    border-radius: 12rpx;
+    font-size: 26rpx;
+    color: #666;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
   }

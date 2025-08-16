@@ -214,28 +214,28 @@
         </view>
       </view>
 
-      <!-- 核心差异 -->
-      <view class="section core-differences">
-  <view class="section-header" bindtap="toggleCoreDifferences">
-    <text class="section-title">核心差异</text>
-    <view class="arrow-icon {{coreDifferencesExpanded ? 'expanded' : ''}}">▼</view>
-  </view>
-  <view class="differences-content {{coreDifferencesExpanded ? 'expanded' : 'collapsed'}}">
-    <view class="differences-table">
-      <view class="differences-row" wx:for="{{coreDifferences}}" wx:key="label">
-        <view class="diff-label">{{item.label}}</view>
-        <view class="diff-values">
-          <view class="diff-value" wx:for="{{item.values}}" wx:key="{{index}}">
-            {{item.values[index]}}
-          </view>
+      <!-- 核心差异对比 -->
+      <view class="section core-differences-section">
+        <view class="section-header" bindtap="toggleCoreDifferences">
+          <text class="section-title">核心差异</text>
+          <view class="arrow-icon {{coreDifferencesExpanded ? 'expanded' : ''}}">▼</view>
+        </view>
+        
+        <view class="core-differences-content {{coreDifferencesExpanded ? 'expanded' : 'collapsed'}}">
+          <scroll-view class="core-differences-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+            <view class="core-differences-wrapper">
+              <view class="core-differences-row" wx:for="{{coreDifferences}}" wx:key="label">
+                <view class="core-differences-label">{{item.label}}</view>
+                <view class="core-differences-values">
+                  <view class="core-differences-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
+                </view>
+              </view>
+            </view>
+          </scroll-view>
         </view>
       </view>
+
     </view>
-  </view>
-</view>
-</view>
-
-
 
     <!-- AI融合页面 -->
     <view wx:elif="{{currentTab === 2}}" class="ai-fusion-content">
