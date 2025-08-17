@@ -2,11 +2,9 @@ Page({
   data: {
     currentTab: 0,
     budgetExpanded: true,
-    exclusiveExpanded: false,
-    accommodationExpanded: false,
-    transportationExpanded: false,
-
-    // 差异点展开状态
+    exclusiveExpanded: true,
+    accommodationExpanded: true,
+    transportationExpanded: true,
     coreDifferencesExpanded: true,
 
     // 已有方案数据
@@ -155,25 +153,18 @@ Page({
   },
 
   onLoad: function (options) {
-    // 页面加载时的初始化
     console.log('页面加载完成');
-    
-    // 调用API获取数据
     this.loadPageData();
-    
-    // 根据方案数量设置布局类
     this.setLayoutClass();
   },
 
   // 加载页面数据
   loadPageData: function() {
-    // 显示加载状态
     wx.showLoading({
       title: '加载中...',
       mask: true
     });
 
-    // 并行调用多个API
     Promise.all([
       this.loadPlans(),
       this.loadPlanHighlights(),
@@ -211,7 +202,6 @@ Page({
       //   fail: reject
       // });
 
-      // 暂时使用本地数据，等后端接口ready后替换
       console.log('方案列表数据:', this.data.existingPlans);
       resolve();
     });
@@ -237,7 +227,6 @@ Page({
       //   fail: reject
       // });
 
-      // 暂时使用本地数据，等后端接口ready后替换
       console.log('方案亮点数据:', this.data.planHighlights);
       resolve();
     });
@@ -256,7 +245,6 @@ Page({
       //       this.setData({
       //         budgetItems: compareData.budgetItems || this.data.budgetItems,
       //         exclusiveItems: compareData.exclusiveItems || this.data.exclusiveItems,
-      
       //         accommodationItems: compareData.accommodationItems || this.data.accommodationItems,
       //         transportationItems: compareData.transportationItems || this.data.transportationItems
       //       });
@@ -268,27 +256,13 @@ Page({
       //   fail: reject
       // });
 
-      // 暂时使用本地数据，等后端接口ready后替换
       console.log('对比数据加载完成');
       resolve();
     });
   },
 
-  // 添加或删除方案时重新计算布局
-  updatePlansAndLayout: function(newPlans) {
-    this.setData({
-      existingPlans: newPlans
-    });
-    this.setLayoutClass();
-  },
-
   // 返回上一页
   goBack: function() {
-    wx.navigateBack();
-  },
-
-  // 关闭页面
-  closePage: function() {
     wx.navigateBack();
   },
 
@@ -307,7 +281,6 @@ Page({
     const currentPlan = plans.find(p => p.id === planId);
     const newVoteStatus = !currentPlan.voted;
     
-    // 显示加载状态
     wx.showLoading({
       title: newVoteStatus ? '投票中...' : '取消投票中...',
       mask: true
@@ -315,7 +288,6 @@ Page({
 
     // TODO: 调用后端API更新投票状态
     // this.updateVoteStatus(planId, newVoteStatus).then(() => {
-    //   // 更新前端状态
     //   plans.forEach(plan => {
     //     if (plan.id === planId) {
     //       plan.voted = newVoteStatus;
@@ -341,7 +313,6 @@ Page({
     //   });
     // });
 
-    // 暂时使用本地数据，等后端接口ready后替换
     plans.forEach(plan => {
       if (plan.id === planId) {
         plan.voted = newVoteStatus;
@@ -424,19 +395,232 @@ Page({
   // 下载报告
   downloadReport: function() {
     wx.showToast({
-      title: '正在生成报告...',
+      title: '正在生成对比图...',
       icon: 'loading',
       duration: 2000
     });
     
-    // 这里可以添加实际的下载逻辑
-    setTimeout(() => {
-      wx.showToast({
-        title: '报告已保存到相册',
-        icon: 'success',
-        duration: 2000
+    this.generateComparisonImage();
+  },
+
+  // 生成对比图
+  generateComparisonImage() {
+    console.log('🚀 开始生成对比图...');
+    
+    const ctx = wx.createCanvasContext('comparisonCanvas');
+    console.log('✅ Canvas上下文创建成功');
+    
+    const canvasWidth = 600;
+    const canvasHeight = 800;
+    console.log(`📏 Canvas尺寸设置: ${canvasWidth} × ${canvasHeight}`);
+    
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    console.log('🧹 画布清空完成');
+    
+    ctx.setFillStyle('#ffffff');
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    console.log('🎨 背景色设置完成');
+    
+    ctx.setFillStyle('#333333');
+    ctx.setFontSize(24);
+    ctx.setTextAlign('center');
+    ctx.fillText('行程对比报告', canvasWidth / 2, 40);
+    console.log('📝 标题绘制完成');
+    
+    ctx.setStrokeStyle('#e0e0e0');
+    ctx.setLineWidth(1);
+    ctx.beginPath();
+    ctx.moveTo(30, 60);
+    ctx.lineTo(canvasWidth - 30, 60);
+    ctx.stroke();
+    console.log('➖ 分隔线绘制完成');
+    
+    let currentY = 80;
+    console.log(`📍 当前绘制位置Y: ${currentY}`);
+    
+    // 绘制已有方案（只显示前2个）
+    if (this.data.existingPlans && this.data.existingPlans.length > 0) {
+      console.log(`📋 开始绘制已有方案，共${this.data.existingPlans.length}个`);
+      ctx.setFillStyle('#333333');
+      ctx.setFontSize(18);
+      ctx.setTextAlign('left');
+      ctx.fillText('已有方案', 30, currentY);
+      currentY += 30;
+      
+      const plansToShow = this.data.existingPlans.slice(0, 2);
+      console.log(`🎯 将绘制前${plansToShow.length}个方案`);
+      
+      plansToShow.forEach((plan, index) => {
+        console.log(`📌 绘制方案${index + 1}: ${plan.title}`);
+        
+        ctx.setFillStyle('#f8f9fa');
+        ctx.fillRect(30, currentY, canvasWidth - 60, 80);
+        ctx.setStrokeStyle('#e0e0e0');
+        ctx.strokeRect(30, currentY, canvasWidth - 60, 80);
+        
+        const statusText = plan.voted ? '已投票' : '未投票';
+        const statusColor = plan.voted ? '#FFD700' : '#007AFF';
+        ctx.setFillStyle(statusColor);
+        ctx.setFontSize(12);
+        ctx.fillText(statusText, 45, currentY + 20);
+        
+        ctx.setFillStyle('#333333');
+        ctx.setFontSize(16);
+        ctx.fillText(plan.title, 45, currentY + 45);
+        
+        ctx.setFontSize(14);
+        ctx.setFillStyle('#666666');
+        ctx.fillText(plan.subtitle, 45, currentY + 65);
+        
+        currentY += 100;
+        console.log(`✅ 方案${index + 1}绘制完成，当前Y位置: ${currentY}`);
       });
-    }, 2000);
+    } else {
+      console.log('⚠️ 没有找到已有方案数据');
+    }
+    
+    // 绘制方案亮点（只显示前2个）
+    if (this.data.planHighlights && this.data.planHighlights.length > 0) {
+      console.log(`✨ 开始绘制方案亮点，共${this.data.planHighlights.length}个`);
+      ctx.setFillStyle('#333333');
+      ctx.setFontSize(18);
+      ctx.setTextAlign('left');
+      ctx.fillText('方案亮点', 30, currentY);
+      currentY += 30;
+      
+      const highlightsToShow = this.data.planHighlights.slice(0, 2);
+      console.log(`🎯 将绘制前${highlightsToShow.length}个亮点`);
+      
+      highlightsToShow.forEach((highlight, index) => {
+        console.log(`💡 绘制亮点${index + 1}: ${highlight.content}`);
+        
+        ctx.setFillStyle('#f8f9fa');
+        ctx.fillRect(30, currentY, canvasWidth - 60, 60);
+        ctx.setStrokeStyle('#e0e0e0');
+        ctx.strokeRect(30, currentY, canvasWidth - 60, 60);
+        
+        ctx.setFillStyle('#333333');
+        ctx.setFontSize(14);
+        ctx.fillText(highlight.content, 45, currentY + 25);
+        
+        if (highlight.tags && highlight.tags.length > 0) {
+          ctx.setFontSize(12);
+          ctx.setFillStyle('#007AFF');
+          const tagsText = highlight.tags.slice(0, 3).join(' ');
+          ctx.fillText(tagsText, 45, currentY + 45);
+          console.log(`🏷️ 标签内容: ${tagsText}`);
+        }
+        
+        currentY += 80;
+        console.log(`✅ 亮点${index + 1}绘制完成，当前Y位置: ${currentY}`);
+      });
+    } else {
+      console.log('⚠️ 没有找到方案亮点数据');
+    }
+    
+    // 绘制预算对比（简化显示）
+    if (this.data.budgetItems && this.data.budgetItems.length > 0) {
+      console.log(`💰 开始绘制预算对比，共${this.data.budgetItems.length}项`);
+      ctx.setFillStyle('#333333');
+      ctx.setFontSize(18);
+      ctx.setTextAlign('left');
+      ctx.fillText('预算对比', 30, currentY);
+      currentY += 30;
+      
+      const budgetToShow = this.data.budgetItems.slice(0, 2);
+      console.log(`🎯 将绘制前${budgetToShow.length}项预算`);
+      
+      budgetToShow.forEach((item, index) => {
+        console.log(`📊 绘制预算项${index + 1}: ${item.label}`);
+        ctx.setFontSize(14);
+        ctx.setFillStyle('#333333');
+        ctx.fillText(item.label, 45, currentY);
+        
+        ctx.setFontSize(12);
+        ctx.setFillStyle('#666666');
+        ctx.fillText(`方案A: ${item.values[0]}`, 45, currentY + 20);
+        if (item.values[1]) {
+          ctx.fillText(`方案B: ${item.values[1]}`, 45, currentY + 35);
+        }
+        
+        currentY += 50;
+        console.log(`✅ 预算项${index + 1}绘制完成，当前Y位置: ${currentY}`);
+      });
+    } else {
+      console.log('⚠️ 没有找到预算数据');
+    }
+    
+    // 绘制底部信息
+    ctx.setFillStyle('#999999');
+    ctx.setFontSize(12);
+    ctx.setTextAlign('center');
+    const currentTime = new Date().toLocaleString('zh-CN');
+    ctx.fillText(`生成时间: ${currentTime}`, canvasWidth / 2, canvasHeight - 20);
+    console.log(`⏰ 底部时间信息绘制完成: ${currentTime}`);
+    
+    console.log('🎨 所有内容绘制完成，开始调用ctx.draw()...');
+    
+    ctx.draw(false, () => {
+      console.log('✅ Canvas绘制完成，等待500ms后转换为图片...');
+      
+      setTimeout(() => {
+        console.log('🔄 开始将Canvas转换为图片...');
+        
+        wx.canvasToTempFilePath({
+          canvasId: 'comparisonCanvas',
+          width: canvasWidth,
+          height: canvasHeight,
+          destWidth: canvasWidth,
+          destHeight: canvasHeight,
+          fileType: 'png',
+          quality: 0.8,
+          success: (res) => {
+            console.log('🎉 Canvas转图片成功!');
+            console.log('📁 临时文件路径:', res.tempFilePath);
+            console.log('📏 图片尺寸:', res.width, '×', res.height);
+            
+            console.log('💾 开始保存图片到相册...');
+            wx.saveImageToPhotosAlbum({
+              filePath: res.tempFilePath,
+              success: () => {
+                console.log('✅ 图片保存到相册成功!');
+                wx.showToast({
+                  title: '对比图已保存到相册',
+                  icon: 'success',
+                  duration: 2000
+                });
+              },
+              fail: (err) => {
+                console.error('❌ 保存到相册失败:', err);
+                if (err.errMsg.includes('auth deny')) {
+                  console.log('🚫 权限被拒绝，显示权限提示');
+                  wx.showModal({
+                    title: '权限提示',
+                    content: '需要相册权限才能保存图片，请在设置中开启',
+                    showCancel: false,
+                    confirmText: '知道了'
+                  });
+                } else {
+                  console.log('⚠️ 其他保存失败原因，显示重试提示');
+                  wx.showToast({
+                    title: '保存失败，请重试',
+                    icon: 'none'
+                  });
+                }
+              }
+            });
+          },
+          fail: (err) => {
+            console.error('❌ Canvas转图片失败:', err);
+            console.error('错误详情:', err.errMsg);
+            wx.showToast({
+              title: '生成图片失败',
+              icon: 'none'
+            });
+          }
+        });
+      }, 500);
+    });
   },
 
   // 分享行程
@@ -476,7 +660,6 @@ Page({
       duration: 3000
     });
     
-    // 这里可以调用AI算法生成融合方案
     setTimeout(() => {
       wx.showToast({
         title: '融合方案生成完成！',
@@ -484,7 +667,6 @@ Page({
         duration: 2000
       });
       
-      // 可以在这里跳转到融合结果页面或显示结果
       console.log('AI融合方案生成完成');
     }, 3000);
   },
@@ -513,27 +695,14 @@ Page({
       layoutClass: layoutClass
     });
     
-    // 延迟检查布局类是否设置成功
     setTimeout(() => {
       console.log('设置后的布局类:', this.data.layoutClass);
     }, 100);
   },
 
-  // 刷新页面数据
-  refreshData: function() {
-    console.log('刷新页面数据');
-    this.loadPageData();
-  },
-
   // 下拉刷新
   onPullDownRefresh: function() {
-    this.refreshData();
+    this.loadPageData();
     wx.stopPullDownRefresh();
-  },
-
-  // 页面显示时刷新数据（可选）
-  onShow: function() {
-    // 如果需要在页面显示时刷新数据，可以取消注释下面这行
-    // this.refreshData();
   }
 });

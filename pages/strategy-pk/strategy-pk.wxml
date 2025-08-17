@@ -3,12 +3,9 @@
   <!-- 导航栏 -->
   <view class="nav-bar">
     <view class="nav-left" bindtap="goBack">
-      <text class="back-icon">←</text>
+      <text class="back-icon">‹</text>
     </view>
     <view class="nav-title">行程PK</view>
-    <view class="nav-right" bindtap="closePage">
-      <text class="close-icon">×</text>
-    </view>
   </view>
 
   <!-- 标签页导航 -->
@@ -39,29 +36,31 @@
             <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true">
                 <view class="plans-wrapper {{layoutClass}}">
                 <view class="plan-card" wx:for="{{existingPlans}}" wx:key="id">
-                    <view class="plan-status">
-                    <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
-                        <text class="check-icon">✓</text>
-                        <text>{{item.voted ? '已投票' : '未投票'}}</text>
-                    </view>
-                    </view>
                     <view class="plan-content">
-                    <view class="title-row">
-                        <view class="plan-icon">
-                        <text class="icon-text">{{item.iconText}}</text>
+                        <view class="plan-status">
+                            <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
+                                <text class="check-icon">✓</text>
+                                <text>{{item.voted ? '已投票' : '未投票'}}</text>
+                            </view>
                         </view>
-                        <view class="plan-title">{{item.title}}</view>
-                    </view>
-                    <view class="plan-subtitle">{{item.subtitle}}</view>
-                    <view class="vote-section">
-                        <view class="avatar-badge">
-                        <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
+                        <view class="main-content">
+                            <view class="title-row">
+                                <view class="plan-icon">
+                                    <text class="icon-text">{{item.iconText}}</text>
+                                </view>
+                                <view class="plan-title">{{item.title}}</view>
+                            </view>
+                            <view class="plan-subtitle">{{item.subtitle}}</view>
                         </view>
-                        <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
-                        <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
-                        <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                        <view class="vote-section">
+                            <view class="avatar-badge">
+                                <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
+                            </view>
+                            <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
+                                <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
+                                <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                            </view>
                         </view>
-                    </view>
                     </view>
                 </view>
                 </view>
@@ -95,8 +94,8 @@
   </view>
   
   <!-- 控制展开和收起 -->
-  <view class="budget-content {{budgetExpanded ? 'expanded' : 'collapsed'}}">
-    <scroll-view class="budget-container" scroll-x="true" show-scrollbar="flase" enhanced="true" >
+  <view class="budget-content {{budgetExpanded ? 'expanded' : 'collapsed'}}" style="{{budgetExpanded ? 'display:block' : 'display:none'}}">
+    <scroll-view class="budget-container" scroll-x="true" show-scrollbar="false" enhanced="true">
       <view class="budget-wrapper">
         <!-- 遍历 budgetItems -->
         <view class="budget-row" wx:for="{{budgetItems}}" wx:key="label">
@@ -119,8 +118,8 @@
           <text class="section-title">独家体验</text>
           <view class="arrow-icon {{exclusiveExpanded ? 'expanded' : ''}}">▼</view>
         </view>
-        <view class="exclusive-content {{exclusiveExpanded ? 'expanded' : 'collapsed'}}" style="{{exclusiveExpanded ? 'display:block' : 'display:none'}}">
-          <scroll-view class="exclusive-container" scroll-x="true" show-scrollbar="false" enhanced="true" style="height: 400rpx;">
+        <view class="exclusive-content {{exclusiveExpanded ? 'expanded' : 'collapsed'}}">
+          <scroll-view class="exclusive-container" scroll-x="true" show-scrollbar="false" enhanced="true">
             <view class="exclusive-wrapper">
               <view class="exclusive-row" wx:for="{{exclusiveItems}}" wx:key="label">
                 <view class="exclusive-label">{{item.label}}</view>
@@ -184,20 +183,22 @@
         <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true">
           <view class="plans-wrapper {{layoutClass}}">
             <view class="plan-card" wx:for="{{existingPlans}}" wx:key="id">
-              <view class="plan-status">
-                <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
-                  <text class="check-icon">✓</text>
-                  <text>{{item.voted ? '已投票' : '未投票'}}</text>
-                </view>
-              </view>
               <view class="plan-content">
-                <view class="title-row">
-                  <view class="plan-icon">
-                    <text class="icon-text">{{item.iconText}}</text>
+                <view class="plan-status">
+                  <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
+                    <text class="check-icon">✓</text>
+                    <text>{{item.voted ? '已投票' : '未投票'}}</text>
                   </view>
-                  <view class="plan-title">{{item.title}}</view>
                 </view>
-                <view class="plan-subtitle">{{item.subtitle}}</view>
+                <view class="main-content">
+                  <view class="title-row">
+                    <view class="plan-icon">
+                      <text class="icon-text">{{item.iconText}}</text>
+                    </view>
+                    <view class="plan-title">{{item.title}}</view>
+                  </view>
+                  <view class="plan-subtitle">{{item.subtitle}}</view>
+                </view>
                 <view class="vote-section">
                   <view class="avatar-badge">
                     <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
@@ -279,6 +280,13 @@
       <text>分享对比行程</text>
     </view>
   </view>
+
+  <!-- Canvas画布 - 用于生成对比图 -->
+  <canvas 
+    canvas-id="comparisonCanvas" 
+    class="comparison-canvas"
+    style="width: 600px; height: 800px; position: fixed; top: -9999px; left: 0;"
+  ></canvas>
 
   <!-- AI融合按钮 -->
   <view class="ai-fusion-actions" wx:if="{{currentTab === 2}}">

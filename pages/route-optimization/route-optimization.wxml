@@ -1,38 +1,39 @@
 <view class="page">
   <!-- 地图展示区域 -->
   <view class="map-container">
-    <map 
-      id="routeMap"
-      class="map"
-      longitude="{{mapCenter.longitude}}" 
-      latitude="{{mapCenter.latitude}}"
-      scale="{{mapScale}}"
-      markers="{{markers}}"
-      polyline="{{polyline}}"
-      show-location="{{true}}"
-      enable-3D="{{false}}"
-      show-compass="{{false}}"
-      enable-overlooking="{{false}}"
-      enable-zoom="{{true}}"
-      enable-scroll="{{true}}"
-      enable-rotate="{{false}}"
-      bindload="onMapLoad"
-      binderror="onMapError"
-      bindmarkertap="onMarkerTap"
-      bindregionchange="onRegionChange">
-    </map>
+    <view class="map-wrapper">
+      <map 
+        id="routeMap"
+        class="map"
+        longitude="{{mapCenter.longitude}}" 
+        latitude="{{mapCenter.latitude}}"
+        scale="{{mapScale}}"
+        markers="{{markers}}"
+        polyline="{{polyline}}"
+        show-location="{{true}}"
+        enable-3D="{{false}}"
+        show-compass="{{false}}"
+        enable-overlooking="{{false}}"
+        enable-zoom="{{true}}"
+        enable-scroll="{{true}}"
+        enable-rotate="{{false}}"
+        bindload="onMapLoad"
+        binderror="onMapError"
+        bindmarkertap="onMarkerTap"
+        bindregionchange="onRegionChange">
+      </map>
+    </view>
     
 
     
     <!-- 返回按钮放在地图左上角 -->
     <view class="back-btn" bindtap="goBack">
-      <text class="back-arrow">←</text>
+      <text class="back-arrow">‹</text>
     </view>
     
-    <!-- 调试按钮 -->
-    <!-- <view class="debug-btn" bindtap="testMap">
-      <text class="debug-text">测试地图</text>
-    </view> -->
+    <!-- 调试按钮区域 -->
+    <view class="debug-buttons">
+    </view>
   </view>
 
   <!-- 状态1: 初始加载状态 -->
@@ -40,7 +41,7 @@
     <view class="loading-container">
       <view class="loading-header">
         <image class="ai-avatar" src="/images/route-optimization/ai.png" />
-        <text class="loading-title">AI正在分析您的行程...</text>
+        <text class="loading-title">告诉ai你的优化需求吧~</text>
       </view>
       
       <view class="loading-dots">
@@ -48,8 +49,6 @@
         <view class="loading-dot"></view>
         <view class="loading-dot"></view>
       </view>
-      
-      <view class="loading-text">请稍等，正在为您优化路线</view>
     </view>
   </view>
 
@@ -63,32 +62,40 @@
       
       <view class="question-list">
         <view wx:for="{{currentQuestions}}" wx:key="index" 
-              class="{{getQuestionItemClass(index)}}" 
               bindtap="selectQuestion" data-index="{{index}}">
-          <view class="question-content">
-            <text class="question-text">{{item.title}}</text>
-            <text class="question-desc">({{item.desc}})</text>
-            <text class="arrow">→</text>
+          
+          <!-- 选中状态 -->
+          <view wx:if="{{questionStates[index]}}" class="question-item selected">
+            <view class="question-content">
+              <text class="question-text">{{item.title}}</text>
+              <text class="question-desc">({{item.desc}})</text>
+              <text class="arrow">→</text>
+            </view>
+          </view>
+          
+          <!-- 未选中状态 -->
+          <view wx:else class="question-item">
+            <view class="question-content">
+              <text class="question-text">{{item.title}}</text>
+              <text class="question-desc">({{item.desc}})</text>
+              <text class="arrow">→</text>
+            </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <!-- 底部按钮区域 -->
-    <view class="bottom-buttons">
-      <!-- 调试信息 -->
-      <view class="debug-info">
-        <text>已选择: {{selectedQuestions ? selectedQuestions.length : 0}} 个问题</text>
-      </view>
-      
-      <!-- 确认按钮 -->
-      <view wx:if="{{selectedQuestions && selectedQuestions.length > 0}}" class="confirm-btn-wrapper">
-        <button class="btn confirm" bindtap="confirmSelection">确认提交</button>
-      </view>
-      
-      <!-- 换一批按钮 -->
-      <view class="change-batch-btn" bindtap="changeBatch">
-        <text class="btn-text">都不是，换一批</text>
+      <!-- 底部按钮区域 -->
+      <view class="bottom-buttons">
+        <!-- 确认提交按钮 -->
+        <view wx:if="{{selectedCount > 0}}" class="confirm-btn-wrapper">
+          <button class="btn confirm" bindtap="confirmSelection">确认提交</button>
+        </view>
+        
+        <!-- 换一批按钮 -->
+        <button class="btn change-batch {{selectedCount > 0 ? 'has-selection' : ''}}" style="width: 145px;" bindtap="changeBatch">
+          <view class="refresh-icon">↺</view>
+          <text class="change-batch-text">都不是，换一批</text>
+        </button>
       </view>
     </view>
   </view>
@@ -102,11 +109,13 @@
       </view>
       
       <view class="thinking-problems">
-        <view wx:for="{{selectedQuestions || []}}" wx:key="index" 
+        <view wx:for="{{selectedQuestions}}" wx:key="*this" 
               class="thinking-problem-item">
-          <text class="thinking-problem-text">
-            {{currentQuestions[item].title}} ({{currentQuestions[item].desc}})
-          </text>
+          <view class="question-content">
+            <text class="question-text">{{currentQuestions[item].title}}</text>
+            <text class="question-desc">({{currentQuestions[item].desc}})</text>
+            <text class="arrow">→</text>
+          </view>
         </view>
       </view>
 
@@ -118,8 +127,16 @@
         </view>
       </view>
 
+      <view class="thinking-instruction">
+        您确认问题后, AI会重新生成新攻略, 将覆盖现有内容, 点击下方确认即可更新...
+      </view>
+
       <view class="thinking-buttons">
-        <button class="btn cancel" bindtap="returnToSelection">返回问题选择</button>
+        <button class="btn confirm-update" bindtap="confirmUpdate">
+          <view class="check-icon">✓</view>
+          <text>确认更新</text>
+        </button>
+        <button class="btn return-btn" bindtap="returnToSelection">不改了，返回</button>
       </view>
     </view>
   </view>

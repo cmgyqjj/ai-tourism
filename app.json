@@ -55,6 +55,10 @@
     },
     "scope.phoneNumber": {
       "desc": "你的手机号将用于快速登录"
+    },
+    "scope.writePhotosAlbum": {
+      "desc": "保存对比图到相册"
     }
   }
+
 }
