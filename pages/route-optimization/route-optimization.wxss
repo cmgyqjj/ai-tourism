@@ -469,4 +469,20 @@
   max-width: 300rpx;
 }
 
-
+/* 调试按钮样式 */
+.debug-btn {
+  position: absolute;
+  right: 30rpx;
+  top: 60rpx;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12rpx 20rpx;
+  border-radius: 25rpx;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  margin-top: 35rpx;
+}
+.debug-text {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: 500;
+}

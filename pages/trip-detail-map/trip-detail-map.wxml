@@ -162,6 +162,71 @@
     </view>
   </view>
 
+  <!-- 分享确认弹窗 -->
+  <view class="modal-overlay" wx:if="{{showShareModal}}" bindtap="hideShareModal">
+    <view class="share-modal-content" catchtap="stopPropagation">
+      <view class="share-modal-header">
+        <text class="share-modal-title">分享攻略</text>
+        <view class="close-btn" bindtap="hideShareModal">×</view>
+      </view>
+      
+      <!-- 分享内容预览 -->
+      <view class="share-preview">
+        <view class="preview-card">
+          <view class="preview-header">
+            <image class="preview-avatar" src="/images/avatar1.png" mode="aspectFill" />
+            <view class="preview-info">
+              <text class="preview-name">我的</text>
+              <text class="preview-type">旅行攻略</text>
+            </view>
+          </view>
+          
+          <view class="preview-content">
+            <view class="preview-title">{{tripTitle}}</view>
+            <view class="preview-desc">详细行程攻略，包含地图路线和景点推荐</view>
+            <view class="preview-meta">
+              <text class="preview-duration">行程时长: {{tripDuration}}</text>
+              <text class="preview-days">共{{tripDays.length}}个行程安排</text>
+            </view>
+            <view class="preview-tags">
+              <text class="preview-tag">地图路线</text>
+              <text class="preview-tag">景点推荐</text>
+              <text class="preview-tag">美食攻略</text>
+              <text class="preview-tag">住宿建议</text>
+            </view>
+          </view>
+          
+          <view class="preview-footer">
+            <text class="preview-app">来自美团旅行</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 分享选项 -->
+      <view class="share-options">
+        <view class="share-option">
+          <button open-type="share" class="share-btn wechat">
+            <view class="share-icon-wrapper">
+              <image class="share-option-icon" src="/images/wx.png" mode="aspectFit" />
+            </view>
+            <text class="share-option-text">微信</text>
+          </button>
+        </view>
+        
+        <view class="share-option" bindtap="copyLink">
+          <view class="share-icon-wrapper">
+            <image class="share-option-icon" src="/images/lianjie.png" mode="aspectFit" />
+          </view>
+          <text class="share-option-text">复制链接</text>
+        </view>
+      </view>
+      
+      <view class="share-modal-footer">
+        <button class="cancel-share-btn" bindtap="hideShareModal">取消</button>
+      </view>
+    </view>
+  </view>
+
   <!-- 侧边栏 -->
   <view class="sidebar {{sidebarOpen ? 'open' : ''}}">
     <!-- 外框图片 -->

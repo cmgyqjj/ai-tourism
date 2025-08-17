@@ -540,5 +540,24 @@ Page({
     });
   },
 
-
+  // 测试地图功能
+  testMap() {
+    console.log('测试地图功能');
+    
+    // 显示当前地图数据
+    console.log('当前地图数据:', {
+      markers: this.data.markers,
+      polyline: this.data.polyline
+    });
+    
+    // 尝试刷新地图
+    this.refreshMapData();
+    
+    // 显示测试提示
+    wx.showToast({
+      title: '地图测试中...',
+      icon: 'loading',
+      duration: 2000
+    });
+  }
 });
