@@ -14,6 +14,36 @@ page {
   padding-bottom: 120rpx; /* 为底部导航栏留出空间 */
 }
 
+/* 顶部导航栏 */
+.top-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+}
+
+/* 返回按钮样式 */
+.back-btn {
+  position: absolute;
+  left: -340rpx;
+  bottom:30rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.back-arrow {
+  font-size: 40rpx;
+  color: #000000;
+  font-weight: bold;
+}
+
+
 .header {
   padding: 32rpx;
   display: flex;

@@ -64,6 +64,13 @@ Page({
     console.log('个人中心页面显示');
   },
 
+  // 返回上一页
+  goBack() {
+    wx.navigateBack({
+      delta: 1
+    })
+  },
+
   onReady() {
     console.log('个人中心页面准备完成');
   },

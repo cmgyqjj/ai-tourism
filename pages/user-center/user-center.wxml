@@ -1,5 +1,12 @@
 <view class="page">
   <view class="container">
+    <!-- 顶部导航栏 -->
+    <view class="top-nav">
+      <view class="back-btn" bindtap="goBack">
+        <text class="back-arrow">←</text>
+      </view>
+    </view>
+    
     <!-- 顶部个人信息区 -->
     <view class="header">
       <view class="user-info">
