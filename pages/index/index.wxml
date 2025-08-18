@@ -5,7 +5,7 @@
     <view class="nav-bar">
       <view class="nav-left">
         <view class="logo-container">
-          <image class="logo-text" src="https://p0.inf.test.sankuai.com/haikesong/71b14f0fb6c8be4b2460ebad86223faf177341.gif" mode="aspectFit"></image>
+          <image class="logo-text" src="https://p0.inf.test.sankuai.com/haikesong/31157c98c67a6f042e07e8ea3560ddf8177263.gif" mode="aspectFit"></image>
         </view>
       </view>
       <view class="search-btn">

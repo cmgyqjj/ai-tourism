@@ -68,6 +68,7 @@ page {
   width: 100%;
   max-width: 750rpx;
   box-sizing: border-box;
+  margin-top: 20rpx;
 }
 
 .nav-left {
