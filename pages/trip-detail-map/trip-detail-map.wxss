@@ -7,26 +7,32 @@
 }
 
 /* 顶部退出按钮 */
-.back-button {
-  position: fixed;
-  top: 94rpx;
-  left: 32rpx;
-  z-index: 1000;
+.back-btn {
+  position: absolute;
+  left: 30rpx;
+  top: 60rpx;
   width: 60rpx;
   height: 60rpx;
-  background: rgba(249, 245, 245, 0.9);
-  border-radius: 50%;
+  background: transparent; /* 透明背景 */
+  border-radius: 0; /* 移除圆角 */
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10rpx);
+  box-shadow: none; /* 移除阴影 */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 100;
+  margin-top: 35rpx;
 }
 
-.back-icon {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
+.back-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 1);
+}
+
+.back-arrow {
+  font-size: 70rpx;
+  color: #000; /* 改成纯黑色 */
 }
 
 /* 行程标题区域 */
@@ -131,11 +137,14 @@
 
 /* 地图区域 - 占更多空间 */
 .map-section {
-  height: 40vh;
+  height: 50vh;
+  min-height: 400rpx;
   border-radius: 24rpx;
   overflow: hidden;
   position: relative;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  margin: 0 32rpx;
+  margin-bottom: 24rpx;
 }
 
 .trip-map {

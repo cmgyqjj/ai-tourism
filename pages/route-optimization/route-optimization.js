@@ -238,89 +238,16 @@ Page({
     // 创建包含用户位置和景点的完整标记数组
     const allMarkers = [];
     
-    // 首先添加用户位置标记（绿色）
-    if (this.data.userLocation) {
-      allMarkers.push({
-        id: 'user',
-        latitude: this.data.userLocation.latitude,
-        longitude: this.data.userLocation.longitude,
-        title: '我的位置',
-        width: 40,
-        height: 40,
-        callout: {
-          content: '📍 我的位置',
-          color: '#ffffff',
-          fontSize: 14,
-          borderRadius: 4,
-          bgColor: '#00ff00',
-          padding: 8,
-          display: 'ALWAYS'
-        }
-      });
-    }
-    
-    // 然后添加景点标记（红色）
-    const attractionMarkers = [
-      { 
-        id: 1, 
-        latitude: 31.2304, 
-        longitude: 121.4737, 
-        title: '起点 - 人民广场',
-        width: 30,
-        height: 30,
-        callout: {
-          content: '起点 - 人民广场',
-          color: '#ffffff',
-          fontSize: 14,
-          borderRadius: 4,
-          bgColor: '#ff0000',
-          padding: 8,
-          display: 'ALWAYS'
-        }
-      },
-      { 
-        id: 2, 
-        latitude: 31.2260, 
-        longitude: 121.4785, 
-        title: '景点1 - 外滩',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 3, 
-        latitude: 31.2204, 
-        longitude: 121.4837, 
-        title: '景点2 - 豫园',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 4, 
-        latitude: 31.2350, 
-        longitude: 121.4700, 
-        title: '景点3 - 南京路',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 5, 
-        latitude: 31.2180, 
-        longitude: 121.4900, 
-        title: '景点4 - 陆家嘴',
-        width: 30,
-        height: 30
-      }
-    ];
-    
-    // 将所有标记添加到数组
-    allMarkers.push(...attractionMarkers);
+    // 不添加任何标记点，只保留路线
+    // 清空标记数组，不显示绿色和红色标记
+    allMarkers = [];
     
     // 更新地图数据
     this.setData({
       markers: allMarkers
     });
     
-    console.log('景点标记显示完成，共', allMarkers.length, '个标记');
+    console.log('标记点已隐藏，只显示路线');
     
     // 延迟显示路线
     setTimeout(() => {

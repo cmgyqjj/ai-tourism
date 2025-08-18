@@ -93,7 +93,7 @@
         
         <!-- 换一批按钮 -->
         <button class="btn change-batch {{selectedCount > 0 ? 'has-selection' : ''}}" style="width: 145px;" bindtap="changeBatch">
-          <view class="refresh-icon">↺</view>
+          <image class="refresh-icon" src="/images/btn.png" mode="aspectFit"></image>
           <text class="change-batch-text">都不是，换一批</text>
         </button>
       </view>

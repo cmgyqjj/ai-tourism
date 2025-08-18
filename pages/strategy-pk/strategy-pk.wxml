@@ -88,26 +88,26 @@
 
       <!-- 预算价格 -->
       <view class="section budget-section">
-  <view class="section-header" bindtap="toggleBudget">
-    <text class="section-title">预算价格</text>
-    <view class="arrow-icon {{budgetExpanded ? 'expanded' : ''}}">▼</view>
-  </view>
-  
-  <!-- 控制展开和收起 -->
-  <view class="budget-content {{budgetExpanded ? 'expanded' : 'collapsed'}}" style="{{budgetExpanded ? 'display:block' : 'display:none'}}">
-    <scroll-view class="budget-container" scroll-x="true" show-scrollbar="false" enhanced="true">
-      <view class="budget-wrapper">
-        <!-- 遍历 budgetItems -->
-        <view class="budget-row" wx:for="{{budgetItems}}" wx:key="label">
-          <view class="budget-label">{{item.label}}</view>
-          <view class="budget-values">
-            <!-- 遍历每个预算项的值 -->
-            <view class="budget-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
-          </view>
+        <view class="section-header" bindtap="toggleBudget">
+            <text class="section-title">预算价格</text>
+            <view class="arrow-icon {{budgetExpanded ? 'expanded' : ''}}">▼</view>
         </view>
-      </view>
-    </scroll-view>
-  </view>
+        
+        <!-- 控制展开和收起 -->
+        <view class="budget-content {{budgetExpanded ? 'expanded' : 'collapsed'}}" style="{{budgetExpanded ? 'display:block' : 'display:none'}}">
+            <scroll-view class="budget-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+            <view class="budget-wrapper">
+                <!-- 遍历 budgetItems -->
+                <view class="budget-row" wx:for="{{budgetItems}}" wx:key="label">
+                <view class="budget-label">{{item.label}}</view>
+                <view class="budget-values">
+                    <!-- 遍历每个预算项的值 -->
+                    <view class="budget-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
+                </view>
+                </view>
+            </view>
+            </scroll-view>
+        </view>
 </view>
 
 
@@ -276,7 +276,7 @@
       <text>下载对比报告</text>
     </view>
     <view class="action-btn primary" bindtap="shareItinerary">
-      <text class="share-icon">⤴</text>
+      <image class="share-icon" src="/images/upload.png" mode="aspectFit"></image>
       <text>分享对比行程</text>
     </view>
   </view>

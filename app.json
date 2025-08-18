@@ -59,6 +59,9 @@
     "scope.writePhotosAlbum": {
       "desc": "保存对比图到相册"
     }
-  }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ]
 
 }

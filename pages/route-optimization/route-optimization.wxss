@@ -347,14 +347,9 @@ padding-top: 15rpx;
 .refresh-icon {
   width: 32rpx;
   height: 32rpx;
-  background: #333;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 20rpx;
-  font-weight: bold;
 }
 
 .change-batch-text {
