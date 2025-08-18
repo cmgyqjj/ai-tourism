@@ -110,7 +110,7 @@
   }
   
   .section-title {
-    width:100px;
+    width:200rpx;
     
     font-size: 32rpx;
     margin-bottom: 8rpx; /* 减少底部间距 */
@@ -130,15 +130,10 @@
     color: rgb(22, 21, 21);
     transition: all 0.3s ease;
     transform-origin: center;
-    margin-right: 570rpx; /* 收起状态：靠右显示 */
+    /* margin-right: 570rpx; 收起状态：靠右显示 */
     line-height: 1;
   }
   
-  .arrow-icon.expanded {
-    transform: rotate(180deg);
-    margin-right: 0; /* 展开状态：移除右边距 */
-    margin-left: 16rpx; /* 展开状态：靠左显示 */
-  }
   
   /* .arrow-icon.expanded {
     transform: rotate(180deg);
@@ -519,8 +514,7 @@
   
   .arrow-icon.expanded {
     transform: rotate(180deg);
-    margin-right: 0; /* 展开状态：移除右边距 */
-    margin-left: 16rpx; /* 展开状态：靠左显示 */
+    margin-right: 570rpx;
   }
   
   /* 预算价格内容展开和收起 */
@@ -774,23 +768,6 @@
   }
   
   
-  
-  /* 响应式设计：对于小屏设备调整样式 */
-  @media (max-width: 375px) {
-    /* 调整整体字体大小 */
-    .section-title {
-      font-size: 28rpx;
-    }
-  
-
-  }
-  
-
-  
-  
-  
-  
-
   
   /* AI融合页面 */
   .ai-fusion-content {
@@ -1175,3 +1152,148 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
+
+/* 同步滚动表格布局样式 */
+.sync-scroll-layout {
+  display: flex;
+  width: 100%;
+  position: relative;
+}
+
+.left-labels {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: #fff;
+  min-width: 200rpx;
+  flex-shrink: 0;
+}
+
+.label-item {
+  padding: 24rpx 32rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  min-height: 80rpx;
+  box-sizing: border-box;
+}
+
+.label-item:last-child {
+  border-bottom: none;
+}
+
+.label-item text {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.right-data {
+  flex: 1;
+  overflow-x: auto;
+  background-color: #fff;
+}
+
+.data-wrapper {
+  display: flex;
+  min-width: max-content;
+}
+
+.data-column {
+  min-width: 210rpx;
+  border-right: 1rpx solid #f0f0f0;
+}
+
+.data-column:last-child {
+  border-right: none;
+}
+
+.data-cell {
+  padding: 24rpx 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  min-height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.data-cell:last-child {
+  border-bottom: none;
+}
+
+.data-cell text {
+  font-size: 28rpx;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* 方案亮点特殊样式 */
+.plan-highlights .sync-scroll-layout {
+  flex-direction: column;
+}
+
+.plan-highlights .left-labels {
+  position: static;
+  width: 100%;
+  min-width: auto;
+}
+
+.plan-highlights .label-item {
+  background-color: transparent;
+  border-bottom: none;
+  padding: 16rpx 32rpx;
+  min-height: auto;
+}
+
+.plan-highlights .right-data {
+  overflow-x: auto;
+  background-color: transparent;
+}
+
+.plan-highlights .data-wrapper {
+  padding: 0 32rpx 32rpx;
+}
+
+.plan-highlights .data-column {
+  min-width: 210rpx;
+  border-right: none;
+  margin-right: 24rpx;
+}
+
+.plan-highlights .data-cell {
+  border-bottom: none;
+  padding: 16rpx 0;
+  min-height: auto;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.plan-highlights .highlight-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 16rpx;
+  text-align: left;
+}
+
+.plan-highlights .highlight-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.plan-highlights .tag {
+  background-color: #FEF031;
+  color: #000;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  white-space: nowrap;
+}

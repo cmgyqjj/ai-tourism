@@ -4,5 +4,6 @@
   },
   "navigationBarTitleText": "行程PK",
   "navigationStyle": "custom",
-  "backgroundColor": "#f5f5f5"
+  "backgroundColor": "#f5f5f5",
+  "enablePullDownRefresh": true
 }
