@@ -1,7 +1,7 @@
 <view class="trip-detail-container">
   <!-- 顶部退出按钮 -->
-  <view class="back-button" bindtap="goBack">
-    <text class="back-icon">←</text>
+  <view class="back-btn" bindtap="goBack">
+    <text class="back-arrow">‹</text>
   </view>
 
   <!-- 主要内容区域 -->
@@ -18,7 +18,8 @@
         polyline="{{mapPolyline}}"
         show-location="true"
         bindmarkertap="onMarkerTap"
-        bindregionchange="onRegionChange">
+        bindregionchange="onRegionChange"
+        bindload="onMapLoad">
       </map>
     </view>
 
@@ -227,7 +228,7 @@
     </view>
   </view>
 
-  <!-- 侧边栏 -->
+ <!-- 侧边栏 -->
   <view class="sidebar {{sidebarOpen ? 'open' : ''}}">
     <!-- 外框图片 -->
     <!-- <image class="sidebar-frame" src="/images/travel-guide/sidebar.png" mode="aspectFit"></image>

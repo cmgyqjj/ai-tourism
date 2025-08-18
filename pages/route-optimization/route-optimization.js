@@ -6,6 +6,11 @@ Page({
     // 当前问题组索引
     currentQuestionGroup: 0,
     
+    // 用户当前位置
+    userLocation: null,
+    // 是否已获取用户位置
+    hasUserLocation: false,
+    
     // 三组问题数据 (总共15个问题)
     questionGroups: [
       // 第一组问题
@@ -20,9 +25,9 @@ Page({
       [
         { title: '预算控制', desc: '总体预算超出或不够合理' },
         { title: '文化体验', desc: '缺少当地文化体验项目' },
-        { title: '购物建议', desc: '购物地点或商品推荐不当' },
+        { title: '购物建议', desc: '购物推荐不够详细' },
         { title: '安全提醒', desc: '缺少安全注意事项' },
-        { title: '天气考虑', desc: '没有考虑天气因素影响' }
+        { title: '天气考虑', desc: '没有考虑天气因素' }
       ],
       // 第三组问题
       [
@@ -37,7 +42,13 @@ Page({
     // 当前显示的问题
     currentQuestions: [],
     
-    // 选中的问题索引
+    // 问题选中状态 - 使用对象管理每个问题的选中状态
+    questionStates: {},
+    
+    // 选中的问题数量
+    selectedCount: 0,
+    
+    // 选中的问题列表
     selectedQuestions: [],
     
     // 地图相关数据
@@ -107,15 +118,13 @@ Page({
   },
 
   onLoad() {
-    console.log('路线优化页面加载');
-    
-    // 请求位置权限
-    this.requestLocationPermission();
-    
-    // 确保selectedQuestions初始化为空数组
+    // 立即初始化数据
     this.setData({
-      selectedQuestions: []
+      currentState: 'loading'
     });
+    
+    // 请求位置权限并获取用户位置
+    this.requestLocationPermission();
     
     // 页面加载时显示loading状态
     this.showLoadingState();
@@ -126,7 +135,16 @@ Page({
     }, 1000);
   },
 
-  // 请求位置权限
+  onShow() {
+    // 每次页面显示时都重置选择状态
+    this.setData({
+      questionStates: {},
+      selectedCount: 0,
+      selectedQuestions: []
+    });
+  },
+
+  // 请求位置权限并获取用户位置
   requestLocationPermission() {
     wx.getSetting({
       success: (res) => {
@@ -135,6 +153,8 @@ Page({
             scope: 'scope.userLocation',
             success: () => {
               console.log('位置权限获取成功');
+              // 权限获取成功后，立即获取用户位置
+              this.getUserLocation();
             },
             fail: () => {
               console.log('位置权限获取失败');
@@ -147,7 +167,46 @@ Page({
           });
         } else {
           console.log('已有位置权限');
+          // 已有权限，直接获取用户位置
+          this.getUserLocation();
         }
+      }
+    });
+  },
+
+  // 获取用户当前位置
+  getUserLocation() {
+    wx.showLoading({
+      title: '获取位置中...',
+      mask: true
+    });
+
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        console.log('获取用户位置成功:', res);
+        const userLocation = {
+          latitude: res.latitude,
+          longitude: res.longitude
+        };
+        
+        this.setData({
+          userLocation: userLocation,
+          hasUserLocation: true,
+          mapCenter: userLocation // 地图中心设置为用户位置
+        });
+        
+        wx.hideLoading();
+        console.log('地图中心已设置为用户位置:', userLocation);
+      },
+      fail: (err) => {
+        console.error('获取用户位置失败:', err);
+        wx.hideLoading();
+        wx.showToast({
+          title: '获取位置失败',
+          icon: 'none',
+          duration: 2000
+        });
       }
     });
   },
@@ -159,61 +218,48 @@ Page({
       polyline: this.data.polyline.length
     });
     
-    // 延迟初始化地图，确保页面完全加载
+    // 如果已获取用户位置，延迟显示景点标记
+    if (this.data.hasUserLocation) {
+      setTimeout(() => {
+        this.showAttractionMarkers();
+      }, 1000); // 1秒后显示景点标记
+    } else {
+      // 如果还没获取到用户位置，等待位置获取完成
+      setTimeout(() => {
+        this.initMapData();
+      }, 500);
+    }
+  },
+
+  // 显示景点标记
+  showAttractionMarkers() {
+    console.log('显示景点标记');
+    
+    // 创建包含用户位置和景点的完整标记数组
+    const allMarkers = [];
+    
+    // 不添加任何标记点，只保留路线
+    // 清空标记数组，不显示绿色和红色标记
+    allMarkers = [];
+    
+    // 更新地图数据
+    this.setData({
+      markers: allMarkers
+    });
+    
+    console.log('标记点已隐藏，只显示路线');
+    
+    // 延迟显示路线
     setTimeout(() => {
-      this.forceMapUpdate();
+      this.showRouteLine();
     }, 500);
   },
 
-  // 强制更新地图
-  forceMapUpdate() {
-    console.log('强制更新地图');
+  // 显示路线
+  showRouteLine() {
+    console.log('显示路线');
     
-    // 保存原始地图数据
-    const originalMarkers = [
-      { 
-        id: 1, 
-        latitude: 31.2304, 
-        longitude: 121.4737, 
-        title: '起点 - 人民广场',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 2, 
-        latitude: 31.2260, 
-        longitude: 121.4785, 
-        title: '景点1 - 外滩',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 3, 
-        latitude: 31.2204, 
-        longitude: 121.4837, 
-        title: '景点2 - 豫园',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 4, 
-        latitude: 31.2350, 
-        longitude: 121.4700, 
-        title: '景点3 - 南京路',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 5, 
-        latitude: 31.2180, 
-        longitude: 121.4900, 
-        title: '景点4 - 陆家嘴',
-        width: 30,
-        height: 30
-      }
-    ];
-    
-    const originalPolyline = [{
+    const polyline = [{
       points: [
         { latitude: 31.2304, longitude: 121.4737 },  // 人民广场
         { latitude: 31.2350, longitude: 121.4700 },  // 南京路
@@ -226,75 +272,24 @@ Page({
       arrowLine: true
     }];
     
-    // 先清空地图数据
     this.setData({
-      markers: [],
-      polyline: []
-    }, () => {
-      // 延迟重新设置数据，强制地图重新渲染
-      setTimeout(() => {
-        this.setData({
-          markers: originalMarkers,
-          polyline: originalPolyline
-        });
-        console.log('地图数据已强制更新:', {
-          markers: originalMarkers.length,
-          polyline: originalPolyline.length
-        });
-        
-        // 强制地图重新渲染
-        this.forceMapRender();
-        
-        // 再次检查地图状态
-        setTimeout(() => {
-          this.checkMapDisplay();
-        }, 500);
-      }, 200);
-    });
-  },
-
-  // 强制地图重新渲染
-  forceMapRender() {
-    console.log('强制地图重新渲染');
-    
-    // 使用选择器查询地图组件
-    const query = wx.createSelectorQuery();
-    query.select('#routeMap').fields({ node: true, size: true }).exec((res) => {
-      if (res[0] && res[0].node) {
-        console.log('找到地图节点，尝试强制渲染');
-        // 这里可以尝试强制刷新地图
-      }
+      polyline: polyline
     });
     
-    // 延迟重新设置地图数据，确保渲染
-    setTimeout(() => {
-      this.setData({
-        markers: this.data.markers,
-        polyline: this.data.polyline
-      });
-      console.log('地图数据重新设置完成');
-    }, 100);
+    console.log('路线显示完成');
   },
 
-  // 检查地图显示状态
-  checkMapDisplay() {
-    const query = wx.createSelectorQuery();
-    query.select('#routeMap').fields({ node: true, size: true }).exec((res) => {
-      if (res[0]) {
-        console.log('地图组件已找到:', res[0]);
-        console.log('地图尺寸:', res[0].size);
-      } else {
-        console.log('地图组件未找到');
-      }
-    });
-  },
 
   // 地图加载完成事件
   onMapLoad() {
     console.log('地图加载完成');
     
-    // 强制刷新地图数据
-    this.refreshMapData();
+    // 如果已获取用户位置，显示景点标记
+    if (this.data.hasUserLocation) {
+      setTimeout(() => {
+        this.showAttractionMarkers();
+      }, 500);
+    }
     
     wx.showToast({
       title: '地图加载完成',
@@ -313,84 +308,7 @@ Page({
     });
   },
 
-  // 强制刷新地图数据
-  refreshMapData() {
-    console.log('强制刷新地图数据');
-    
-    // 重新设置地图数据
-    const markers = [
-      { 
-        id: 1, 
-        latitude: 31.2304, 
-        longitude: 121.4737, 
-        title: '起点 - 人民广场',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 2, 
-        latitude: 31.2260, 
-        longitude: 121.4785, 
-        title: '景点1 - 外滩',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 3, 
-        latitude: 31.2204, 
-        longitude: 121.4837, 
-        title: '景点2 - 豫园',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 4, 
-        latitude: 31.2350, 
-        longitude: 121.4700, 
-        title: '景点3 - 南京路',
-        width: 30,
-        height: 30
-      },
-      { 
-        id: 5, 
-        latitude: 31.2180, 
-        longitude: 121.4900, 
-        title: '景点4 - 陆家嘴',
-        width: 30,
-        height: 30
-      }
-    ];
-    
-    const polyline = [{
-      points: [
-        { latitude: 31.2304, longitude: 121.4737 },  // 人民广场
-        { latitude: 31.2350, longitude: 121.4700 },  // 南京路
-        { latitude: 31.2260, longitude: 121.4785 },  // 外滩
-        { latitude: 31.2204, longitude: 121.4837 },  // 豫园
-        { latitude: 31.2180, longitude: 121.4900 }   // 陆家嘴
-      ],
-      color: '#FF6B6B',
-      width: 4,
-      arrowLine: true
-    }];
-    
-    this.setData({
-      markers: [],
-      polyline: []
-    }, () => {
-      // 延迟重新设置数据，强制地图重新渲染
-      setTimeout(() => {
-        this.setData({
-          markers: markers,
-          polyline: polyline
-        });
-        console.log('地图数据已刷新:', {
-          markers: markers.length,
-          polyline: polyline.length
-        });
-      }, 100);
-    });
-  },
+  
 
   // 显示初始加载状态
   showLoadingState() {
@@ -406,44 +324,64 @@ Page({
 
   // 显示问题选择状态
   showQuestionSelectionState() {
+    // 强制重置选择状态
     this.setData({
       currentState: 'selecting',
       currentQuestions: this.data.questionGroups[this.data.currentQuestionGroup],
-      selectedQuestions: [] // 确保初始化为空数组
+      questionStates: {},
+      selectedCount: 0, // 重置选中的问题数量
+      selectedQuestions: [] // 重置选中的问题列表
     });
   },
 
   // 选择/取消选择问题
   selectQuestion(e) {
     const index = e.currentTarget.dataset.index;
-    // 确保selectedQuestions是数组
-    let selectedQuestions = Array.isArray(this.data.selectedQuestions) ? [...this.data.selectedQuestions] : [];
     
-    console.log('点击问题索引:', index, '当前选中:', selectedQuestions);
+    // 获取当前选中的问题状态
+    let questionStates = this.data.questionStates;
     
-    // 如果问题已经选中，则取消选中
-    if (selectedQuestions.includes(index)) {
-      selectedQuestions = selectedQuestions.filter(i => i !== index);
-      console.log('取消选择问题:', index);
+    // 检查问题是否已经选中
+    const isSelected = questionStates[index] === true;
+    
+    if (isSelected) {
+      // 如果已选中，则取消选中
+      questionStates[index] = false;
     } else {
-      // 如果问题未选中，则添加到选中列表
-      selectedQuestions.push(index);
-      console.log('选择问题:', index);
+      // 如果未选中，则添加到选中列表
+      questionStates[index] = true;
     }
     
-    console.log('更新后选中:', selectedQuestions);
+    // 计算选中的问题数量
+    const selectedCount = Object.keys(questionStates).filter(index => questionStates[index] === true).length;
     
+    // 更新数据
     this.setData({
-      selectedQuestions: selectedQuestions
-    }, () => {
-      // 在setData完成后打印确认
-      console.log('setData完成，当前selectedQuestions:', this.data.selectedQuestions);
+      questionStates: questionStates,
+      selectedCount: selectedCount
     });
   },
 
-  // 确认选择，直接进入AI思考状态
+  // 获取选中的问题索引数组
+  getSelectedQuestions() {
+    const questionStates = this.data.questionStates;
+    const selectedQuestions = Object.keys(questionStates).filter(index => questionStates[index] === true);
+    return selectedQuestions;
+  },
+
+  // 获取选中的问题数量
+  getSelectedCount() {
+    const questionStates = this.data.questionStates;
+    const selectedCount = Object.keys(questionStates).filter(index => questionStates[index] === true).length;
+    return selectedCount;
+  },
+
+  // 确认选择，进入AI思考状态
   confirmSelection() {
-    if (!Array.isArray(this.data.selectedQuestions) || this.data.selectedQuestions.length === 0) {
+    const questionStates = this.data.questionStates;
+    const selectedQuestions = Object.keys(questionStates).filter(index => questionStates[index] === true);
+    
+    if (selectedQuestions.length === 0) {
       wx.showToast({
         title: '请至少选择一个问题',
         icon: 'none'
@@ -451,7 +389,12 @@ Page({
       return;
     }
     
-    // 直接进入AI思考状态
+    // 设置选中的问题列表
+    this.setData({
+      selectedQuestions: selectedQuestions
+    });
+    
+    // 进入AI思考状态
     this.startAIThinking();
   },
 
@@ -483,31 +426,15 @@ Page({
     this.setData({
       currentQuestionGroup: nextGroup,
       currentQuestions: this.data.questionGroups[nextGroup],
-      selectedQuestions: []
+      questionStates: {}, // 确保切换时重置选择状态
+      selectedCount: 0, // 确保切换时重置选中的问题数量
+      selectedQuestions: [] // 确保切换时重置选中的问题列表
     });
     
     wx.showToast({
       title: `已切换到第${nextGroup + 1}组问题`,
       icon: 'none'
     });
-  },
-
-  // 检查问题是否被选中
-  isQuestionSelected(index) {
-    return Array.isArray(this.data.selectedQuestions) && this.data.selectedQuestions.includes(index);
-  },
-
-  // 检查是否有选中的问题
-  hasSelectedQuestions() {
-    return Array.isArray(this.data.selectedQuestions) && this.data.selectedQuestions.length > 0;
-  },
-
-  // 获取问题项的CSS类名
-  getQuestionItemClass(index) {
-    if (this.isQuestionSelected(index)) {
-      return 'question-item selected';
-    }
-    return 'question-item';
   },
 
   // 地图标记点击事件
@@ -537,27 +464,6 @@ Page({
   goBack() {
     wx.navigateBack({
       delta: 1
-    });
-  },
-
-  // 测试地图功能
-  testMap() {
-    console.log('测试地图功能');
-    
-    // 显示当前地图数据
-    console.log('当前地图数据:', {
-      markers: this.data.markers,
-      polyline: this.data.polyline
-    });
-    
-    // 尝试刷新地图
-    this.refreshMapData();
-    
-    // 显示测试提示
-    wx.showToast({
-      title: '地图测试中...',
-      icon: 'loading',
-      duration: 2000
     });
   }
 });

@@ -233,27 +233,51 @@
             longitude: 116.397128,
             latitude: 39.916527,
             title: '起点',
-            iconPath: '/images/marker-start.png',
-            width: 32,
-            height: 32
+            width: 40,
+            height: 40,
+            callout: {
+                content: '📍 起点',
+                color: '#ffffff',
+                fontSize: 14,
+                borderRadius: 4,
+                bgColor: '#00ff00',
+                padding: 8,
+                display: 'ALWAYS'
+            }
         },
         {
             id: 2,
             longitude: 116.407128,
             latitude: 39.926527,
             title: '景点1',
-            iconPath: '/images/marker-attraction.png',
-            width: 32,
-            height: 32
+            width: 40,
+            height: 40,
+            callout: {
+                content: '📍 景点1',
+                color: '#ffffff',
+                fontSize: 14,
+                borderRadius: 4,
+                bgColor: '#ff6b6b',
+                padding: 8,
+                display: 'ALWAYS'
+            }
         },
         {
             id: 3,
             longitude: 116.417128,
             latitude: 39.936527,
             title: '景点2',
-            iconPath: '/images/marker-attraction.png',
-            width: 32,
-            height: 32
+            width: 40,
+            height: 40,
+            callout: {
+                content: '📍 景点2',
+                color: '#ffffff',
+                fontSize: 14,
+                borderRadius: 4,
+                bgColor: '#ff6b6b',
+                padding: 8,
+                display: 'ALWAYS'
+            }
         }
         ];
         
@@ -309,6 +333,18 @@
         if (e.type === 'end') {
         console.log('地图区域变化:', e.detail);
         }
+    },
+
+    /**
+     * 地图加载完成事件
+     */
+    onMapLoad(e) {
+        console.log('地图加载完成:', e.detail);
+        // 地图加载完成后，确保标记点和路线显示
+        this.setData({
+            mapMarkers: this.data.mapMarkers,
+            mapPolyline: this.data.mapPolyline
+        });
     },
 
     /**
