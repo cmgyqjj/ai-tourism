@@ -1,0 +1,264 @@
+/* featured-topics.wxss */
+.container {
+  background-color: #ffffff;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 顶部导航栏 */
+.header-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  z-index: 1000;
+  padding-top: 120rpx;
+  padding-bottom: 20rpx;
+}
+
+/* 返回按钮样式 */
+.back-btn {
+  position: absolute;
+  top: 100rpx;
+  left: 40rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+}
+
+.back-arrow {
+  font-size: 40rpx;
+  color: #000000;
+  font-weight: bold;
+}
+
+/* 选项卡样式 */
+.tab-container {
+  display: flex;
+  background-color: transparent;
+  padding: 0 40rpx;
+  margin-top: 60rpx;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 40rpx;
+  position: relative;
+  margin: 0 20rpx;
+  cursor: pointer;
+}
+
+.tab-text {
+  font-size: 40rpx;
+  color: #666666;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.tab-item.active .tab-text {
+  color: #000000;
+  font-weight: 600;
+}
+
+.tab-underline {
+  position: absolute;
+  bottom: 0;
+  width: 60rpx;
+  height: 6rpx;
+  background-color: #ffd700;
+  border-radius: 3rpx;
+  transition: all 0.3s ease;
+}
+
+/* 滚动容器样式 */
+.scroll-container {
+  flex: 1;
+  height: 100hv;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  margin-top: 200rpx;
+  padding-bottom:80rpx;
+  top:120rpx;
+}
+
+/* 内容容器 */
+.content-container {
+  padding: 20rpx 40rpx 40rpx 40rpx;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* 一日游卡片样式 */
+.topic-card {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  margin-bottom: 40rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.topic-images {
+  display: flex;
+  padding: 30rpx;
+  gap: 30rpx;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.topic-image {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+  flex-shrink: 0;
+  margin: 0 5rpx;
+}
+
+.topic-content {
+  padding: 0 20rpx 20rpx 20rpx;
+}
+
+.topic-title {
+  font-size: 38rpx;
+  font-weight: 500;
+  color:rgb(0, 0, 0);
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.topic-route {
+  margin-bottom: 20rpx;
+}
+
+.route-text {
+  font-size: 24rpx;
+  color: #999999;
+  line-height: 1.6;
+  display: block;
+}
+
+/* 分割线样式 */
+.divider-line {
+  height: 1rpx;
+  background-color: #e0e0e0;
+  margin: 20rpx 0;
+  width: 100%;
+}
+
+.topic-review {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-top: 10rpx;
+}
+
+.review-emoji {
+  font-size: 36rpx;
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.review-text {
+  font-size: 32rpx;
+  color: #000000;
+  line-height: 1.6;
+  flex: 1;
+  font-weight: 500;
+}
+
+/* 精选专题卡片样式 */
+.featured-card {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  margin-bottom: 40rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.featured-image {
+  width: 100%;
+  height: 400rpx;
+  display: block;
+}
+
+.featured-content {
+  padding: 20rpx;
+}
+
+.featured-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 20rpx;
+  display: block;
+  line-height: 1.4;
+}
+
+.featured-description {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.6;
+  display: block;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .header-nav {
+    padding-top: 30rpx;
+    padding-bottom: 15rpx;
+  }
+  
+  .back-btn {
+    left: 20rpx;
+    top: 30rpx;
+  }
+  
+  .tab-container {
+    padding: 0 20rpx;
+    margin-top: 50rpx;
+  }
+  
+  .scroll-container {
+    height: calc(100vh - 180rpx);
+    margin-top: 180rpx;
+  }
+  
+  .content-container {
+    padding: 15rpx 20rpx 30rpx 20rpx;
+  }
+  
+  .topic-images {
+    padding: 25rpx;
+    gap: 25rpx;
+  }
+  
+  .topic-image {
+    width: 200rpx;
+    height: 200rpx;
+  }
+  
+  .topic-content,
+  .featured-content {
+    padding: 0 15rpx 15rpx 15rpx;
+  }
+} 

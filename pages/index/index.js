@@ -14,7 +14,62 @@ Component({
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
     showModal: false, // 控制悬浮框显示
   },
+  
+  // 组件生命周期
+  attached() {
+    console.log('首页组件加载')
+    this.initUserInfo()
+  },
+  
+  pageLifetimes: {
+    show() {
+      console.log('首页页面显示')
+      this.initUserInfo()
+    }
+  },
   methods: {
+    // 初始化用户信息
+    initUserInfo() {
+      // 尝试从本地存储获取用户信息
+      const userInfo = wx.getStorageSync('userInfo')
+      if (userInfo && userInfo.avatarUrl) {
+        this.setData({
+          userInfo: userInfo,
+          hasUserInfo: true
+        })
+        console.log('从本地存储获取到用户信息:', userInfo)
+      } else {
+        // 如果没有本地存储的用户信息，尝试获取用户信息
+        this.tryGetUserInfo()
+      }
+    },
+    
+    // 尝试获取用户信息
+    tryGetUserInfo() {
+      wx.getUserInfo({
+        success: (res) => {
+          console.log('获取用户信息成功:', res.userInfo)
+          this.setData({
+            userInfo: res.userInfo,
+            hasUserInfo: true
+          })
+          // 保存到本地存储
+          wx.setStorageSync('userInfo', res.userInfo)
+        },
+        fail: (err) => {
+          console.log('获取用户信息失败:', err)
+          // 使用默认头像
+          this.setData({
+            userInfo: {
+              avatarUrl: defaultAvatarUrl,
+              nickName: ''
+            },
+            hasUserInfo: false
+          })
+        }
+      })
+    },
+    
     // 事件处理函数
     bindViewTap() {
       wx.navigateTo({
@@ -174,11 +229,10 @@ Component({
       
       // 使用认证工具检查登录状态
       withLogin(() => {
-        wx.showToast({
-          title: '更多灵感专题功能开发中',
-          icon: 'none'
+        wx.navigateTo({
+          url: '/pages/featured-topics/featured-topics'
         })
-      })
+      }, '/pages/featured-topics/featured-topics')
     },
 
     // 显示搜索功能（需要登录）
@@ -205,6 +259,18 @@ Component({
           icon: 'none'
         })
       })
+    },
+
+    // 跳转到行程计划页面
+    goToPlan() {
+      console.log('跳转到行程计划页面')
+      
+      // 使用认证工具检查登录状态
+      withLogin(() => {
+        wx.navigateTo({
+          url: '/pages/trip-plans/trip-plans'
+        })
+      }, '/pages/trip-plans/trip-plans')
     },
 
     // 分享功能

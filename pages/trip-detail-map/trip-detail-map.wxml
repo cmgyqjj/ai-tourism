@@ -263,7 +263,7 @@
         <view class="share-option">
           <button open-type="share" class="share-btn wechat">
             <view class="share-icon-wrapper">
-              <image class="share-option-icon" src="/images/wx.png" mode="aspectFit" />
+              <image class="share-option-icon" src="https://p0.meituan.net/hackathonqjj/7356c3901364fbbd732cd4cd3caa4ea22882.png" mode="aspectFit" />
             </view>
             <text class="share-option-text">微信</text>
           </button>
@@ -271,7 +271,7 @@
         
         <view class="share-option" bindtap="copyLink">
           <view class="share-icon-wrapper">
-            <image class="share-option-icon" src="/images/lianjie.png" mode="aspectFit" />
+            <image class="share-option-icon" src="https://p0.meituan.net/hackathonqjj/a351cb132c75aa8b5e3f2b0b71630445614.png" mode="aspectFit" />
           </view>
           <text class="share-option-text">复制链接</text>
         </view>
@@ -286,10 +286,10 @@
  <!-- 侧边栏 -->
   <view class="sidebar {{sidebarOpen ? 'open' : ''}}">
     <!-- 外框图片 -->
-    <!-- <image class="sidebar-frame" src="/images/travel-guide/sidebar.png" mode="aspectFit"></image>
+    <!-- <image class="sidebar-frame" src="https://p0.meituan.net/hackathonqjj/5926975fb0ad74f370db26e5fae4df6f6892.png" mode="aspectFit"></image>
      -->
     <!-- 内层背景图片 -->
-    <image class="sidebar-bg" src="/images/travel-guide/sidebar1.png" mode="aspectFit"></image>
+    <image class="sidebar-bg" src="https://p0.meituan.net/hackathonqjj/22c76c6373e66798ca8ed31949c7619b19445.png" mode="aspectFit"></image>
     
     <!-- 四个功能按钮，覆盖在图片上对应的功能区域 -->
     <view class="sidebar-btn route-optimization" bindtap="onRouteOptimization"></view>

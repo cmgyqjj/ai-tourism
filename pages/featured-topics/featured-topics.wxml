@@ -1,0 +1,118 @@
+<!--featured-topics.wxml-->
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="header-nav">
+    <!-- 返回按钮 -->
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-arrow">←</text>
+    </view>
+    
+    <!-- 顶部选项卡 -->
+    <view class="tab-container">
+      <view class="tab-item {{activeTab === 'oneday' ? 'active' : ''}}" bindtap="switchTab" data-tab="oneday">
+        <text class="tab-text">一日游</text>
+        <view class="tab-underline" wx:if="{{activeTab === 'oneday'}}"></view>
+      </view>
+      <view class="tab-item {{activeTab === 'featured' ? 'active' : ''}}" bindtap="switchTab" data-tab="featured">
+        <text class="tab-text">精选专题</text>
+        <view class="tab-underline" wx:if="{{activeTab === 'featured'}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 可滚动内容区域 -->
+  <scroll-view class="scroll-container" scroll-y="true" enhanced="true" show-scrollbar="false">
+    <!-- 一日游内容 -->
+    <view class="content-container" wx:if="{{activeTab === 'oneday'}}">
+      <!-- 巴黎购物一日游 -->
+      <view class="topic-card" bindtap="viewOneDayDetail" data-title="巴黎购物一日游">
+        <view class="topic-images">
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/43880025907dd07ce353b5f8d19a1490798878.png" mode="aspectFill"></image>
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/43880025907dd07ce353b5f8d19a1490798878.png" mode="aspectFill"></image>
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/43880025907dd07ce353b5f8d19a1490798878.png" mode="aspectFill"></image>
+        </view>
+        <view class="topic-content">
+          <text class="topic-title">巴黎购物一日游</text>
+          <view class="topic-route">
+            <text class="route-text">香榭丽舍大街 > 巴黎凯旋门 > 巴黎老佛爷 (Galeries Lafayette) 奥斯曼旗舰店 > 巴黎春天百货 (奥斯曼旗舰店)</text>
+          </view>
+          <view class="divider-line"></view>
+          <view class="topic-review">
+            <text class="review-emoji">😊</text>
+            <text class="review-text">爱玩点评:来到巴黎这个购物天堂,不逛怎么行?一日的精选行程让你用最短的时间走遍巴黎最负盛名的所有购物中心,一定让热爱 shopping 的你尽兴而归。</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 马赛市集一日游 -->
+      <view class="topic-card" bindtap="viewOneDayDetail" data-title="马赛市集一日游">
+        <view class="topic-images">
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/8bf4cc6c61b595ac0be6c7a49911eaee739057.png" mode="aspectFill"></image>
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/8bf4cc6c61b595ac0be6c7a49911eaee739057.png" mode="aspectFill"></image>
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/8bf4cc6c61b595ac0be6c7a49911eaee739057.png" mode="aspectFill"></image>
+        </view>
+        <view class="topic-content">
+          <text class="topic-title">马赛市集一日游</text>
+          <view class="topic-route">
+            <text class="route-text">卢浮宫 > 香榭丽舍大街 > 巴黎凯旋门 > Le Cinq > 埃菲尔铁塔 > 塞纳河</text>
+          </view>
+          <view class="divider-line"></view>
+          <view class="topic-review">
+            <text class="review-emoji">😊</text>
+            <text class="review-text">爱玩点评:体验马赛独特的市集文化，感受地中海风情，品尝当地美食，探索历史悠久的港口城市。</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 罗马古迹一日游 -->
+      <view class="topic-card" bindtap="viewOneDayDetail" data-title="罗马古迹一日游">
+        <view class="topic-images">
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/27acdbbfade30c2dcae927fa807a1e81648285.png" mode="aspectFill"></image>
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/27acdbbfade30c2dcae927fa807a1e81648285.png" mode="aspectFill"></image>
+          <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/27acdbbfade30c2dcae927fa807a1e81648285.png" mode="aspectFill"></image>
+        </view>
+        <view class="topic-content">
+          <text class="topic-title">罗马古迹一日游</text>
+          <view class="topic-route">
+            <text class="route-text">斗兽场 > 古罗马广场 > 万神殿 > 特莱维喷泉 > 西班牙阶梯 > 梵蒂冈</text>
+          </view>
+          <view class="divider-line"></view>
+          <view class="topic-review">
+            <text class="review-emoji">😊</text>
+            <text class="review-text">爱玩点评:穿越时空，感受古罗马帝国的辉煌历史，漫步在永恒之城的街道上，体验意大利的浪漫与艺术。</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 精选专题内容 -->
+    <view class="content-container" wx:if="{{activeTab === 'featured'}}">
+      <!-- 浮世传说 - 巴黎蒙马特高地旅记 -->
+      <view class="featured-card" bindtap="viewFeaturedDetail" data-title="浮世传说 - 巴黎蒙马特高地旅记">
+        <image class="featured-image" src="https://p0.meituan.net/hackathonqjj/bd48db7c41bdefb89efba8b9c267cafb932595.png" mode="aspectFill"></image>
+        <view class="featured-content">
+          <text class="featured-title">浮世传说 - 巴黎蒙马特高地旅记</text>
+          <text class="featured-description">浮世传说 - 巴黎蒙马特高地札记有这么一个街区,既伫立着供奉耶稣圣心的天主教宗座圣殿,也承载着歌舞升平靡靡声色的红磨坊,既潜藏着属于黑夜的琳琅酒吧,也遍布着清新文艺的咖啡馆。</text>
+        </view>
+      </view>
+
+      <!-- One Day in - 巴黎 -->
+      <view class="featured-card" bindtap="viewFeaturedDetail" data-title="One Day in - 巴黎">
+        <image class="featured-image" src="https://p0.meituan.net/hackathonqjj/0469c2fe682ff88b9e321e1194537dd12704874.png" mode="aspectFill"></image>
+        <view class="featured-content">
+          <text class="featured-title">One Day in - 巴黎</text>
+          <text class="featured-description">也许巴黎是你行程中的中转站,没有留给她太多时间,却又不想错过;也许巴黎会让你觉得过于城市气,不愿让冰离城市的休假被城市占据大久也许你直的口</text>
+        </view>
+      </view>
+
+      <!-- 威尼斯水城漫记 -->
+      <view class="featured-card" bindtap="viewFeaturedDetail" data-title="威尼斯水城漫记">
+        <image class="featured-image" src="https://p0.meituan.net/hackathonqjj/bd48db7c41bdefb89efba8b9c267cafb932595.png" mode="aspectFill"></image>
+        <view class="featured-content">
+          <text class="featured-title">威尼斯水城漫记</text>
+          <text class="featured-description">漫步在威尼斯的水巷中，感受这座水上城市的独特魅力，乘坐贡多拉穿梭在古老的建筑之间，体验意大利水城的浪漫与神秘。</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view> 

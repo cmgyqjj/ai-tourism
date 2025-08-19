@@ -24,7 +24,9 @@
     "pages/login-placeholder/login-placeholder",
     "pages/user-center-not-logged/user-center-not-logged",
     "pages/strategy-pk/strategy-pk",
-    "pages/route-optimization/route-optimization"
+    "pages/route-optimization/route-optimization",
+    "pages/featured-topics/featured-topics",
+    "pages/trip-plans/trip-plans"
   ],
   "window": {
     "navigationBarTextStyle": "black",

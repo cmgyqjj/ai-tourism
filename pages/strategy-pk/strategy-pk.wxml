@@ -413,10 +413,10 @@
   <!-- AI融合按钮 -->
   <view class="ai-fusion-actions" wx:if="{{currentTab === 2}}">
     <!-- 呼唤队长解锁语音气泡 -->
-    <image class="captain-call-bubble" src="/images/strategyPK/a.png" mode="aspectFill"></image>
+    <image class="captain-call-bubble" src="https://p0.meituan.net/hackathonqjj/20f4a5b781dcd7d81577d68ee48a47ca20888.png" mode="aspectFill"></image>
     
     <view class="ai-fusion-btn" bindtap="generateFusionPlan">
-      <image class="ai-fusion-bg" src="/images/strategyPK/btn.png" mode="aspectFill"></image>
+      <image class="ai-fusion-bg" src="https://p0.meituan.net/hackathonqjj/516dfdc8dcfbbbc44d5b667aee88041e9472.png" mode="aspectFill"></image>
       <view class="ai-fusion-content">
       
       </view>
