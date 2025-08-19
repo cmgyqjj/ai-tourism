@@ -61,7 +61,7 @@
     <scroll-view class="content" scroll-y>
       <!-- 空状态显示 -->
       <view class="empty-state" wx:if="{{!tripList || tripList.length === 0}}">
-        <image class="empty-image" src="https://p0.inf.test.sankuai.com/haikesong/个人页啥也没有" mode="aspectFit" />
+        <image class="empty-image" src="https://p0.meituan.net/hackathonqjj/个人页啥也没有" mode="aspectFit" />
         <view class="empty-text">暂无内容</view>
       </view>
       

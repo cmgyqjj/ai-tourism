@@ -1,6 +1,6 @@
 Page({
   data: {
-    currentImage: 'https://p0.inf.test.sankuai.com/haikesong/be4b8277a45d1b49fb4be2fbd2ca383f143340.png',
+    currentImage: 'https://p0.meituan.net/hackathonqjj/be4b8277a45d1b49fb4be2fbd2ca383f143340.png',
     isFirstImage: true,
     redirectUrl: null
   },
@@ -55,7 +55,7 @@ Page({
   switchBackgroundImage() {
     console.log('切换背景图片');
     this.setData({
-      currentImage: 'https://p0.inf.test.sankuai.com/haikesong/fab633f7efe4a68b209796245716f751116309.png',
+      currentImage: 'https://p0.meituan.net/hackathonqjj/fab633f7efe4a68b209796245716f751116309.png',
       isFirstImage: false
     });
     

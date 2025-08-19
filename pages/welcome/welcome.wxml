@@ -6,7 +6,7 @@
   <view class="content">
     <!-- 顶部GIF图片区域 -->
     <view class="top-gif-container">
-      <image class="gif-image" src="https://p0.inf.test.sankuai.com/haikesong/6ff6fb2db0703ba735cde1d887d76592801464.gif" mode="aspectFit"></image>
+      <image class="gif-image" src="https://p0.meituan.net/hackathonqjj/6ff6fb2db0703ba735cde1d887d76592801464.gif" mode="aspectFit"></image>
     </view>
     
     <!-- 手机号显示区域 -->
