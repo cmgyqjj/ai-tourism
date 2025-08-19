@@ -3,7 +3,7 @@
   <view class="image-container" bindtap="onImageTap">
     <image 
       class="full-screen-image" 
-      src="/images/user-center/use-center-not-log.png" 
+      src="https://p0.meituan.net/hackathonqjj/d724b3d59085331bd8c64f333090e9e8228238.png"
       mode="aspectFill">
     </image>
   </view>

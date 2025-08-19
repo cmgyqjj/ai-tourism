@@ -117,15 +117,15 @@
 <!-- 底部导航栏 -->
 <view class="bottom-nav">
   <view class="nav-item" bindtap="goToPlan">
-    <image class="nav-image" src="/images/shoye/btn-trip-plan.png" mode="aspectFit" />
+    <image class="nav-image" src="https://p0.meituan.net/hackathonqjj/57b26ae32ae1d1dd796337aac4ce67482337.png" mode="aspectFit" />
   </view>
   
   <view class="nav-item active" bindtap="showAiModal">
-    <image class="nav-image-center" src="/images/shoye/btn-ai-strategy.png" mode="aspectFit" />
+    <image class="nav-image-center" src="https://p0.meituan.net/hackathonqjj/33fcf7ac3b2ae0e7356f8e04dc33928e42045.png" mode="aspectFit" />
   </view>
   
   <view class="nav-item" bindtap="goToLogin">
-    <image class="nav-image" src="/images/shoye/btn-user-center.png" mode="aspectFit" />
+    <image class="nav-image" src="https://p0.meituan.net/hackathonqjj/b57c1137f38dc4710c3188203622e43d4427.png" mode="aspectFit" />
   </view>
 </view>
 

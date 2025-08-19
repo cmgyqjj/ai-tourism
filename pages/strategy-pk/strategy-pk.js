@@ -14,7 +14,7 @@ Page({
         title: '高端舒适型',
         subtitle: '南方海滨度假',
         iconText: '💎',
-        avatar: '/images/denglu/Ai.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: true
       },
       {
@@ -22,7 +22,7 @@ Page({
         title: '极致性价比',
         subtitle: '南方海滨度假',
         iconText: '￥',
-        avatar: '/images/avatar2.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: false
       },
       {
@@ -30,7 +30,7 @@ Page({
         title: '网红打卡型',
         subtitle: '南方海滨度假',
         iconText: '📸',
-        avatar: '/images/avatar3.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: false
       },
       {
@@ -38,7 +38,7 @@ Page({
         title: '深度文化型',
         subtitle: '南方海滨度假',
         iconText: '🏛️',
-        avatar: '/images/denglu/Ai.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: true
       }
     ],

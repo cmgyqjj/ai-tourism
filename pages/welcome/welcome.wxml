@@ -20,30 +20,30 @@
       class="main-login-btn" 
       open-type="chooseAvatar"
       bindchooseavatar="onChooseAvatar">
-      <image class="login-btn-image" src="/images/denglu/wechatLogin.png" mode="scaleToFill"></image>
+      <image class="login-btn-image" src="https://p0.meituan.net/hackathonqjj/3c6007c411070433ad242db329bd07519515.png" mode="scaleToFill"></image>
     </button>
     
     
     <!-- 底部登录选项 -->
     <view class="login-options">
       <view class="option-item" bindtap="onAiwanLogin">
-        <image class="option-image" src="/images/denglu/Ai.png" mode="aspectFit"></image>
+        <image class="option-image" src="https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png" mode="aspectFit"></image>
       </view>
       
       <view class="option-item" bindtap="onWechatLogin">
-        <image class="option-image" src="/images/denglu/wechat.png" mode="aspectFit"></image>
+        <image class="option-image" src="https://p0.meituan.net/hackathonqjj/422145c79604eb28661febe128c76ba15722.png" mode="aspectFit"></image>
       </view>
       
       <view class="option-item" bindtap="onPhoneLogin">
-        <image class="option-image" src="/images/denglu/Phone.png" mode="aspectFit"></image>
+        <image class="option-image" src="https://p0.meituan.net/hackathonqjj/36fc38fcf8a635ec446f723967d580f15607.png" mode="aspectFit"></image>
       </view>
       
       <view class="option-item" bindtap="onOtherLogin">
-        <image class="option-image" src="/images/denglu/QQ.png" mode="aspectFit"></image>
+        <image class="option-image" src="https://p0.meituan.net/hackathonqjj/9afd15d554ea525ce800ad07d2f25b724612.png" mode="aspectFit"></image>
       </view>
       
       <view class="option-item" bindtap="onAppleLogin">
-        <image class="option-image" src="/images/denglu/apple.png" mode="aspectFit"></image>
+        <image class="option-image" src="https://p0.meituan.net/hackathonqjj/dc593175365cae1a45ed584cb833b7314763.png" mode="aspectFit"></image>
       </view>
     </view>
     
