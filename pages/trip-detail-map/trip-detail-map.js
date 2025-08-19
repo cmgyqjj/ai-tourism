@@ -134,7 +134,7 @@
             distance: '3.2',
             time: '15',
             location: 'Café de Flore, Paris',
-            image: '/images/cafe.png'
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
             }
         ],
         attractions: [
@@ -144,7 +144,7 @@
             distance: '1.2',
             time: '5',
             location: 'Seine River, Paris',
-            image: '/images/cafe.png'
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
             }
         ],
         hotels: [
@@ -152,7 +152,7 @@
             name: 'Prais万豪(第7区)',
             nights: '1',
             price: '1028',
-            image: '/images/cafe.png',
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
             distance: '2.1',
             time: '8',
             location: 'Marriott Hotel, Paris'
@@ -557,7 +557,7 @@
                         distance: '3.2',
                         time: '15',
                         location: 'Café de Flore, Paris',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 dayInfo.attractions = [
@@ -567,7 +567,7 @@
                         distance: '1.2',
                         time: '5',
                         location: 'Seine River, Paris',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 break;
@@ -582,7 +582,7 @@
                         distance: '0.5',
                         time: '8',
                         location: 'Duomo Restaurant, Milan',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 dayInfo.attractions = [
@@ -592,7 +592,7 @@
                         distance: '0.3',
                         time: '3',
                         location: 'Duomo di Milano, Milan',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 break;
@@ -607,7 +607,7 @@
                         distance: '0.8',
                         time: '12',
                         location: 'Traditional Roman Restaurant',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 dayInfo.attractions = [
@@ -617,7 +617,7 @@
                         distance: '1.5',
                         time: '20',
                         location: 'Colosseum, Rome',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 break;
@@ -632,7 +632,7 @@
                         distance: '0.6',
                         time: '10',
                         location: 'Tuscany Restaurant, Florence',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 dayInfo.attractions = [
@@ -642,7 +642,7 @@
                         distance: '0.4',
                         time: '5',
                         location: 'Cathedral of Santa Maria del Fiore',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 break;
@@ -657,7 +657,7 @@
                         distance: '0.7',
                         time: '15',
                         location: 'Venetian Seafood Restaurant',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 dayInfo.attractions = [
@@ -667,7 +667,7 @@
                         distance: '0.5',
                         time: '8',
                         location: 'Piazza San Marco, Venice',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 break;
@@ -681,7 +681,7 @@
                         distance: '0.5-1.0',
                         time: '10-15',
                         location: 'Local Restaurant',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 dayInfo.attractions = [
@@ -691,7 +691,7 @@
                         distance: '1.0',
                         time: '15',
                         location: 'Local Attraction',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     }
                 ];
                 break;
@@ -703,7 +703,7 @@
                 name: '当地精品酒店',
                 nights: '1',
                 price: '800-1500',
-                image: '/images/cafe.png',
+                image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
                 distance: '1.5',
                 time: '12',
                 location: 'Local Boutique Hotel'

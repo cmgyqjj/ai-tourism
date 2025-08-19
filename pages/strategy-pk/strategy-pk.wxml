@@ -398,7 +398,7 @@
       <text>下载对比报告</text>
     </view>
     <view class="action-btn primary" bindtap="shareItinerary">
-      <image class="share-icon" src="/images/upload.png" mode="aspectFit"></image>
+      <image class="share-icon" src="https://p0.meituan.net/hackathonqjj/8572dd552d155204f3f0e157b20532f4698.png" mode="aspectFit"></image>
       <text>分享对比行程</text>
     </view>
   </view>

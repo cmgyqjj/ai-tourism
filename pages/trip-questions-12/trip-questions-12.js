@@ -571,7 +571,7 @@ Page({
           distance: '3.2',
           time: '15',
           location: 'Café de Flore, Paris',
-          image: '/images/cafe.jpg'
+          image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
         }
       ],
       attractions: [

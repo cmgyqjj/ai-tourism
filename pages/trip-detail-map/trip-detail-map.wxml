@@ -55,7 +55,7 @@
                    data-day="{{item.day}}">
                <!-- 顶部行：日历图标 + 日期数字 + 天气图标 -->
                <view class="date-top-row">
-                 <image class="calendar-icon" src="/images/calendar.png" mode="aspectFit"></image>
+                 <image class="calendar-icon" src="https://p0.meituan.net/hackathonqjj/866ab254da43a9b9188e3b7924cdc3c6438.png" mode="aspectFit"></image>
                  <text class="day-number">{{item.day}}</text>
                  <text class="weather-icon">{{item.weather}}</text>
                </view>
@@ -134,7 +134,7 @@
 
      <!-- 下半部分：底部信息区 -->
      <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
-       <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
+       <image class="car-icon" src="https://p0.meituan.net/hackathonqjj/e74740b1d2d0b37eb5a2db1618eff01b948.png" mode="aspectFit"></image>
        <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
      </view>
    </view>
@@ -171,7 +171,7 @@
 
                 <!-- 下半部分：底部信息区 -->
                 <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
-                  <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
+                  <image class="car-icon" src="https://p0.meituan.net/hackathonqjj/e74740b1d2d0b37eb5a2db1618eff01b948.png" mode="aspectFit"></image>
                   <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
                 </view>
               </view>
@@ -208,7 +208,7 @@
 
                 <!-- 下半部分：底部信息区 -->
                 <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
-                  <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
+                  <image class="car-icon" src="https://p0.meituan.net/hackathonqjj/e74740b1d2d0b37eb5a2db1618eff01b948.png" mode="aspectFit"></image>
                   <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
                 </view>
               </view>
