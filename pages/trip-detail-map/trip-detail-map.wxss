@@ -5,7 +5,29 @@
   flex-direction: column;
   background: #f5f5f5;
 }
+.trip-content-container {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16rpx 16rpx 0 0;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.1);
+  margin: 0 32rpx;
+  margin-top: -16rpx;
+  position: relative;
+  z-index: 10;
+  padding: 24rpx;
+  min-height: calc(100vh - 35vh);
+  max-height: calc(100vh - 30vh); /* 限制最大高度确保滚动 */
+}
 
+/* 行程信息容器 */
+.trip-info-container {
+  background: #ffffff;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid #f0f0f0;
+}
 /* 顶部退出按钮 */
 .back-btn {
   position: absolute;
@@ -40,11 +62,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16rpx 32rpx;
-  background: white;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  margin: 0 32rpx;
+  padding: 16rpx 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0 0 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  padding-bottom: 24rpx;
 }
 
 .trip-title {
@@ -181,220 +205,458 @@
   display: flex;
   flex: 1;
   gap: 24rpx;
-  margin: 0 32rpx;
+  margin: 0;
+  height: 800rpx; /* 固定容器高度 */
+  min-height: 800rpx; /* 最小高度限制 */
+  overflow: hidden; /* 防止内容溢出 */
 }
 
 /* 左侧日期列表 */
 .date-list {
-  width: 200rpx;
-  background: white;
+  width: 180rpx;
+  background: transparent;
   border-right: 1rpx solid #eee;
+  flex-shrink: 0;
+  padding-top: 0;
+  height: 800rpx; /* 固定容器高度 */
+  overflow: hidden; /* 防止内容溢出 */
 }
 
 .date-scroll {
-  height: 100%;
+  height: 100%; /* 占满父容器 */
+  max-height: 800rpx; /* 最大高度限制 */
+  overflow-y: auto; /* 垂直滚动 */
 }
 
 .date-item {
-  display: flex;
-  align-items: center;
-  padding: 20rpx 16rpx;
+  /* display: flex; */
+  flex-direction: column;
+  padding: 12rpx 12rpx;
   border-bottom: 1rpx solid #f5f5f5;
   transition: background-color 0.3s ease;
+  text-align: center;
+  margin-bottom: 65rpx; /* 减少间距，让更多内容适应容器 */
+  height: 100rpx; /* 设置最小高度确保一致性 */
 }
 
 .date-item.active {
   background: #e3f2fd;
   border-left: 4rpx solid #2196f3;
+  height: 120rpx;
 }
 
 .date-item:active {
   background: #f0f0f0;
 }
 
-.date-icon {
+/* 顶部行：日历图标 + 日期数字 + 天气图标 */
+.date-top-row {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-right: 16rpx;
+  justify-content: flex-start;
+  margin-bottom: 8rpx;
+  position: relative;
+  gap: 8rpx;
+}
+
+.calendar-icon {
+  width: 40rpx;
+  height: 33rpx;
+  flex-shrink: 0;
 }
 
 .day-number {
-  font-size: 24rpx;
+  font-size: 40rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 4rpx;
+  position: static;
+  transform: none;
 }
 
 .weather-icon {
-  font-size: 20rpx;
+  font-size: 30rpx;
+  flex-shrink: 0;
 }
 
-.date-info {
-  flex: 1;
+/* 中间行：日期文本 */
+.date-middle-row {
+  margin-bottom: 6rpx;
 }
 
 .date-text {
-  font-size: 20rpx;
-  color: #666;
+  font-size:22rpx;
+  color: #000;
   display: block;
-  margin-bottom: 4rpx;
+  text-align: left;
+}
+
+/* 底部行：路线文本 */
+.date-bottom-row {
+  margin-bottom: 0;
 }
 
 .route-text {
-  font-size: 18rpx;
+  font-size: 16rpx;
   color: #999;
   display: block;
+  text-align: left;
 }
 
 /* 右侧行程详情 */
 .trip-details {
   flex: 1;
-  padding: 20rpx;
-  height: 100%;
+  padding: 0;
+  overflow-y: auto; /* 垂直滚动 */
+  padding-bottom: 140rpx; /* 底部留出空间 */
 }
 
 .day-header {
-  margin-bottom: 30rpx;
+  margin-bottom: 8rpx;
 }
 
 .day-title {
-  font-size: 32rpx;
+  font-size: 28rpx;
   font-weight: bold;
   color: #333;
 }
 
 /* 详情部分 */
 .detail-section {
-  background: white;
-  border-radius: 16rpx;
-  margin-bottom: 20rpx;
-  overflow: hidden;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  background: transparent;
+  overflow: visible;
+  box-shadow: none;
+  border: none;
+  border-bottom: 1rpx solid #f0f0f0;
+  padding-bottom: 6rpx;
 }
 
 .section-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20rpx;
-  background: #f8f9fa;
-  border-bottom: 1rpx solid #eee;
+  justify-content: flex-start;
+  padding: 0;
+  background: transparent;
+  border-bottom: none;
+  margin-bottom: 12rpx;
+  gap: 8rpx;
 }
 
 .section-title {
-  font-size: 28rpx;
+  font-size: 22rpx;
   font-weight: 600;
   color: #333;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-right: 10rpx;
 }
 
 .expand-icon {
   font-size: 20rpx;
   color: #999;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .category-icon {
-  width: 32rpx;
+  width: 32rpx; /* 减少图标尺寸 */
   height: 32rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6rpx;
-  margin-right: 12rpx;
+  border-radius: 50%;
+  margin-right: 6rpx; /* 减少右边距 */
 }
 
 .food-icon {
-  background: #fff3e0;
+  background: #ff9800;
 }
 
 .attraction-icon {
-  background: #e8f5e8;
+  background: #4caf50;
 }
 
 .hotel-icon {
-  background: #f3e5f5;
+  background: #9c27b0;
 }
 
 .category-label {
-  font-size: 24rpx;
-  color: #666;
+  font-size: 24rpx; /* 减少字体大小 */
+  font-weight: 600;
+  color: #333;
 }
 
+/* 分类标题头部样式 */
+.category-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0; /* 移除下边距，让space-between控制间距 */
+  gap: 6rpx; /* 减少图标和文字间距 */
+}
+/* 下半部分：底部信息区 */
+.item-bottom-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8rpx;
+  padding: 6rpx 0 8rpx 0; /* 减少上下间距 */
+  border-top: 1rpx solid #f0f0f0;
+  margin-left: 0; /* 左对齐图片容器 */
+  min-height: 50rpx; /* 减少最小高度 */
+}
+
+.item-footer{
+  height: 20rpx;
+}
+
+/* 底部距离信息样式 */
+.item-distance-bottom {
+  margin-top: auto; /* 关键：推到底部 */
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding-top: 12rpx;
+  border-top: 1rpx solid #f5f5f5;
+}
+  
+
 .section-content {
-  padding: 20rpx;
+  padding: 0;
+  flex: 1;
 }
 
 .flight-info,
 .accommodation-info {
-  font-size: 26rpx;
-  color: #333;
-  line-height: 1.5;
+  font-size: 20rpx;
+  color: #666;
+  line-height: 1.2;
+  display: inline;
 }
 
 /* 项目卡片 */
 .item-card {
   display: flex;
-  align-items: center;
-  padding: 16rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
+  flex-direction: column;
+  padding: 16rpx; /* 减少内边距 */
+  background: #ffffff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid #e8e8e8;
+  position: relative;
+  min-height: 160rpx; /* 减少最小高度 */
 }
 
 .item-card:last-child {
   border-bottom: none;
+  height: 120rpx;
 }
 
 .item-image {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 8rpx;
-  margin-right: 16rpx;
+  width: 100%;
+  height: 100%;
+  border-radius: 6rpx;
+  object-fit: cover; /* 确保图片填充容器 */
+}
+
+/* 图片容器 - 固定尺寸 */
+.item-image-container {
+  width: 100rpx; /* 减少图片尺寸 */
+  height: 100rpx;
+  border-radius: 8rpx; /* 减少圆角 */
+  flex-shrink: 0;
+  overflow: hidden; /* 防止图片溢出容器 */
+  background: #f5f5f5; /* 占位背景色 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 上半部分：主内容区 */
+.item-main-content {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16rpx; /* 减少底部间距 */
+  gap: 16rpx; /* 减少图片和文本之间的间距 */
+  min-height: 100rpx; /* 匹配新的图片高度 */
 }
 
 .item-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 改为space-between，让内容均匀分布 */
+  height: 100rpx; /* 固定高度，匹配新的图片高度 */
+  margin-left: 12rpx; /* 移除左边距，让gap来控制间距 */
 }
 
 .item-name,
 .item-number {
-  font-size: 26rpx;
-  font-weight: 600;
+  font-size: 26rpx; /* 减少字体大小 */
+  font-weight: bold;
   color: #333;
   display: block;
-  margin-bottom: 4rpx;
+  margin-bottom: 0; /* 移除下边距，让space-between控制间距 */
+  text-align: left;
+}
+
+.item-price {
+  font-size: 22rpx; /* 减少字体大小 */
+  color: #666;
+  display: block;
+  margin-bottom: 0; /* 移除下边距，让space-between控制间距 */
+}
+
+.item-desc {
+  font-size: 20rpx; /* 减少字体大小 */
+  color: #666;
+  display: block;
+  margin-bottom: 0; /* 移除下边距，让space-between控制间距 */
+}
+
+.item-name,
+.item-number {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 6rpx;
+  text-align: left; /* 景点名称右对齐 */
 }
 
 .item-desc {
   font-size: 22rpx;
   color: #666;
   display: block;
+  margin-top: 20rpx;
   margin-bottom: 8rpx;
 }
 
 .item-price {
-  font-size: 22rpx;
-  color: #ff6b35;
+  font-size: 24rpx;
+  color: #666;
   display: block;
-  margin-bottom: 8rpx;
+  margin-bottom: 6rpx;
+  margin-top: 20rpx;
 }
 
-.item-distance {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
+/* 汽车图标样式 */
+.car-icon {
+  width: 24rpx; /* 减少图标尺寸 */
+  height: 24rpx;
+  margin-right: 8rpx; /* 减少右边距 */
+  flex-shrink: 0;
 }
 
 .distance-text {
-  font-size: 20rpx;
-  color: #999;
+  font-size: 22rpx; /* 减少字体大小 */
+  color: #666;
+  flex: 1;
+  white-space: nowrap; /* 防止文字换行 */
+  overflow: visible; /* 确保文字完全显示 */
+  text-overflow: clip; /* 不截断文字 */
+  line-height: 1.3; /* 减少行高 */
 }
 
 .navigate-arrow {
-  font-size: 16rpx;
+  font-size: 20rpx; /* 减少箭头尺寸 */
   color: #999;
+  margin-left: 4rpx; /* 减少左边距，让箭头更靠近距离信息 */
+  flex-shrink: 0; /* 防止被压缩 */
+  display: inline; /* 确保箭头在文本内部正确显示 */
+}
+
+/* 清理重复的样式，保留一个统一的版本 */
+
+/* 确保item-card有正确的间距 */
+
+
+/* 调整分类图标的颜色 */
+.food-icon {
+  background: #ff9800;
+  color: white;
+}
+
+.attraction-icon {
+  background: #4caf50;
+  color: white;
+}
+
+.hotel-icon {
+  background: #9c27b0;
+  color: white;
+}
+
+/* 优化底部信息区的样式 */
+.item-bottom-info {
+  padding-left: 0; /* 确保左对齐图片容器 */
+  /* margin-top: 12rpx; */
+}
+
+/* 确保图片容器有正确的尺寸 */
+.item-image-container {
+  flex-shrink: 0;
+}
+
+/* 优化文本信息的间距 */
+.item-info {
+  padding-right: 16rpx; /* 为菜单按钮留出空间 */
+}
+
+/* 确保菜单按钮位置正确 */
+.item-menu {
+  position: relative;
+  top: 0;
+  right: 0;
+}
+
+/* 优化分类标题的显示 */
+.category-header {
+  margin-bottom: 10rpx;
+}
+
+/* 确保价格信息有正确的间距 */
+.item-price {
+  margin-bottom: 10rpx;
+}
+
+/* 优化景点描述的显示 */
+.item-desc {
+  line-height: 1.4;
+  color: #777;
+}
+
+/* 最终优化：确保卡片整体效果 */
+.item-card {
+  transition: all 0.3s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 确保分类图标有正确的emoji显示 */
+.category-icon {
+  font-size: 20rpx;
+}
+
+/* 优化底部信息区的边框 */
+.item-bottom-info {
+  border-top-color: #e8e8e8;
+}
+
+/* 确保所有文本都有正确的行高 */
+.item-name,
+.item-number,
+.item-price,
+.item-desc,
+.category-label {
+  line-height: 1.5;
 }
 
 .item-menu {
   padding: 8rpx;
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .menu-icon {
