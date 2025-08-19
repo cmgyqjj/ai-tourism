@@ -62,13 +62,9 @@
 /* 滚动容器样式 */
 .scroll-container {
   flex: 1;
-  height: 100hv;
-  margin: 0;
-  padding: 0;
+  margin-top: 180rpx;
+  height: calc(100vh - 180rpx);
   overflow-y: auto;
-  margin-top: 200rpx;
-  padding-bottom: 80rpx;
-  top: 120rpx;
 }
 
 /* 内容容器 */
