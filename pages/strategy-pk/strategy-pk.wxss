@@ -130,7 +130,6 @@
     color: rgb(22, 21, 21);
     transition: all 0.3s ease;
     transform-origin: center;
-    /* margin-right: 570rpx; 收起状态：靠右显示 */
     line-height: 1;
   }
   
@@ -273,7 +272,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: left;
       margin-top: 150rpx;
     }
   
@@ -406,7 +405,7 @@
     white-space: normal;
     margin-bottom: 8rpx;
   }
-  
+
 
   /* 可展开section内容 */
    .budget-content,
@@ -430,110 +429,6 @@
   .exclusive-content.collapsed,
   .accommodation-content.collapsed,
   .transportation-content.collapsed {
-    max-height: 0;
-    padding-bottom: 0;
-  }
-  
-  /* 预算价格收起时减少底部间距 
-  .budget-content.collapsed {
-    margin-bottom: -24rpx;
-  }
-  
-  /* 横向滑动容器 */
-  .budget-container {
-    text-align: center;
-    white-space: nowrap;  
-    overflow-x: auto;
-    padding: 0 32rpx;
-    height: 310rpx; 
-  }
-  .exclusive-container {
-    text-align: center;
-    white-space: nowrap;  
-    overflow-x: auto;
-    padding: 0 32rpx;
-    height: 410rpx; 
-  }
-  .accommodation-container,
-  .transportation-container {
-    text-align: center;
-    white-space: nowrap;  
-    overflow-x: auto;
-    padding: 0 32rpx;
-    height: 210rpx; 
-  }
-
-  
-  .budget-wrapper,
-  .exclusive-wrapper,
-  .accommodation-wrapper,
-  .transportation-wrapper {
-    display: flex;
-    min-width: 100%;
-    gap: 0;
-    padding-right: 32rpx;
-    width: 100%;
-    flex-direction: column;
-  } 
-  
-  /* 预算价格行 */
-/* 预算价格section收起时的间距调整 */
-.budget-section {
-    margin-bottom: 24rpx;
-  }
-  
-  .header-container {
-    display: flex;
-    align-items: center; /* 垂直居中对齐 */
-    justify-content: flex-start; /* 左对齐 */
-  }
-  
-  .section-title {
-    text-align: center;
-    width:100px;
-    font-size: 32rpx;
-  }
-  
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* padding:0rpx 0rpx 24rpx; */
-    cursor: pointer;
-    min-height: 88rpx;
-  }
-  
-  .arrow-icon {
-    font-size: 18rpx;
-    color: rgb(22, 21, 21);
-    transition: all 0.3s ease;
-    transform-origin: center;
-    margin-right: 570rpx; /* 收起状态：靠右显示 */
-    line-height: 1;
-  }
-  
-  .arrow-icon.expanded {
-    transform: rotate(180deg);
-    margin-right: 570rpx;
-  }
-  
-  /* 预算价格内容展开和收起 */
-/* 通用内容样式 */
-/* 通用内容展开/收起样式 */
-/* 展开内容 */
-.content {
-    max-height: none; /* 动态计算，不限制最大高度 */
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
-  
-  /* 展开时显示内容 */
-  .content.expanded {
-    padding-bottom: 32rpx;
-  }
-  
-  /* 收起时隐藏内容 */
-  .content.collapsed {
     max-height: 0;
     padding-bottom: 0;
   }
@@ -1153,78 +1048,336 @@
     flex-shrink: 0;
   }
 
-/* 同步滚动表格布局样式 */
-.sync-scroll-layout {
-  display: flex;
-  width: 100%;
-  position: relative;
+/* 基础样式 */
+.section-title {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: 1;
 }
 
-.left-labels {
-  position: sticky;
-  left: 0;
-  z-index: 10;
-  background-color: #fff;
-  min-width: 200rpx;
+/* 箭头图标样式 - 保持向下状态 */
+.arrow-icon {
+  font-size: 18rpx;
+  color: #333;
+  margin-left: 8rpx;
   flex-shrink: 0;
+  /* 移除transition和transform，保持向下状态 */
 }
 
-.label-item {
-  padding: 24rpx 32rpx;
-  border-bottom: 1rpx solid #f0f0f0;
-  background-color: #fafafa;
+/* 移除expandable相关的cursor样式 */
+.section-header-budget,
+.section-header-exclusive,
+.section-header-accommodation,
+.section-header-transportation,
+.section-header-core-differences {
+  height: 88rpx;
   display: flex;
   align-items: center;
-  min-height: 80rpx;
-  box-sizing: border-box;
-}
-
-.label-item:last-child {
+  justify-content: space-between;
+  padding: 0 24rpx;
   border-bottom: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  margin: 0;
+  /* 移除cursor: pointer，因为不再可点击 */
 }
 
-.label-item text {
-  font-size: 28rpx;
-  color: #333;
-  font-weight: 500;
-  white-space: nowrap;
+/* 标签组基础样式 - 始终显示 */
+.labels-group {
+  overflow: visible;
+  background-color: transparent;
+  display: block !important;
+  max-height: none !important;
+  opacity: 1 !important;
 }
 
-.right-data {
-  flex: 1;
-  overflow-x: auto;
-  background-color: #fff;
-}
+/* 移除展开收起动画相关样式 */
 
-.data-wrapper {
+
+/* 方法3：使用具体类名实现精确对齐 */
+
+/* 左侧标题项 - 已有方案 */
+.section-header-existing-plans {
+  height: 400rpx; /* 已有方案固定高度 */
   display: flex;
-  min-width: max-content;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.data-column {
-  min-width: 210rpx;
-  border-right: 1rpx solid #f0f0f0;
+/* 左侧标题项 - 方案亮点 */
+.section-header-highlights {
+  height: 450rpx; /* 方案亮点固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.data-column:last-child {
-  border-right: none;
+/* 左侧标题项 - 预算价格 */
+.section-header-budget {
+  height: 88rpx; /* 预算价格标题固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 25rpx;
+
 }
 
-.data-cell {
-  padding: 24rpx 16rpx;
-  border-bottom: 1rpx solid #f0f0f0;
-  min-height: 80rpx;
+/* 左侧标题项 - 独家体验 */
+.section-header-exclusive {
+  height: 88rpx; /* 独家体验标题固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 25rpx;
+  /* 移除cursor: pointer，因为不再可点击 */
+}
+
+/* 左侧标题项 - 住宿位置 */
+.section-header-accommodation {
+  height: 88rpx; /* 住宿位置标题固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 25rpx;
+  /* 移除cursor: pointer，因为不再可点击 */
+}
+
+/* 左侧标题项 - 交通方式 */
+.section-header-transportation {
+  height: 88rpx; /* 交通方式标题固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 25rpx;
+  /* 移除cursor: pointer，因为不再可点击 */
+}
+
+/* 左侧标题项 - 核心差异 */
+.section-header-core-differences {
+  height: 88rpx; /* 核心差异标题固定高度 */
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin-bottom: 25rpx;
+  /* 移除cursor: pointer，因为不再可点击 */
+}
+
+/* 标签组 - 预算价格 */
+.budget-labels .budget-label-item {
+  height: 80rpx; /* 预算标签固定高度 */
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+  text-align: center;
+}
+
+/* 标签组 - 独家体验 */
+.exclusive-labels .exclusive-label-item {
+  height: 80rpx; /* 独家体验标签固定高度 */
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: visible;
+}
+
+/* 标签组 - 住宿位置 */
+.accommodation-labels .accommodation-label-item {
+  height: 80rpx; /* 住宿位置标签固定高度 */
+  text-align: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* 标签组 - 交通方式 */
+.transportation-labels .transportation-label-item {
+  height: 80rpx; /* 交通方式标签固定高度 */
+  text-align: center;
+  padding: 0 24rpx;
+  border-bottom: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* 标签组 - 核心差异 */
+.core-differences-labels .core-differences-label-item {
+  height: 80rpx; /* 核心差异标签固定高度 */
+  border-bottom: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+  text-align: center;
+}
+
+/* 标签文字样式 - 确保完整显示 */
+
+
+/* 右侧数据区域 - 已有方案 */
+.plan-section-existing-plans {
+  height: 400rpx; /* 与左侧标题完全一致 */
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: none;
+  box-sizing: border-box;
+  margin-left: 30rpx;
+}
+
+/* 右侧数据区域 - 方案亮点 */
+.plan-section-highlights {
+  height: 450rpx; /* 与左侧标题完全一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: none;
   box-sizing: border-box;
 }
 
-.data-cell:last-child {
+/* 右侧数据区域 - 预算价格 */
+.plan-section-budget {
+  height: auto; /* 根据内容自动调整 */
   border-bottom: none;
+  box-sizing: border-box;
 }
 
-.data-cell text {
+/* 右侧数据区域 - 独家体验 */
+.plan-section-exclusive {
+  height: auto; /* 根据内容自动调整 */
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+/* 右侧数据区域 - 住宿位置 */
+.plan-section-accommodation {
+  height: auto; /* 根据内容自动调整 */
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+/* 右侧数据区域 - 交通方式 */
+.plan-section-transportation {
+  height: auto; /* 根据内容自动调整 */
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+/* 右侧数据区域 - 核心差异 */
+.core-differences-plan-section {
+  height: auto; /* 根据内容自动调整 */
+  border-bottom: none;
+  box-sizing: border-box;
+}
+
+/* 数据单元格 - 预算价格 */
+.budget-data-cells .budget-data-cell {
+  height: 80rpx; /* 与左侧标签完全一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin: 0;
+}
+
+/* 数据单元格 - 独家体验 */
+.exclusive-data-cells .exclusive-data-cell {
+  height: 80rpx; /* 与左侧标签完全一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin: 0;
+}
+
+/* 数据单元格 - 住宿位置 */
+.accommodation-data-cells .accommodation-data-cell {
+  height: 80rpx; /* 与左侧标签完全一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin: 0;
+}
+
+/* 数据单元格 - 交通方式 */
+.transportation-data-cells .transportation-data-cell {
+  height: 80rpx; /* 与左侧标签完全一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin: 0;
+}
+
+/* 数据单元格 - 核心差异 */
+.core-differences-data-cells .core-differences-data-cell {
+  height: 80rpx; /* 与左侧标签完全一致 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  box-sizing: border-box;
+  background-color: #fff;
+  margin: 0;
+}
+
+/* 数据单元格文字样式 */
+.budget-data-cells .budget-data-cell text,
+.exclusive-data-cells .exclusive-data-cell text,
+.accommodation-data-cells .accommodation-data-cell text,
+.transportation-data-cells .transportation-data-cell text,
+.core-differences-data-cells .core-differences-data-cell text {
   font-size: 28rpx;
   color: #333;
   text-align: center;
@@ -1234,66 +1387,197 @@
   max-width: 100%;
 }
 
-/* 方案亮点特殊样式 */
-.plan-highlights .sync-scroll-layout {
+/* 左侧固定容器基础样式 */
+.left-fixed-container {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background-color: transparent;
+  min-width: 200rpx;
+  max-width: 200rpx;
+  flex-shrink: 0;
+  border-right: none;
+  display: flex;
   flex-direction: column;
 }
 
-.plan-highlights .left-labels {
-  position: static;
-  width: 100%;
-  min-width: auto;
-}
-
-.plan-highlights .label-item {
-  background-color: transparent;
-  border-bottom: none;
-  padding: 16rpx 32rpx;
-  min-height: auto;
-}
-
-.plan-highlights .right-data {
+/* 右侧滚动容器基础样式 */
+.right-scrollable-container {
+  flex: 1;
   overflow-x: auto;
   background-color: transparent;
-}
 
-.plan-highlights .data-wrapper {
-  padding: 0 32rpx 32rpx;
-}
-
-.plan-highlights .data-column {
-  min-width: 210rpx;
-  border-right: none;
-  margin-right: 24rpx;
-}
-
-.plan-highlights .data-cell {
-  border-bottom: none;
-  padding: 16rpx 0;
-  min-height: auto;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.plan-highlights .highlight-content {
-  font-size: 28rpx;
-  color: #333;
-  line-height: 1.5;
-  margin-bottom: 16rpx;
-  text-align: left;
-}
-
-.plan-highlights .highlight-tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
+  flex-direction: column;
 }
 
-.plan-highlights .tag {
-  background-color: #FEF031;
-  color: #000;
-  padding: 8rpx 16rpx;
-  border-radius: 12rpx;
-  font-size: 24rpx;
-  white-space: nowrap;
+/* 统一布局容器基础样式 */
+.unified-layout-container {
+  display: flex;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  margin-bottom: 24rpx;
+  box-shadow: none;
 }
+
+/* 所有方案数据容器 */
+.all-plans-data {
+  display: flex;
+  min-width: max-content;
+  gap: 24rpx;
+  padding-right: 32rpx;
+}
+
+/* 方案数据列 */
+.plan-data-column {
+  min-width: 320rpx;
+  flex-shrink: 0;
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.plan-data-column:last-child {
+  border-right: none;
+}
+
+/* 方案卡片在统一布局中的样式 */
+.plan-section-data .plan-card {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
+  height: 360rpx;
+}
+
+/* 亮点卡片在统一布局中的样式 */
+.plan-section-data .highlight-card {
+  width: 180rpx;
+  /* background-color: #fff; */
+  border-radius: 16rpx;
+  padding: 32rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 200rpx;
+  /* box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08); */
+}
+
+/* 数据单元格组基础样式 */
+.data-cells-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  /* box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08); */
+}
+
+/* 展开收起动画 */
+.budget-data,
+.exclusive-data,
+.accommodation-data,
+.transportation-data,
+.core-differences-data {
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.budget-data.collapsed,
+.exclusive-data.collapsed,
+.accommodation-data.collapsed,
+.transportation-data.collapsed,
+.core-differences-data.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.budget-data.expanded,
+.exclusive-data.expanded,
+.accommodation-data.expanded,
+.transportation-data.expanded,
+.core-differences-data.expanded {
+  max-height: 1000rpx;
+  opacity: 1;
+}
+
+/* 响应式调整 */
+@media (max-width: 375px) {
+  .plan-data-column {
+    min-width: 280rpx;
+  }
+  
+  .left-fixed-container {
+    min-width: 212rpx;
+    max-width: 200rpx;
+  }
+  
+  .section-header-item .section-title {
+    font-size: 36rpx;
+  }
+  
+  .labels-group .label-item text {
+    font-size: 24rpx;
+  }
+  
+  .data-cells-group .data-cell text {
+    font-size: 24rpx;
+  }
+}
+
+/* Value容器样式 - 用户可以通过调整这些容器的高度来实现对齐 */
+.budget-value-container {
+  width: 100%;
+  height: auto; /* 用户可以根据需要调整这个高度 */
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  margin-top: 88rpx;
+  padding: 0;
+}
+
+.exclusive-value-container {
+  width: 100%;
+  height: auto; /* 用户可以根据需要调整这个高度 */
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  margin-top: 113rpx;
+  padding: 0;
+}
+
+.accommodation-value-container {
+  width: 100%;
+  height: auto; /* 用户可以根据需要调整这个高度 */
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  margin-top: 113rpx;
+  padding: 0;
+}
+
+.transportation-value-container {
+  width: 100%;
+  height: auto; /* 用户可以根据需要调整这个高度 */
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  margin-top: 113rpx;
+  padding: 0;
+}
+
+.core-differences-value-container {
+  width: 100%;
+  height: auto; /* 用户可以根据需要调整这个高度 */
+  background-color: transparent;
+  border-radius: 0;
+  overflow: visible;
+  margin-top: 88rpx;
+  padding: 0;
+}
+
+/* 数据单元格组基础样式 */

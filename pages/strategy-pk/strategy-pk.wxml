@@ -29,242 +29,338 @@
     <!-- 基本信息页面 -->
     <view wx:if="{{currentTab === 0}}" class="basic-info-content">
       
-      <!-- 已有方案 -->
-      <view class="section existing-plans">
-        <view class="header-container">
-            <view class="section-title">已有方案</view>
-            <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onPlansScroll">
-                <view class="plans-wrapper {{layoutClass}}">
-                <view class="plan-card" wx:for="{{existingPlans}}" wx:key="id">
-                    <view class="plan-content">
-                        <view class="plan-status">
-                            <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
-                                <text class="check-icon">✓</text>
-                                <text>{{item.voted ? '已投票' : '未投票'}}</text>
-                            </view>
-                        </view>
-                        <view class="main-content">
-                            <view class="title-row">
-                                <view class="plan-icon">
-                                    <text class="icon-text">{{item.iconText}}</text>
-                                </view>
-                                <view class="plan-title">{{item.title}}</view>
-                            </view>
-                            <view class="plan-subtitle">{{item.subtitle}}</view>
-                        </view>
-                        <view class="vote-section">
-                            <view class="avatar-badge">
-                                <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
-                            </view>
-                            <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
-                                <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
-                                <text>{{item.voted ? '已投票' : '点此投票'}}</text>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-                </view>
-            </scroll-view>
-            </view>
-      </view>
-
-      <!-- 方案亮点 -->
-      <view class="section plan-highlights">
-  <view class="header-container">
-    <view class="section-title">方案亮点</view>
-    <scroll-view class="highlights-container" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onHighlightsScroll">
-      <view class="highlights-wrapper">
-        <view class="highlight-card" wx:for="{{planHighlights}}" wx:key="id">
-          <view class="highlight-content">{{item.content}}</view>
-          <view class="highlight-tags">
-            <view class="tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</view>
+      <!-- 统一的左右布局容器 -->
+      <view class="unified-layout-container">
+        <!-- 左侧固定容器 - 包含所有标题和标签 -->
+        <view class="left-fixed-container">
+          <!-- 已有方案标题 -->
+          <view class="section-header-item section-header-existing-plans">
+            <text class="section-title">已有方案</text>
           </view>
-        </view>
-      </view>
-    </scroll-view>
-  </view>
-</view>
-
-
-      <!-- 预算价格 -->
-      <view class="section budget-section">
-        <view class="section-header" bindtap="toggleBudget">
+          
+          <!-- 方案亮点标题 -->
+          <view class="section-header-item section-header-highlights">
+            <text class="section-title">方案亮点</text>
+          </view>
+          
+          <!-- 预算价格标题 -->
+          <view class="section-header-item section-header-budget">
             <text class="section-title">预算价格</text>
-            <view class="arrow-icon {{budgetExpanded ? 'expanded' : ''}}">▼</view>
+            <view class="arrow-icon">▼</view>
+          </view>
+          
+          <!-- 预算价格标签组 -->
+          <view class="labels-group budget-labels">
+            <view class="label-item budget-label-item">
+              <text>总价</text>
+            </view>
+            <view class="label-item budget-label-item">
+              <text>餐饮预算</text>
+            </view>
+            <view class="label-item budget-label-item">
+              <text>酒店预算</text>
+            </view>
+          </view>
+          
+          <!-- 独家体验标题 -->
+          <view class="section-header-item section-header-exclusive">
+            <text class="section-title">独家体验</text>
+            <view class="arrow-icon">▼</view>
+          </view>
+          
+          <!-- 独家体验标签组 -->
+          <view class="labels-group exclusive-labels">
+            <view class="label-item exclusive-label-item">
+              <text>特色体验</text>
+            </view>
+            <view class="label-item exclusive-label-item">
+              <text>特色美食</text>
+            </view>
+            <view class="label-item exclusive-label-item">
+              <text>特色交通</text>
+            </view>
+          </view>
+          
+          <!-- 住宿位置标题 -->
+          <view class="section-header-item section-header-accommodation">
+            <text class="section-title">住宿位置</text>
+            <view class="arrow-icon">▼</view>
+          </view>
+          
+          <!-- 住宿位置标签组 -->
+          <view class="labels-group accommodation-labels">
+            <view class="label-item accommodation-label-item">
+              <text>位置</text>
+            </view>
+            <view class="label-item accommodation-label-item">
+              <text>时间</text>
+            </view>
+          </view>
+          
+          <!-- 交通方式标题 -->
+          <view class="section-header-item section-header-transportation">
+            <text class="section-title">交通方式</text>
+            <view class="arrow-icon">▼</view>
+          </view>
+          
+          <!-- 交通方式标签组 -->
+          <view class="labels-group transportation-labels">
+            <view class="label-item transportation-label-item">
+              <text>主交通</text>
+            </view>
+            <view class="label-item transportation-label-item">
+              <text>市区内</text>
+            </view>
+          </view>
         </view>
         
-        <!-- 控制展开和收起 -->
-        <view class="budget-content {{budgetExpanded ? 'expanded' : 'collapsed'}}" style="{{budgetExpanded ? 'display:block' : 'display:none'}}">
-            <view class="sync-scroll-layout">
-                <view class="left-labels">
-                    <view class="label-item" wx:for="{{budgetItems}}" wx:key="label">
-                        <text>{{item.label}}</text>
+        <!-- 右侧滚动容器 - 包含所有方案数据 -->
+        <scroll-view class="right-scrollable-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+          <view class="all-plans-data">
+            <!-- 四个方案列 -->
+            <view class="plan-data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+              
+              <!-- 已有方案卡片 -->
+              <view class="plan-section-data plan-section-existing-plans">
+                <view class="plan-card">
+                  <view class="plan-content">
+                    <view class="plan-status">
+                      <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
+                        <text class="check-icon">✓</text>
+                        <text>{{item.voted ? '已投票' : '未投票'}}</text>
+                      </view>
                     </view>
-                </view>
-                <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onBudgetScroll">
-                    <view class="data-wrapper">
-                        <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
-                            <view class="data-cell" wx:for="{{budgetItems}}" wx:key="label">
-                                <text>{{item.values[planIndex] || '-'}}</text>
-                            </view>
+                    <view class="main-content">
+                      <view class="title-row">
+                        <view class="plan-icon">
+                          <text class="icon-text">{{item.iconText}}</text>
                         </view>
+                        <view class="plan-title">{{item.title}}</view>
+                      </view>
+                      <view class="plan-subtitle">{{item.subtitle}}</view>
                     </view>
-                </scroll-view>
-            </view>
-        </view>
-      </view>
-
-      <!-- 独家体验 -->
-      <view class="section exclusive-experience">
-        <view class="section-header" bindtap="toggleExclusive">
-          <text class="section-title">独家体验</text>
-          <view class="arrow-icon {{exclusiveExpanded ? 'expanded' : ''}}">▼</view>
-        </view>
-        <view class="exclusive-content {{exclusiveExpanded ? 'expanded' : 'collapsed'}}">
-          <view class="sync-scroll-layout">
-            <view class="left-labels">
-              <view class="label-item" wx:for="{{exclusiveItems}}" wx:key="label">
-                <text>{{item.label}}</text>
-              </view>
-            </view>
-            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onExclusiveScroll">
-              <view class="data-wrapper">
-                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
-                  <view class="data-cell" wx:for="{{exclusiveItems}}" wx:key="label">
-                    <text>{{item.values[planIndex] || '-'}}</text>
-                  </view>
-                </view>
-              </view>
-            </scroll-view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 住宿位置 -->
-      <view class="section accommodation">
-        <view class="section-header" bindtap="toggleAccommodation">
-          <text class="section-title">住宿位置</text>
-          <view class="arrow-icon {{accommodationExpanded ? 'expanded' : ''}}">▼</view>
-        </view>
-        <view class="accommodation-content {{accommodationExpanded ? 'expanded' : 'collapsed'}}" style="{{accommodationExpanded ? 'display:block' : 'display:none'}}">
-          <view class="sync-scroll-layout">
-            <view class="left-labels">
-              <view class="label-item" wx:for="{{accommodationItems}}" wx:key="label">
-                <text>{{item.label}}</text>
-              </view>
-            </view>
-            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onAccommodationScroll">
-              <view class="data-wrapper">
-                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
-                  <view class="data-cell" wx:for="{{accommodationItems}}" wx:key="label">
-                    <text>{{item.values[planIndex] || '-'}}</text>
-                  </view>
-                </view>
-              </view>
-            </scroll-view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 交通方式 -->
-      <view class="section transportation">
-        <view class="section-header" bindtap="toggleTransportation">
-          <text class="section-title">交通方式</text>
-          <view class="arrow-icon {{transportationExpanded ? 'expanded' : ''}}">▼</view>
-        </view>
-        <view class="transportation-content {{transportationExpanded ? 'expanded' : 'collapsed'}}" style="{{transportationExpanded ? 'display:block' : 'display:none'}}">
-          <view class="sync-scroll-layout">
-            <view class="left-labels">
-              <view class="label-item" wx:for="{{transportationItems}}" wx:key="label">
-                <text>{{item.label}}</text>
-              </view>
-            </view>
-            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onTransportationScroll">
-              <view class="data-wrapper">
-                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
-                  <view class="data-cell" wx:for="{{transportationItems}}" wx:key="label">
-                    <text>{{item.values[planIndex] || '-'}}</text>
-                  </view>
-                </view>
-              </view>
-            </scroll-view>
-          </view>
-        </view>
-      </view>
-
-    </view>
-
-    <!-- 差异点页面 -->
-    <view wx:elif="{{currentTab === 1}}" class="difference-content">
-      <!-- 已有方案 -->
-      <view class="section existing-plans">
-        <view class="header-container">
-        <view class="section-title">已有方案</view>
-        <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onPlansScroll">
-          <view class="plans-wrapper {{layoutClass}}">
-            <view class="plan-card" wx:for="{{existingPlans}}" wx:key="id">
-              <view class="plan-content">
-                <view class="plan-status">
-                  <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
-                    <text class="check-icon">✓</text>
-                    <text>{{item.voted ? '已投票' : '未投票'}}</text>
-                  </view>
-                </view>
-                <view class="main-content">
-                  <view class="title-row">
-                    <view class="plan-icon">
-                      <text class="icon-text">{{item.iconText}}</text>
+                    <view class="vote-section">
+                      <view class="avatar-badge">
+                        <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
+                      </view>
+                      <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
+                        <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
+                        <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                      </view>
                     </view>
-                    <view class="plan-title">{{item.title}}</view>
-                  </view>
-                  <view class="plan-subtitle">{{item.subtitle}}</view>
-                </view>
-                <view class="vote-section">
-                  <view class="avatar-badge">
-                    <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
-                  </view>
-                  <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
-                    <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
-                    <text>{{item.voted ? '已投票' : '点此投票'}}</text>
                   </view>
                 </view>
               </view>
+              
+              <!-- 方案亮点数据 -->
+              <view class="plan-section-data plan-section-highlights">
+                <view class="highlight-card">
+                  <view class="highlight-content">{{planHighlights[planIndex].content}}</view>
+                  <view class="highlight-tags">
+                    <view class="tag" wx:for="{{planHighlights[planIndex].tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</view>
+                  </view>
+                </view>
+              </view>
+              
+              <!-- 预算价格数据 -->
+              <view class="plan-section-data budget-data plan-section-budget">
+                <view class="budget-value-container">
+                  <view class="data-cells-group budget-data-cells">
+                    <!-- 总价行 -->
+                    <view class="data-cell budget-data-cell">
+                      <text>{{budgetItems[0].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 餐饮预算行 -->
+                    <view class="data-cell budget-data-cell">
+                      <text>{{budgetItems[1].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 酒店预算行 -->
+                    <view class="data-cell budget-data-cell">
+                      <text>{{budgetItems[2].values[planIndex] || '-'}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              
+              <!-- 独家体验数据 -->
+              <view class="plan-section-data exclusive-data plan-section-exclusive">
+                <view class="exclusive-value-container">
+                  <view class="data-cells-group exclusive-data-cells">
+                    <!-- 特色体验行 -->
+                    <view class="data-cell exclusive-data-cell">
+                      <text>{{exclusiveItems[0].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 特色美食行 -->
+                    <view class="data-cell exclusive-data-cell">
+                      <text>{{exclusiveItems[1].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 特色交通行 -->
+                    <view class="data-cell exclusive-data-cell">
+                      <text>{{exclusiveItems[2].values[planIndex] || '-'}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              
+              <!-- 住宿位置数据 -->
+              <view class="plan-section-data accommodation-data plan-section-accommodation">
+                <view class="accommodation-value-container">
+                  <view class="data-cells-group accommodation-data-cells">
+                    <!-- 位置行 -->
+                    <view class="data-cell accommodation-data-cell">
+                      <text>{{accommodationItems[0].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 时间行 -->
+                    <view class="data-cell accommodation-data-cell">
+                      <text>{{accommodationItems[1].values[planIndex] || '-'}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              
+              <!-- 交通方式数据 -->
+              <view class="plan-section-data transportation-data plan-section-transportation">
+                <view class="transportation-value-container">
+                  <view class="data-cells-group transportation-data-cells">
+                    <!-- 主交通行 -->
+                    <view class="data-cell transportation-data-cell">
+                      <text>{{transportationItems[0].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 市区内行 -->
+                    <view class="data-cell transportation-data-cell">
+                      <text>{{transportationItems[1].values[planIndex] || '-'}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              
             </view>
           </view>
         </scroll-view>
-        </view>
       </view>
+      
+    </view>
 
-      <!-- 核心差异对比 -->
-      <view class="section core-differences-section">
-        <view class="section-header" bindtap="toggleCoreDifferences">
-          <text class="section-title">核心差异</text>
-          <view class="arrow-icon {{coreDifferencesExpanded ? 'expanded' : ''}}">▼</view>
+    <!-- 差异点页面 -->
+    <view wx:if="{{currentTab === 1}}" class="difference-content">
+      
+      <!-- 统一的左右布局容器 -->
+      <view class="unified-layout-container">
+        <!-- 左侧固定容器 - 包含所有标题和标签 -->
+        <view class="left-fixed-container">
+          <!-- 已有方案标题 -->
+          <view class="section-header-item section-header-existing-plans">
+            <text class="section-title">已有方案</text>
+          </view>
+          
+          <!-- 核心差异标题 -->
+          <view class="section-header-item section-header-core-differences">
+            <text class="section-title">核心差异</text>
+            <view class="arrow-icon">▼</view>
+          </view>
+          
+          <!-- 核心差异标签组 -->
+          <view class="labels-group core-differences-labels">
+            <view class="label-item core-differences-label-item">
+              <text>消费感受</text>
+            </view>
+            <view class="label-item core-differences-label-item">
+              <text>日均预算</text>
+            </view>
+            <view class="label-item core-differences-label-item">
+              <text>游玩体验</text>
+            </view>
+            <view class="label-item core-differences-label-item">
+              <text>日均景点</text>
+            </view>
+            <view class="label-item core-differences-label-item">
+              <text>日均步数</text>
+            </view>
+            <view class="label-item core-differences-label-item">
+              <text>换酒店</text>
+            </view>
+          </view>
         </view>
         
-        <view class="core-differences-content {{coreDifferencesExpanded ? 'expanded' : 'collapsed'}}">
-          <view class="sync-scroll-layout">
-            <view class="left-labels">
-              <view class="label-item" wx:for="{{coreDifferences}}" wx:key="label">
-                <text>{{item.label}}</text>
-              </view>
-            </view>
-            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onCoreDifferencesScroll">
-              <view class="data-wrapper">
-                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
-                  <view class="data-cell" wx:for="{{coreDifferences}}" wx:key="label">
-                    <text>{{item.values[planIndex] || '-'}}</text>
+        <!-- 右侧滚动容器 - 包含所有方案数据 -->
+        <scroll-view class="right-scrollable-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+          <view class="all-plans-data">
+            <!-- 四个方案列 -->
+            <view class="plan-data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+              
+              <!-- 已有方案卡片 -->
+              <view class="plan-section-data plan-section-existing-plans">
+                <view class="plan-card">
+                  <view class="plan-content">
+                    <view class="plan-status">
+                      <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
+                        <text class="check-icon">✓</text>
+                        <text>{{item.voted ? '已投票' : '未投票'}}</text>
+                      </view>
+                    </view>
+                    <view class="main-content">
+                      <view class="title-row">
+                        <view class="plan-icon">
+                          <text class="icon-text">{{item.iconText}}</text>
+                        </view>
+                        <view class="plan-title">{{item.title}}</view>
+                      </view>
+                      <view class="plan-subtitle">{{item.subtitle}}</view>
+                    </view>
+                    <view class="vote-section">
+                      <view class="avatar-badge">
+                        <image class="avatar-img" src="{{item.avatar}}" mode="aspectFill"></image>
+                      </view>
+                      <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
+                        <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
+                        <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                      </view>
+                    </view>
                   </view>
                 </view>
               </view>
-            </scroll-view>
+              
+              <!-- 核心差异数据 -->
+              <view class="plan-section-data core-differences-data core-differences-plan-section">
+                <view class="core-differences-value-container">
+                  <view class="data-cells-group core-differences-data-cells">
+                    <!-- 消费感受行 -->
+                    <view class="data-cell core-differences-data-cell">
+                      <text>{{coreDifferences[0].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 日均预算行 -->
+                    <view class="data-cell core-differences-data-cell">
+                      <text>{{coreDifferences[1].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 游玩体验行 -->
+                    <view class="data-cell core-differences-data-cell">
+                      <text>{{coreDifferences[2].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 日均景点行 -->
+                    <view class="data-cell core-differences-data-cell">
+                      <text>{{coreDifferences[3].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 日均步数行 -->
+                    <view class="data-cell core-differences-data-cell">
+                      <text>{{coreDifferences[4].values[planIndex] || '-'}}</text>
+                    </view>
+                    <!-- 换酒店行 -->
+                    <view class="data-cell core-differences-data-cell">
+                      <text>{{coreDifferences[5].values[planIndex] || '-'}}</text>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              
+            </view>
           </view>
-        </view>
+        </scroll-view>
       </view>
+      
     </view>
 
     <!-- AI融合页面 -->
-    <view wx:elif="{{currentTab === 2}}" class="ai-fusion-content">
+    <view wx:if="{{currentTab === 2}}" class="ai-fusion-content">
       <view class="fusion-plans-grid {{layoutClass}}">
         <view class="fusion-plan-card" wx:for="{{existingPlans}}" wx:key="id">
           <view class="plan-status">

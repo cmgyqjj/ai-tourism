@@ -10,7 +10,7 @@
         },
         
         // 行程标题和时长
-        tripTitle: '法意12日游',
+        tripTitle: '法意瑞12日游',
         tripDuration: '12天11晚',
         
         // 地图相关数据
@@ -57,19 +57,67 @@
         {
             day: 2,
             date: '05月06日',
-            route: '北京 > 巴黎',
+            route: '巴黎',
             weather: '🌧️'
         },
         {
             day: 3,
             date: '05月07日',
-            route: '北京 > 巴黎',
+            route: '巴黎',
             weather: '☁️'
         },
         {
             day: 4,
             date: '05月08日',
-            route: '北京 > 巴黎',
+            route: '巴黎 > 米兰',
+            weather: '☀️'
+        },
+        {
+            day: 5,
+            date: '05月09日',
+            route: '米兰',
+            weather: '☀️'
+        },
+        {
+            day: 6,
+            date: '05月10日',
+            route: '米兰 > 罗马',
+            weather: '☀️'
+        },
+        {
+            day: 7,
+            date: '05月11日',
+            route: '罗马',
+            weather: '☀️'
+        },
+        {
+            day: 8,
+            date: '05月12日',
+            route: '罗马',
+            weather: '☀️'
+        },
+        {
+            day: 9,
+            date: '05月13日',
+            route: '罗马 > 佛罗伦萨',
+            weather: '☀️'
+        },
+        {
+            day: 10,
+            date: '05月14日',
+            route: '佛罗伦萨',
+            weather: '☀️'
+        },
+        {
+            day: 11,
+            date: '05月15日',
+            route: '佛罗伦萨 > 威尼斯',
+            weather: '☀️'
+        },
+        {
+            day: 12,
+            date: '05月16日',
+            route: '威尼斯 > 北京',
             weather: '☀️'
         }
         ],
@@ -86,7 +134,7 @@
             distance: '3.2',
             time: '15',
             location: 'Café de Flore, Paris',
-            image: '/images/cafe.jpg'
+            image: '/images/cafe.png'
             }
         ],
         attractions: [
@@ -96,15 +144,18 @@
             distance: '1.2',
             time: '5',
             location: 'Seine River, Paris',
-            image: '/images/seine.jpg'
+            image: '/images/cafe.png'
             }
         ],
         hotels: [
             {
-            name: 'Prais万豪(第7',
+            name: 'Prais万豪(第7区)',
             nights: '1',
             price: '1028',
-            image: '/images/hotel.jpg'
+            image: '/images/cafe.png',
+            distance: '2.1',
+            time: '8',
+            location: 'Marriott Hotel, Paris'
             }
         ]
         }
@@ -147,6 +198,15 @@
         this.generateTripTitle();
         this.initMapData();
         }
+        
+        // 加载第一天的行程信息
+        this.loadDayInfo(1);
+        
+        // 调试：打印当前数据状态
+        console.log('=== 页面加载完成后的数据状态 ===');
+        console.log('tripDays:', this.data.tripDays);
+        console.log('tripTitle:', this.data.tripTitle);
+        console.log('currentDayInfo:', this.data.currentDayInfo);
     },
 
     /**
@@ -161,29 +221,137 @@
         
         console.log('计算的天数:', days, '晚数:', nights);
         
-        // 从第一个行程的路线中提取目的地
-        let destination = '未知目的地';
-        if (tripDays.length > 0 && tripDays[0].route) {
-        const routeParts = tripDays[0].route.split('>');
-        if (routeParts.length > 1) {
-            destination = routeParts[1].trim();
-        } else {
-            destination = routeParts[0].trim();
+        // 分析行程路线，生成更合适的标题
+        let tripTitle = '欧洲多国游';
+        if (tripDays.length > 0) {
+            // 收集所有目的地
+            const destinations = new Set();
+            tripDays.forEach(day => {
+                if (day.route) {
+                    const cities = day.route.split('>').map(city => city.trim());
+                    cities.forEach(city => {
+                        if (city && city !== '北京') {
+                            destinations.add(city);
+                        }
+                    });
+                }
+            });
+            
+            // 根据目的地生成标题
+            const destinationArray = Array.from(destinations);
+            if (destinationArray.length === 1) {
+                tripTitle = `${destinationArray[0]}${days}日游`;
+            } else if (destinationArray.length === 2) {
+                tripTitle = `${destinationArray[0]}${destinationArray[1]}${days}日游`;
+            } else if (destinationArray.length >= 3) {
+                tripTitle = `法意瑞${days}日游`;
+            }
         }
-        }
-        
-        // 生成标题：目的地 + X日游
-        const tripTitle = `${destination}${days}日游`;
         
         // 生成长度：X天X晚
         const tripDuration = `${days}天${nights}晚`;
         
         this.setData({
-        tripTitle,
-        tripDuration
+            tripTitle,
+            tripDuration
         });
         
         console.log('生成的行程标题:', tripTitle, '时长:', tripDuration);
+    },
+
+    /**
+     * 页面显示事件
+     */
+    onShow() {
+        console.log('页面显示事件触发');
+        console.log('当前tripDays数据:', this.data.tripDays);
+        
+        // 强制重新设置数据，确保显示正确
+        const freshTripDays = [
+            {
+                day: 1,
+                date: '05月05日',
+                route: '北京 > 巴黎',
+                weather: '☀️'
+            },
+            {
+                day: 2,
+                date: '05月06日',
+                route: '巴黎',
+                weather: '🌧️'
+            },
+            {
+                day: 3,
+                date: '05月07日',
+                route: '巴黎',
+                weather: '☁️'
+            },
+            {
+                day: 4,
+                date: '05月08日',
+                route: '巴黎 > 米兰',
+                weather: '☀️'
+            },
+            {
+                day: 5,
+                date: '05月09日',
+                route: '米兰',
+                weather: '☀️'
+            },
+            {
+                day: 6,
+                date: '05月10日',
+                route: '米兰 > 罗马',
+                weather: '☀️'
+            },
+            {
+                day: 7,
+                date: '05月11日',
+                route: '罗马',
+                weather: '☀️'
+            },
+            {
+                day: 8,
+                date: '05月12日',
+                route: '罗马',
+                weather: '☀️'
+            },
+            {
+                day: 9,
+                date: '05月13日',
+                route: '罗马 > 佛罗伦萨',
+                weather: '☀️'
+            },
+            {
+                day: 10,
+                date: '05月14日',
+                route: '佛罗伦萨',
+                weather: '☀️'
+            },
+            {
+                day: 11,
+                date: '05月15日',
+                route: '佛罗伦萨 > 威尼斯',
+                weather: '☀️'
+            },
+            {
+                day: 12,
+                date: '05月16日',
+                route: '威尼斯 > 北京',
+                weather: '☀️'
+            }
+        ];
+        
+        this.setData({
+            tripDays: freshTripDays
+        });
+
+        
+        // 重新生成标题
+        this.generateTripTitle();
+        
+        // 重新加载当前选中天数的信息
+        this.loadDayInfo(this.data.selectedDay);
     },
 
     /**
@@ -241,40 +409,6 @@
                 fontSize: 14,
                 borderRadius: 4,
                 bgColor: '#00ff00',
-                padding: 8,
-                display: 'ALWAYS'
-            }
-        },
-        {
-            id: 2,
-            longitude: 116.407128,
-            latitude: 39.926527,
-            title: '景点1',
-            width: 40,
-            height: 40,
-            callout: {
-                content: '📍 景点1',
-                color: '#ffffff',
-                fontSize: 14,
-                borderRadius: 4,
-                bgColor: '#ff6b6b',
-                padding: 8,
-                display: 'ALWAYS'
-            }
-        },
-        {
-            id: 3,
-            longitude: 116.417128,
-            latitude: 39.936527,
-            title: '景点2',
-            width: 40,
-            height: 40,
-            callout: {
-                content: '📍 景点2',
-                color: '#ffffff',
-                fontSize: 14,
-                borderRadius: 4,
-                bgColor: '#ff6b6b',
                 padding: 8,
                 display: 'ALWAYS'
             }
@@ -376,6 +510,10 @@
         const day = e.currentTarget.dataset.day;
         console.log('选择第', day, '天');
         
+        // 调试：打印当前选中的天数对应的路线
+        const selectedTripDay = this.data.tripDays.find(item => item.day === day);
+        console.log('选中的天数路线:', selectedTripDay ? selectedTripDay.route : '未找到');
+        
         this.setData({
         selectedDay: day
         });
@@ -390,44 +528,190 @@
     loadDayInfo(day) {
         console.log('加载第', day, '天的行程信息');
         
-        // 这里可以根据日期从服务器或本地存储加载对应的行程信息
-        // 暂时使用模拟数据
-        const dayInfo = {
-        route: `第${day}天路线`,
-        flight: day === 1 ? '机场 巴黎 - 戴高乐机场' : null,
-        accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-        food: [
-            {
-            name: '花神咖啡馆',
-            price: '100',
-            distance: '3.2',
-            time: '15',
-            location: 'Café de Flore, Paris',
-            image: '/images/cafe.jpg'
-            }
-        ],
-        attractions: [
-            {
-            name: '塞纳河',
-            description: '夜游塞纳河拍照打卡',
-            distance: '1.2',
-            time: '5',
-            location: 'Seine River, Paris',
-            image: '/images/seine.jpg'
-            }
-        ],
-        hotels: [
-            {
-            name: 'Prais万豪(第7',
-            nights: '1',
-            price: '1028',
-            image: '/images/hotel.jpg'
-            }
-        ]
+        // 根据天数获取对应的行程信息
+        const tripDay = this.data.tripDays.find(item => item.day === day);
+        if (!tripDay) {
+            console.error('未找到第', day, '天的行程信息');
+            return;
+        }
+        
+        // 根据不同的天数显示不同的行程信息
+        let dayInfo = {
+            route: tripDay.route,
+            flight: null,
+            accommodation: '',
+            food: [],
+            attractions: [],
+            hotels: []
         };
         
+        // 根据天数设置不同的内容
+        switch (day) {
+            case 1: // 第一天：北京-巴黎
+                dayInfo.flight = '机场 巴黎 - 戴高乐机场';
+                dayInfo.accommodation = '住宿建议 巴黎景区附近 (1,7,9区)';
+                dayInfo.food = [
+                    {
+                        name: '花神咖啡馆',
+                        price: '100',
+                        distance: '3.2',
+                        time: '15',
+                        location: 'Café de Flore, Paris',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '塞纳河',
+                        description: '夜游塞纳河拍照打卡',
+                        distance: '1.2',
+                        time: '5',
+                        location: 'Seine River, Paris',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                break;
+                
+            case 4: // 第四天：巴黎-米兰
+                dayInfo.flight = '机场 米兰 - 马尔彭萨机场';
+                dayInfo.accommodation = '住宿建议 米兰市中心 (1,2区)';
+                dayInfo.food = [
+                    {
+                        name: '米兰大教堂餐厅',
+                        price: '150',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'Duomo Restaurant, Milan',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '米兰大教堂',
+                        description: '哥特式建筑杰作',
+                        distance: '0.3',
+                        time: '3',
+                        location: 'Duomo di Milano, Milan',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                break;
+                
+            case 6: // 第六天：米兰-罗马
+                dayInfo.flight = '机场 罗马 - 菲乌米奇诺机场';
+                dayInfo.accommodation = '住宿建议 罗马古城区 (1,2区)';
+                dayInfo.food = [
+                    {
+                        name: '罗马传统餐厅',
+                        price: '120',
+                        distance: '0.8',
+                        time: '12',
+                        location: 'Traditional Roman Restaurant',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '斗兽场',
+                        description: '古罗马竞技场遗址',
+                        distance: '1.5',
+                        time: '20',
+                        location: 'Colosseum, Rome',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                break;
+                
+            case 9: // 第九天：罗马-佛罗伦萨
+                dayInfo.flight = '机场 佛罗伦萨 - 佩雷托拉机场';
+                dayInfo.accommodation = '住宿建议 佛罗伦萨老城区';
+                dayInfo.food = [
+                    {
+                        name: '托斯卡纳餐厅',
+                        price: '130',
+                        distance: '0.6',
+                        time: '10',
+                        location: 'Tuscany Restaurant, Florence',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '圣母百花大教堂',
+                        description: '文艺复兴建筑代表',
+                        distance: '0.4',
+                        time: '5',
+                        location: 'Cathedral of Santa Maria del Fiore',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                break;
+                
+            case 11: // 第十一天：佛罗伦萨-威尼斯
+                dayInfo.flight = '机场 威尼斯 - 马可波罗机场';
+                dayInfo.accommodation = '住宿建议 威尼斯主岛';
+                dayInfo.food = [
+                    {
+                        name: '威尼斯海鲜餐厅',
+                        price: '180',
+                        distance: '0.7',
+                        time: '15',
+                        location: 'Venetian Seafood Restaurant',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '圣马可广场',
+                        description: '威尼斯地标广场',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'Piazza San Marco, Venice',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                break;
+                
+            default: // 其他天数：显示当地信息
+                dayInfo.accommodation = '住宿建议 当地景区附近';
+                dayInfo.food = [
+                    {
+                        name: '当地特色餐厅',
+                        price: '100-150',
+                        distance: '0.5-1.0',
+                        time: '10-15',
+                        location: 'Local Restaurant',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '当地景点',
+                        description: '探索当地特色文化',
+                        distance: '1.0',
+                        time: '15',
+                        location: 'Local Attraction',
+                        image: '/images/cafe.png'
+                    }
+                ];
+                break;
+        }
+        
+        // 为所有天数添加酒店推荐
+        dayInfo.hotels = [
+            {
+                name: '当地精品酒店',
+                nights: '1',
+                price: '800-1500',
+                image: '/images/cafe.png',
+                distance: '1.5',
+                time: '12',
+                location: 'Local Boutique Hotel'
+            }
+        ];
+        
         this.setData({
-        currentDayInfo: dayInfo
+            currentDayInfo: dayInfo
         });
     },
 
