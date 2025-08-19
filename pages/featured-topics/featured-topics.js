@@ -56,7 +56,7 @@ Page({
     return {
       title: '精选专题 - 去哪 Whatever',
       path: 'pages/featured-topics/featured-topics',
-      imageUrl: '/images/shoye/logo.png'
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
     }
   },
 
@@ -64,7 +64,7 @@ Page({
   onShareTimeline() {
     return {
       title: '精选专题 - 去哪 Whatever',
-      imageUrl: '/images/shoye/logo.png'
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
     }
   }
 }) 

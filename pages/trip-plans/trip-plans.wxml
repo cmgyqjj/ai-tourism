@@ -13,75 +13,80 @@
     </view>
   </view>
 
-  <!-- 我的行程 -->
-  <view class="section">
-    <view class="section-header">
-      <text class="section-title">我的行程</text>
-    </view>
-    
-    <view class="trip-list">
-      <!-- 法意12日游 -->
-      <view class="trip-item" bindtap="viewTripDetailMap">
-        <view class="trip-left">
-          <view class="trip-header">
-            <text class="trip-title">法意12日舒适游</text>
-          </view>
-          <view class="trip-details">
-            <view class="trip-info-row">
-              <view class="info-item">
-                <text class="info-label">12天11晚</text>
-              </view>
-            </view>
-            <view class="trip-info-row">
-              <view class="info-item">
-                <text class="info-label">16个地点</text>
-              </view>
-            </view>
-            <view class="participants">
-              <view class="participant-avatars">
-                <image class="participant-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-                <image class="participant-avatar" src="https://p0.inf.test.sankuai.com/haikesong/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
-                <image class="participant-avatar" src="https://p0.inf.test.sankuai.com/haikesong/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
-                <view class="trip-status">进行中...</view>
-              </view>
-            </view>
-          </view>
+  <!-- 滚动内容区域 -->
+  <scroll-view class="scroll-container" scroll-y="true" enable-back-to-top="true">
+    <view class="content-container">
+      <!-- 我的行程 -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">我的行程</text>
         </view>
-        <view class="trip-right">
-          <image class="trip-scenery" src="https://p0.inf.test.sankuai.com/haikesong/1321a7f38543ea9619ea9a91d73fc15c121844.png" mode="aspectFill"></image>
+        
+        <view class="trip-list">
+          <!-- 法意12日游 -->
+          <view class="trip-item" bindtap="viewTripDetailMap">
+            <view class="trip-left">
+              <view class="trip-header">
+                <text class="trip-title">法意12日舒适游</text>
+              </view>
+              <view class="trip-details">
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">12天11晚</text>
+                  </view>
+                </view>
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">16个地点</text>
+                  </view>
+                </view>
+                <view class="participants">
+                  <view class="participant-avatars">
+                    <image class="participant-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+                    <image class="participant-avatar" src="https://p0.meituan.net/hackathonqjj/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
+                    <image class="participant-avatar" src="https://p0.meituan.net/hackathonqjj/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
+                    <view class="trip-status">进行中...</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="trip-right">
+              <image class="trip-scenery" src="https://p0.meituan.net/hackathonqjj/1321a7f38543ea9619ea9a91d73fc15c121844.png" mode="aspectFill"></image>
+            </view>
+          </view>
+          
+          <!-- 日本7日游 -->
+          <view class="trip-item">
+            <view class="trip-left">
+              <view class="trip-header">
+                <text class="trip-title">日本7日深度游</text>
+              </view>
+              <view class="trip-details">
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">7天6晚</text>
+                  </view>
+                </view>
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">12个地点</text>
+                  </view>
+                </view>
+                <view class="participants">
+                  <view class="participant-avatars">
+                    <image class="participant-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+                    <image class="participant-avatar" src="https://p0.meituan.net/hackathonqjj/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
+                    <view class="trip-status">进行中...</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="trip-right">
+              <image class="trip-scenery" src="https://p0.meituan.net/hackathonqjj/1321a7f38543ea9619ea9a91d73fc15c121844.png" mode="aspectFill"></image>
+            </view>
+          </view>
         </view>
       </view>
-      
-      <!-- 日本7日游 -->
-      <view class="trip-item">
-        <view class="trip-left">
-          <view class="trip-header">
-            <text class="trip-title">日本7日深度游</text>
-          </view>
-          <view class="trip-details">
-            <view class="trip-info-row">
-              <view class="info-item">
-                <text class="info-label">7天6晚</text>
-              </view>
-            </view>
-            <view class="trip-info-row">
-              <view class="info-item">
-                <text class="info-label">12个地点</text>
-              </view>
-            </view>
-            <view class="participants">
-              <view class="participant-avatars">
-                <image class="participant-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-                <image class="participant-avatar" src="https://p0.inf.test.sankuai.com/haikesong/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
-                <view class="trip-status">进行中...</view>
-              </view>
-            </view>
-          </view>
-        </view>
-        <view class="trip-right">
-          <image class="trip-scenery" src="https://p0.inf.test.sankuai.com/haikesong/1321a7f38543ea9619ea9a91d73fc15c121844.png" mode="aspectFill"></image>
-        </view>
-      </view>
     </view>
-  </view>
+  </scroll-view>
 </view> 

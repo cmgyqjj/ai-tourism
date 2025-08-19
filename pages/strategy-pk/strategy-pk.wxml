@@ -25,7 +25,7 @@
   </view>
 
   <!-- 内容区域 -->
-  <scroll-view class="content-area" scroll-y="true">
+  <scroll-view class="content-area" scroll-y="true" refresher-enabled="true" refresher-triggered="{{refresherTriggered}}" bindrefresherrefresh="onRefresherRefresh" show-scrollbar="false">
     <!-- 基本信息页面 -->
     <view wx:if="{{currentTab === 0}}" class="basic-info-content">
       
@@ -33,7 +33,7 @@
       <view class="section existing-plans">
         <view class="header-container">
             <view class="section-title">已有方案</view>
-            <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+            <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onPlansScroll">
                 <view class="plans-wrapper {{layoutClass}}">
                 <view class="plan-card" wx:for="{{existingPlans}}" wx:key="id">
                     <view class="plan-content">
@@ -72,7 +72,7 @@
       <view class="section plan-highlights">
   <view class="header-container">
     <view class="section-title">方案亮点</view>
-    <scroll-view class="highlights-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+    <scroll-view class="highlights-container" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onHighlightsScroll">
       <view class="highlights-wrapper">
         <view class="highlight-card" wx:for="{{planHighlights}}" wx:key="id">
           <view class="highlight-content">{{item.content}}</view>
@@ -95,22 +95,24 @@
         
         <!-- 控制展开和收起 -->
         <view class="budget-content {{budgetExpanded ? 'expanded' : 'collapsed'}}" style="{{budgetExpanded ? 'display:block' : 'display:none'}}">
-            <scroll-view class="budget-container" scroll-x="true" show-scrollbar="false" enhanced="true">
-            <view class="budget-wrapper">
-                <!-- 遍历 budgetItems -->
-                <view class="budget-row" wx:for="{{budgetItems}}" wx:key="label">
-                <view class="budget-label">{{item.label}}</view>
-                <view class="budget-values">
-                    <!-- 遍历每个预算项的值 -->
-                    <view class="budget-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
+            <view class="sync-scroll-layout">
+                <view class="left-labels">
+                    <view class="label-item" wx:for="{{budgetItems}}" wx:key="label">
+                        <text>{{item.label}}</text>
+                    </view>
                 </view>
-                </view>
+                <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onBudgetScroll">
+                    <view class="data-wrapper">
+                        <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+                            <view class="data-cell" wx:for="{{budgetItems}}" wx:key="label">
+                                <text>{{item.values[planIndex] || '-'}}</text>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
             </view>
-            </scroll-view>
         </view>
-</view>
-
-
+      </view>
 
       <!-- 独家体验 -->
       <view class="section exclusive-experience">
@@ -119,16 +121,22 @@
           <view class="arrow-icon {{exclusiveExpanded ? 'expanded' : ''}}">▼</view>
         </view>
         <view class="exclusive-content {{exclusiveExpanded ? 'expanded' : 'collapsed'}}">
-          <scroll-view class="exclusive-container" scroll-x="true" show-scrollbar="false" enhanced="true">
-            <view class="exclusive-wrapper">
-              <view class="exclusive-row" wx:for="{{exclusiveItems}}" wx:key="label">
-                <view class="exclusive-label">{{item.label}}</view>
-                <view class="exclusive-values">
-                  <view class="exclusive-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
-                </view>
+          <view class="sync-scroll-layout">
+            <view class="left-labels">
+              <view class="label-item" wx:for="{{exclusiveItems}}" wx:key="label">
+                <text>{{item.label}}</text>
               </view>
             </view>
-          </scroll-view>
+            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onExclusiveScroll">
+              <view class="data-wrapper">
+                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+                  <view class="data-cell" wx:for="{{exclusiveItems}}" wx:key="label">
+                    <text>{{item.values[planIndex] || '-'}}</text>
+                  </view>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
         </view>
       </view>
 
@@ -139,16 +147,22 @@
           <view class="arrow-icon {{accommodationExpanded ? 'expanded' : ''}}">▼</view>
         </view>
         <view class="accommodation-content {{accommodationExpanded ? 'expanded' : 'collapsed'}}" style="{{accommodationExpanded ? 'display:block' : 'display:none'}}">
-          <scroll-view class="accommodation-container" scroll-x="true" show-scrollbar="false" enhanced="true">
-            <view class="accommodation-wrapper">
-              <view class="accommodation-row" wx:for="{{accommodationItems}}" wx:key="label">
-                <view class="accommodation-label">{{item.label}}</view>
-                <view class="accommodation-values">
-                  <view class="accommodation-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
-                </view>
+          <view class="sync-scroll-layout">
+            <view class="left-labels">
+              <view class="label-item" wx:for="{{accommodationItems}}" wx:key="label">
+                <text>{{item.label}}</text>
               </view>
             </view>
-          </scroll-view>
+            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onAccommodationScroll">
+              <view class="data-wrapper">
+                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+                  <view class="data-cell" wx:for="{{accommodationItems}}" wx:key="label">
+                    <text>{{item.values[planIndex] || '-'}}</text>
+                  </view>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
         </view>
       </view>
 
@@ -159,16 +173,22 @@
           <view class="arrow-icon {{transportationExpanded ? 'expanded' : ''}}">▼</view>
         </view>
         <view class="transportation-content {{transportationExpanded ? 'expanded' : 'collapsed'}}" style="{{transportationExpanded ? 'display:block' : 'display:none'}}">
-          <scroll-view class="transportation-container" scroll-x="true" show-scrollbar="false" enhanced="true">
-            <view class="transportation-wrapper">
-              <view class="transportation-row" wx:for="{{transportationItems}}" wx:key="label">
-                <view class="transportation-label">{{item.label}}</view>
-                <view class="transportation-values">
-                  <view class="transportation-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
-                </view>
+          <view class="sync-scroll-layout">
+            <view class="left-labels">
+              <view class="label-item" wx:for="{{transportationItems}}" wx:key="label">
+                <text>{{item.label}}</text>
               </view>
             </view>
-          </scroll-view>
+            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onTransportationScroll">
+              <view class="data-wrapper">
+                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+                  <view class="data-cell" wx:for="{{transportationItems}}" wx:key="label">
+                    <text>{{item.values[planIndex] || '-'}}</text>
+                  </view>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
         </view>
       </view>
 
@@ -180,7 +200,7 @@
       <view class="section existing-plans">
         <view class="header-container">
         <view class="section-title">已有方案</view>
-        <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true">
+        <scroll-view class="plans-container" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onPlansScroll">
           <view class="plans-wrapper {{layoutClass}}">
             <view class="plan-card" wx:for="{{existingPlans}}" wx:key="id">
               <view class="plan-content">
@@ -223,16 +243,22 @@
         </view>
         
         <view class="core-differences-content {{coreDifferencesExpanded ? 'expanded' : 'collapsed'}}">
-          <scroll-view class="core-differences-container" scroll-x="true" show-scrollbar="false" enhanced="true">
-            <view class="core-differences-wrapper">
-              <view class="core-differences-row" wx:for="{{coreDifferences}}" wx:key="label">
-                <view class="core-differences-label">{{item.label}}</view>
-                <view class="core-differences-values">
-                  <view class="core-differences-value" wx:for="{{item.values}}" wx:key="*this" wx:for-item="value">{{value}}</view>
-                </view>
+          <view class="sync-scroll-layout">
+            <view class="left-labels">
+              <view class="label-item" wx:for="{{coreDifferences}}" wx:key="label">
+                <text>{{item.label}}</text>
               </view>
             </view>
-          </scroll-view>
+            <scroll-view class="right-data" scroll-x="true" show-scrollbar="false" enhanced="true" bindscroll="onCoreDifferencesScroll">
+              <view class="data-wrapper">
+                <view class="data-column" wx:for="{{existingPlans}}" wx:key="id" wx:for-index="planIndex">
+                  <view class="data-cell" wx:for="{{coreDifferences}}" wx:key="label">
+                    <text>{{item.values[planIndex] || '-'}}</text>
+                  </view>
+                </view>
+              </view>
+            </scroll-view>
+          </view>
         </view>
       </view>
     </view>
@@ -291,10 +317,10 @@
   <!-- AI融合按钮 -->
   <view class="ai-fusion-actions" wx:if="{{currentTab === 2}}">
     <!-- 呼唤队长解锁语音气泡 -->
-    <image class="captain-call-bubble" src="/images/strategyPK/a.png" mode="aspectFill"></image>
+    <image class="captain-call-bubble" src="https://p0.meituan.net/hackathonqjj/20f4a5b781dcd7d81577d68ee48a47ca20888.png" mode="aspectFill"></image>
     
     <view class="ai-fusion-btn" bindtap="generateFusionPlan">
-      <image class="ai-fusion-bg" src="/images/strategyPK/btn.png" mode="aspectFill"></image>
+      <image class="ai-fusion-bg" src="https://p0.meituan.net/hackathonqjj/516dfdc8dcfbbbc44d5b667aee88041e9472.png" mode="aspectFill"></image>
       <view class="ai-fusion-content">
       
       </view>

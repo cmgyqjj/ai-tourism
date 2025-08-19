@@ -61,7 +61,7 @@
     <scroll-view class="content" scroll-y>
       <!-- 空状态显示 -->
       <view class="empty-state" wx:if="{{!tripList || tripList.length === 0}}">
-        <image class="empty-image" src="https://p0.inf.test.sankuai.com/haikesong/个人页啥也没有" mode="aspectFit" />
+        <image class="empty-image" src="https://p0.meituan.net/hackathonqjj/个人页啥也没有" mode="aspectFit" />
         <view class="empty-text">暂无内容</view>
       </view>
       
@@ -91,14 +91,14 @@
 <!-- 底部导航栏 -->
 <view class="bottom-nav">
   <view class="nav-item" bindtap="onTabBarTap" data-type="plan">
-    <image class="nav-image" src="/images/shoye/btn-trip-plan.png" mode="aspectFit" />
+    <image class="nav-image" src="https://p0.meituan.net/hackathonqjj/57b26ae32ae1d1dd796337aac4ce67482337.png" mode="aspectFit" />
   </view>
   
   <view class="nav-item" bindtap="onTabBarTap" data-type="ai">
-    <image class="nav-image-center" src="/images/shoye/btn-ai-strategy.png" mode="aspectFit" />
+    <image class="nav-image-center" src="https://p0.meituan.net/hackathonqjj/fdbc7a96dcd2977ea8d0cc894bef630389025.png" mode="aspectFit" />
   </view>
   
   <view class="nav-item active">
-    <image class="nav-image" src="/images/shoye/btn-user-center.png" mode="aspectFit" />
+    <image class="nav-image" src="https://p0.meituan.net/hackathonqjj/d645fd45d097b3e6f4888367327f53ff2179.png" mode="aspectFit" />
   </view>
 </view> 

@@ -14,7 +14,7 @@ Page({
         title: '高端舒适型',
         subtitle: '南方海滨度假',
         iconText: '💎',
-        avatar: '/images/denglu/Ai.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: true
       },
       {
@@ -22,7 +22,7 @@ Page({
         title: '极致性价比',
         subtitle: '南方海滨度假',
         iconText: '￥',
-        avatar: '/images/avatar2.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: false
       },
       {
@@ -30,7 +30,7 @@ Page({
         title: '网红打卡型',
         subtitle: '南方海滨度假',
         iconText: '📸',
-        avatar: '/images/avatar3.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: false
       },
       {
@@ -38,7 +38,7 @@ Page({
         title: '深度文化型',
         subtitle: '南方海滨度假',
         iconText: '🏛️',
-        avatar: '/images/denglu/Ai.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         voted: true
       }
     ],
@@ -71,15 +71,15 @@ Page({
     budgetItems: [
       {
         label: '总价',
-        values: ['¥ 5.8w', '¥ 1.5w', '¥ 3.2w', '¥ 4.5w', '¥ 4.5w']
+        values: ['¥ 5.8w', '¥ 1.5w', '¥ 3.2w', '¥ 4.5w']
       },
       {
         label: '餐饮预算',
-        values: ['¥ 1.2w', '¥ 4000', '¥ 8000','¥ 6000', '¥ 4.5w']
+        values: ['¥ 1.2w', '¥ 4000', '¥ 8000','¥ 6000']
       },
       {
         label: '酒店预算',
-        values: ['¥ 3w', '¥ 6000', '¥ 1.5w', '¥ 2.2w', '¥ 4.5w']
+        values: ['¥ 3w', '¥ 6000', '¥ 1.5w', '¥ 2.2w']
       }
     ],
 
@@ -704,5 +704,189 @@ Page({
   onPullDownRefresh: function() {
     this.loadPageData();
     wx.stopPullDownRefresh();
+  },
+
+  // 滚动位置数据
+  budgetScrollLeft: 0,
+  exclusiveScrollLeft: 0,
+  accommodationScrollLeft: 0,
+  transportationScrollLeft: 0,
+  plansScrollLeft: 0,
+  highlightsScrollLeft: 0,
+  coreDifferencesScrollLeft: 0,
+  
+  // 防抖相关
+  isScrolling: false,
+  scrollTimer: null,
+
+  // 监听已有方案滚动
+  onPlansScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      plansScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 监听预算价格滚动
+  onBudgetScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      budgetScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 监听独家体验滚动
+  onExclusiveScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      exclusiveScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 监听住宿位置滚动
+  onAccommodationScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      accommodationScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 监听交通方式滚动
+  onTransportationScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      transportationScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 监听核心差异滚动
+  onCoreDifferencesScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      coreDifferencesScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 监听方案亮点滚动
+  onHighlightsScroll: function(e) {
+    if (this.data.isScrolling) return;
+    
+    const scrollLeft = e.detail.scrollLeft;
+    this.setData({
+      highlightsScrollLeft: scrollLeft
+    });
+    
+    // 防抖同步其他表格
+    this.debouncedSyncAllTables(scrollLeft);
+  },
+
+  // 防抖函数
+  debouncedSyncAllTables: function(scrollLeft) {
+    if (this.data.scrollTimer) {
+      clearTimeout(this.data.scrollTimer);
+    }
+    this.data.scrollTimer = setTimeout(() => {
+      this.syncAllTables(scrollLeft);
+      this.data.scrollTimer = null;
+    }, 16);
+  },
+
+  // 同步所有表格的滚动位置
+  syncAllTables: function(scrollLeft) {
+    // 设置防抖标记
+    this.setData({
+      isScrolling: true
+    });
+    
+    // 使用requestAnimationFrame确保更精确的同步
+    const syncScroll = () => {
+      // 同步所有scroll-view的滚动位置
+      const scrollViews = [
+        '.plans-container',
+        '.highlights-container',
+        '.budget-content .right-data',
+        '.exclusive-content .right-data',
+        '.accommodation-content .right-data',
+        '.transportation-content .right-data',
+        '.core-differences-content .right-data'
+      ];
+
+      scrollViews.forEach((selector) => {
+        const query = wx.createSelectorQuery();
+        query.select(selector).node().exec((res) => {
+          if (res[0] && res[0].node) {
+            const scrollView = res[0].node;
+            if (scrollView.scrollTo) {
+              // 使用更精确的滚动方法
+              const targetScrollLeft = Math.round(scrollLeft);
+              scrollView.scrollTo({
+                left: targetScrollLeft,
+                behavior: 'instant'
+              });
+              
+              // 验证滚动位置是否正确，如果不正确则补偿
+              setTimeout(() => {
+                if (scrollView.scrollLeft !== targetScrollLeft) {
+                  // 尝试直接设置scrollLeft属性
+                  try {
+                    scrollView.scrollLeft = targetScrollLeft;
+                  } catch (e) {
+                    // 如果直接设置失败，再次使用scrollTo
+                    scrollView.scrollTo({
+                      left: targetScrollLeft,
+                      behavior: 'instant'
+                    });
+                  }
+                }
+              }, 10);
+            }
+          }
+        });
+      });
+      
+      // 延迟清除防抖标记
+      setTimeout(() => {
+        this.setData({
+          isScrolling: false
+        });
+      }, 50);
+    };
+
+    // 使用requestAnimationFrame确保同步时机更准确
+    if (typeof requestAnimationFrame !== 'undefined') {
+      requestAnimationFrame(syncScroll);
+    } else {
+      setTimeout(syncScroll, 16);
+    }
   }
 });
