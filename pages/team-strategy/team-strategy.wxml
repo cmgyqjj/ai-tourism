@@ -165,7 +165,7 @@
   <!-- 侧边栏 -->
   <view class="sidebar {{sidebarOpen ? 'open' : ''}}">
     <!-- 内层背景图片 -->
-    <image class="sidebar-bg" src="/images/travel-guide/sidebar1.png" mode="aspectFit"></image>
+    <image class="sidebar-bg" src="https://p0.meituan.net/hackathonqjj/22c76c6373e66798ca8ed31949c7619b19445.png" mode="aspectFit"></image>
     
     <!-- 四个功能按钮，覆盖在图片上对应的功能区域 -->
     <view class="sidebar-btn route-optimization" bindtap="onRouteOptimization"></view>
