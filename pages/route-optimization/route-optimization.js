@@ -236,7 +236,7 @@ Page({
     console.log('显示景点标记');
     
     // 创建包含用户位置和景点的完整标记数组
-    const allMarkers = [];
+    let allMarkers = [];
     
     // 不添加任何标记点，只保留路线
     // 清空标记数组，不显示绿色和红色标记
