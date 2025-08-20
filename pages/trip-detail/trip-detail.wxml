@@ -108,7 +108,12 @@
       </view>
       <view class="modal-footer">
         <button class="cancel-btn" bindtap="cancelJoin">取消</button>
-        <button class="confirm-btn" bindtap="confirmJoin">确认加入</button>
+      </view>
+      <view class="confirm-section">
+        <button class="btn confirm-update" bindtap="confirmJoin">
+          <view class="check-icon">✓</view>
+          确认提交
+        </button>
       </view>
     </view>
   </view>

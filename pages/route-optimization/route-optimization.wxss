@@ -202,7 +202,7 @@
   display: inline-flex;
   align-items: center;
   padding: 25rpx 15rpx;
-  margin-bottom: 20rpx;
+  margin: 20rpx 0;
   border-radius: 32rpx;
   /* border: 1rpx solid #E5E5E5; */
   transition: all 0.3s ease;
@@ -223,11 +223,8 @@
 
 .question-item.selected {
   background: #FFEE07;
-  border: 1rpx solid #FFE4B5;
   box-shadow: 0 2rpx 8rpx rgba(255, 228, 181, 0.3);
   padding-right: 75rpx;
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
 }
 
 .question-item.selected .question-text {
@@ -281,6 +278,7 @@ padding-top: 15rpx;
 
 .confirm-btn-wrapper {
   flex: 0 0 auto;
+  margin-top: 36rpx;
 }
 
 .confirm-btn-wrapper .btn {
@@ -295,8 +293,33 @@ padding-top: 15rpx;
 }
 
 .btn.confirm {
-  background: #FFEE07;
-  color: #333;
+  background: #333333;
+  color: white;
+  border-radius: 25rpx;
+  padding: 25rpx 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  transition: all 0.3s ease;
+  width: 40%;
+}
+
+.btn.confirm::before {
+  content: '✓';
+  display: inline-block;
+  width: 32rpx;
+  height: 32rpx;
+  background: #FFD700;
+  border-radius: 50%;
+  color: white;
+  font-size: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .btn.confirm:active {

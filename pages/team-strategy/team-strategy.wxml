@@ -1,7 +1,7 @@
 <view class="trip-detail-container">
   <!-- 顶部退出按钮 -->
-  <view class="back-button" bindtap="goBack">
-    <text class="back-icon">←</text>
+  <view class="back-btn" bindtap="goBack">
+    <text class="back-arrow">‹</text>
   </view>
 
   <!-- 主要内容区域 -->
@@ -18,10 +18,13 @@
         polyline="{{mapPolyline}}"
         show-location="true"
         bindmarkertap="onMarkerTap"
-        bindregionchange="onRegionChange">
+        bindregionchange="onRegionChange"
+        bindload="onMapLoad">
       </map>
     </view>
-
+  </view>
+  
+  <view class="trip-content-container">
     <!-- 行程标题区域 - 移动到地图下面 -->
     <view class="trip-header">
       <view class="trip-title">
@@ -42,7 +45,7 @@
       </view>
     </view>
 
-    <!-- 行程内容区域 - 占屏幕2/3 -->
+    <!-- 行程内容区域 - 占剩余空间 -->
     <view class="trip-content">
       <!-- 左侧日期列表 -->
       <view class="date-list">
@@ -52,12 +55,18 @@
                 wx:key="day"
                 bindtap="selectDay"
                 data-day="{{item.day}}">
-            <view class="date-icon">
+            <!-- 顶部行：日历图标 + 日期数字 + 天气图标 -->
+            <view class="date-top-row">
+              <image class="calendar-icon" src="/images/calendar.png" mode="aspectFit"></image>
               <text class="day-number">{{item.day}}</text>
               <text class="weather-icon">{{item.weather}}</text>
             </view>
-            <view class="date-info">
+            <!-- 中间行：日期文本 -->
+            <view class="date-middle-row">
               <text class="date-text">{{item.date}}</text>
+            </view>
+            <!-- 底部行：路线文本 -->
+            <view class="date-bottom-row">
               <text class="route-text">{{item.route}}</text>
             </view>
           </view>
@@ -66,98 +75,85 @@
 
       <!-- 右侧行程详情 -->
       <scroll-view class="trip-details" scroll-y="true">
-        <view class="day-header">
-          <text class="day-title">第{{selectedDay}}天 | {{currentDayInfo.route}}</text>
-        </view>
+        <!-- 行程信息容器 -->
+        <view class="trip-info-container">
+          <view class="day-header">
+            <text class="day-title">第{{selectedDay}}天 | {{currentDayInfo.route}}</text>
+          </view>
 
-        <!-- 航班信息 -->
-        <view class="detail-section" wx:if="{{currentDayInfo.flight}}">
-          <view class="section-header">
-            <text class="section-title">航班信息</text>
-          </view>
-          <view class="section-content">
-            <text class="flight-info">{{currentDayInfo.flight}}</text>
-          </view>
-        </view>
-
-        <!-- 住宿建议 -->
-        <view class="detail-section">
-          <view class="section-header">
-            <text class="section-title">住宿建议</text>
-            <text class="expand-icon" bindtap="toggleAccommodation">▼</text>
-          </view>
-          <view class="section-content">
-            <text class="accommodation-info">{{currentDayInfo.accommodation}}</text>
-          </view>
-        </view>
-
-        <!-- 美食推荐 -->
-        <view class="detail-section" wx:for="{{currentDayInfo.food}}" wx:key="index">
-          <view class="section-header">
-            <view class="category-icon food-icon">🍽️</view>
-            <text class="category-label">美食</text>
-          </view>
-          <view class="section-content">
-            <view class="item-card">
-              <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
-              <view class="item-info">
-                <text class="item-name">{{item.name}}</text>
-                <text class="item-price">人均: ¥{{item.price}}</text>
-                <view class="item-distance" bindtap="navigateToLocation" data-location="{{item.location}}">
-                  <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟</text>
-                  <text class="navigate-arrow">></text>
-                </view>
-              </view>
-              <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
-                <text class="menu-icon">☰</text>
+          <!-- 航班信息 -->
+          <view class="detail-section" wx:if="{{currentDayInfo.flight}}">
+            <view class="section-header">
+              <text class="section-title">航班信息</text>
+              <view class="section-content">
+                <text class="flight-info">{{currentDayInfo.flight}}</text>
               </view>
             </view>
           </view>
-        </view>
 
-        <!-- 景点推荐 -->
-        <view class="detail-section" wx:for="{{currentDayInfo.attractions}}" wx:key="index">
-          <view class="section-header">
-            <view class="category-icon attraction-icon">🏔️</view>
-            <text class="category-label">景点</text>
-          </view>
-          <view class="section-content">
-            <view class="item-card">
-              <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
-              <view class="item-info">
-                <text class="item-number">{{index + 1}}.{{item.name}}</text>
-                <text class="item-desc">{{item.description}}</text>
-                <view class="item-distance" bindtap="navigateToLocation" data-location="{{item.location}}">
-                  <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟</text>
-                  <text class="navigate-arrow">></text>
-                </view>
-              </view>
-              <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
-                <text class="menu-icon">☰</text>
+          <!-- 住宿建议 -->
+          <view class="detail-section">
+            <view class="section-header">
+              <text class="section-title">住宿建议</text>
+              <view class="section-content">
+                <text class="accommodation-info">{{currentDayInfo.accommodation}}</text>
               </view>
             </view>
           </view>
-        </view>
+     
 
-        <!-- 住宿推荐 -->
-        <view class="detail-section" wx:for="{{currentDayInfo.hotels}}" wx:key="index">
-          <view class="section-header">
-            <view class="category-icon hotel-icon">🛏️</view>
-            <text class="category-label">住宿推荐</text>
-          </view>
-          <view class="section-content">
-            <view class="item-card">
-              <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
-              <view class="item-info">
-                <text class="item-name">{{item.name}}</text>
-                <text class="item-price">{{item.nights}}晚:¥{{item.price}}</text>
-              </view>
-              <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
-                <text class="menu-icon">☰</text>
-              </view>
-            </view>
-          </view>
-        </view>
+                 <!-- 动态渲染所有行程项目 -->
+         <view class="detail-section" wx:for="{{currentDayInfo.items}}" wx:key="index">
+           <view class="item-card">
+             <!-- 上半部分：主内容区 -->
+             <view class="item-main-content">
+               <!-- 左侧图片 -->
+               <view class="item-image-container">
+                 <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+               </view>
+
+               <!-- 中间文本信息 -->
+               <view class="item-info">
+                 <!-- 顶部：分类标题 -->
+                 <view class="category-header">
+                   <view class="category-icon {{item.type}}-icon" wx:if="{{item.type === 'food'}}">🍽️</view>
+                   <view class="category-icon {{item.type}}-icon" wx:elif="{{item.type === 'attraction'}}">🏔️</view>
+                   <view class="category-icon {{item.type}}-icon" wx:elif="{{item.type === 'hotel'}}">🛏️</view>
+                   <view class="category-icon {{item.type}}-icon" wx:elif="{{item.type === 'checkin'}}">📸</view>
+                   <view class="category-icon {{item.type}}-icon" wx:else>📍</view>
+                 </view>
+                 <text class="category-label" wx:if="{{item.type === 'food'}}">美食</text>
+                 <text class="category-label" wx:elif="{{item.type === 'attraction'}}">景点</text>
+                 <text class="category-label" wx:elif="{{item.type === 'hotel'}}">住宿推荐</text>
+                 <text class="category-label" wx:elif="{{item.type === 'checkin'}}">打卡点</text>
+                 <text class="category-label" wx:else>{{item.title}}</text>
+               </view>
+           
+               <!-- 中间：名称 -->
+               <text class="item-name" wx:if="{{item.type === 'food' || item.type === 'hotel'}}">{{item.name}}</text>
+               <text class="item-number" wx:elif="{{item.type === 'attraction'}}">{{index + 1}}.{{item.name}}</text>
+               <text class="item-name" wx:else>{{item.title}}</text>
+               
+               <!-- 底部：描述信息 -->
+               <text class="item-price" wx:if="{{item.type === 'food'}}">人均: ¥{{item.price}}</text>
+               <text class="item-price" wx:elif="{{item.type === 'hotel'}}">{{item.nights}}晚:¥{{item.price}}</text>
+               <text class="item-desc" wx:elif="{{item.type === 'attraction'}}">{{item.description}}</text>
+               <text class="item-desc" wx:elif="{{item.type === 'checkin'}}">{{item.content}}</text>
+             </view>
+
+             <!-- 右上角菜单按钮 -->
+             <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
+               <text class="menu-icon">☰</text>
+             </view>
+           </view>
+
+           <!-- 下半部分：底部信息区 -->
+           <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
+             <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
+             <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
+           </view>
+         </view>
+       </view>
       </scroll-view>
     </view>
   </view>

@@ -348,41 +348,43 @@ Page({
   loadDayInfo(day) {
     console.log('加载第', day, '天的行程信息');
     
-    // 这里可以根据日期从服务器或本地存储加载对应的行程信息
-    // 暂时使用模拟数据
-    const dayInfo = {
-      route: `第${day}天路线`,
-      flight: day === 1 ? '机场 巴黎 - 戴高乐机场' : null,
-      accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-      food: [
-        {
-          name: '花神咖啡馆',
-          price: '100',
-          distance: '3.2',
-          time: '15',
-          location: 'Café de Flore, Paris',
-          image: '/images/cafe.jpg'
-        }
-      ],
-      attractions: [
-        {
-          name: '塞纳河',
-          description: '夜游塞纳河拍照打卡',
-          distance: '1.2',
-          time: '5',
-          location: 'Seine River, Paris',
-          image: '/images/seine.jpg'
-        }
-      ],
-      hotels: [
-        {
-          name: 'Prais万豪(第7',
-          nights: '1',
-          price: '1028',
-          image: '/images/hotel.jpg'
-        }
-      ]
-    };
+         // 这里可以根据日期从服务器或本地存储加载对应的行程信息
+     // 暂时使用模拟数据
+     const dayInfo = {
+       route: `第${day}天路线`,
+       flight: day === 1 ? '机场 巴黎 - 戴高乐机场' : null,
+       accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
+       items: [
+         {
+           type: 'food',
+           name: '花神咖啡馆',
+           price: '100',
+           distance: '3.2',
+           time: '15',
+           location: 'Café de Flore, Paris',
+           image: '/images/cafe.jpg'
+         },
+         {
+           type: 'attraction',
+           name: '塞纳河',
+           description: '夜游塞纳河拍照打卡',
+           distance: '1.2',
+           time: '5',
+           location: 'Seine River, Paris',
+           image: '/images/seine.jpg'
+         },
+         {
+           type: 'hotel',
+           name: 'Prais万豪(第7区)',
+           nights: '1',
+           price: '1028',
+           image: '/images/hotel.jpg',
+           distance: '2.1',
+           time: '8',
+           location: 'Marriott Hotel, Paris'
+         }
+       ]
+     };
     
     this.setData({
       currentDayInfo: dayInfo

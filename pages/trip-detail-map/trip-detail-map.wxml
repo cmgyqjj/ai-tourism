@@ -103,116 +103,49 @@
           
            </view>
          </view>
- <!-- 美食推荐 -->
- <view class="detail-section" wx:for="{{currentDayInfo.food}}" wx:key="index">
-   <view class="item-card">
-     <!-- 上半部分：主内容区 -->
-     <view class="item-main-content">
-       <!-- 左侧图片 -->
-       <view class="item-image-container">
-         <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
-       </view>
-
-       <!-- 中间文本信息 -->
-       <view class="item-info">
-         <!-- 顶部：分类标题 -->
-         <view class="category-header">
-           <view class="category-icon food-icon">🍽️</view>
-           <text class="category-label">美食</text>
-         </view>
-         <!-- 中间：店名 -->
-         <text class="item-name">{{item.name}}</text>
-         <!-- 底部：价格信息 -->
-         <text class="item-price">人均: ¥{{item.price}}</text>
-       </view>
-
-       <!-- 右上角菜单按钮 -->
-       <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
-         <text class="menu-icon">☰</text>
-       </view>
-     </view>
-
-     <!-- 下半部分：底部信息区 -->
-     <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
-       <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
-       <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
-     </view>
-   </view>
- </view>
-
-                                                                                                                                               <!-- 景点推荐 -->
-            <view class="detail-section" wx:for="{{currentDayInfo.attractions}}" wx:key="index">
-              <view class="item-card">
-                <!-- 上半部分：主内容区 -->
-                <view class="item-main-content">
-                  <!-- 左侧图片 -->
-                  <view class="item-image-container">
-                    <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
-                  </view>
-
-                  <!-- 中间文本信息 -->
-                  <view class="item-info">
-                    <!-- 顶部：分类标题 -->
-                    <view class="category-header">
-                      <view class="category-icon attraction-icon">🏔️</view>
-                      <text class="category-label">景点</text>
-                    </view>
-                    <!-- 中间：景点名称 -->
-                    <text class="item-number">{{index + 1}}.{{item.name}}</text>
-                    <!-- 底部：景点描述 -->
-                    <text class="item-desc">{{item.description}}</text>
-                  </view>
-
-                  <!-- 右上角菜单按钮 -->
-                  <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
-                    <text class="menu-icon">☰</text>
-                  </view>
+          <!-- 动态渲染所有items -->
+          <view class="detail-section" wx:for="{{currentDayInfo.items}}" wx:key="index">
+            <view class="item-card">
+              <!-- 上半部分：主内容区 -->
+              <view class="item-main-content">
+                <!-- 左侧图片 -->
+                <view class="item-image-container">
+                  <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
                 </view>
 
-                <!-- 下半部分：底部信息区 -->
-                <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
-                  <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
-                  <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
+                <!-- 中间文本信息 -->
+                <view class="item-info">
+                  <!-- 顶部：分类标题 -->
+                  <view class="category-header">
+                    <view class="category-icon {{item.type}}-icon">{{item.icon}}</view>
+                    <text class="category-label">{{item.category}}</text>
+                  </view>
+                  
+                  <!-- 动态显示内容 -->
+                  <text class="item-name" wx:if="{{item.type === 'food' || item.type === 'hotel'}}">{{item.name}}</text>
+                  <text class="item-number" wx:elif="{{item.type === 'attraction'}}">{{index + 1}}.{{item.name}}</text>
+                  <text class="item-name" wx:else>{{item.name}}</text>
+                  
+                  <!-- 动态显示价格/描述 -->
+                  <text class="item-price" wx:if="{{item.type === 'food'}}">人均: ¥{{item.price}}</text>
+                  <text class="item-price" wx:elif="{{item.type === 'hotel'}}">{{item.nights}}晚:¥{{item.price}}</text>
+                  <text class="item-desc" wx:elif="{{item.type === 'attraction'}}">{{item.description}}</text>
+                  <text class="item-desc" wx:else>{{item.description}}</text>
+                </view>
+
+                <!-- 右上角菜单按钮 -->
+                <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
+                  <text class="menu-icon">☰</text>
                 </view>
               </view>
-            </view>
 
-                                                                                                                                               <!-- 住宿推荐 -->
-            <view class="detail-section" wx:for="{{currentDayInfo.hotels}}" wx:key="index">
-              <view class="item-card">
-                <!-- 上半部分：主内容区 -->
-                <view class="item-main-content">
-                  <!-- 左侧图片 -->
-                  <view class="item-image-container">
-                    <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
-                  </view>
-
-                  <!-- 中间文本信息 -->
-                  <view class="item-info">
-                    <!-- 顶部：分类标题 -->
-                    <view class="category-header">
-                      <view class="category-icon hotel-icon">🛏️</view>
-                      <text class="category-label">住宿推荐</text>
-                    </view>
-                    <!-- 中间：酒店名称 -->
-                    <text class="item-name">{{item.name}}</text>
-                    <!-- 底部：价格信息 -->
-                    <text class="item-price">{{item.nights}}晚:¥{{item.price}}</text>
-                  </view>
-
-                  <!-- 右上角菜单按钮 -->
-                  <view class="item-menu" bindtap="showItemMenu" data-index="{{index}}">
-                    <text class="menu-icon">☰</text>
-                  </view>
-                </view>
-
-                <!-- 下半部分：底部信息区 -->
-                <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
-                  <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
-                  <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
-                </view>
+              <!-- 下半部分：底部信息区 -->
+              <view class="item-bottom-info" bindtap="navigateToLocation" data-location="{{item.location}}">
+                <image class="car-icon" src="/images/car.png" mode="aspectFit"></image>
+                <text class="distance-text">{{item.distance}}公里·{{item.time}}分钟<text class="navigate-arrow">></text></text>
               </view>
             </view>
+          </view>
       </scroll-view>
     </view>
   </view>
