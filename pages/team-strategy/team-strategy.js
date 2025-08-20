@@ -2,9 +2,15 @@ Page({
   data: {
     selectedDay: 1,
     sidebarOpen: false, // 侧边栏开关状态
+    showShareModal: false, // 分享弹窗状态
+    shareStats: {
+      wechatCount: 0,    // 微信分享次数
+      timelineCount: 0,  // 朋友圈分享次数
+      copyCount: 0       // 复制链接次数
+    },
     
-    // 行程标题和时长
-    tripTitle: '法意12日游',
+    // 行程标题和时长 - 改成团队版
+    tripTitle: '团队版: 法意瑞12日游',
     tripDuration: '12天11晚',
     
     // 地图相关数据
@@ -16,7 +22,7 @@ Page({
     mapMarkers: [],
     mapPolyline: [],
     
-    // 参与者信息
+    // 参与者信息 - 团队版
     participants: [
       { 
         avatar: '/images/avatar1.png',
@@ -51,61 +57,218 @@ Page({
       {
         day: 2,
         date: '05月06日',
-        route: '北京 > 巴黎',
+        route: '巴黎',
         weather: '🌧️'
       },
       {
         day: 3,
         date: '05月07日',
-        route: '北京 > 巴黎',
+        route: '巴黎',
         weather: '☁️'
       },
       {
         day: 4,
         date: '05月08日',
-        route: '北京 > 巴黎',
+        route: '巴黎 > 米兰',
+        weather: '☀️'
+      },
+      {
+        day: 5,
+        date: '05月09日',
+        route: '米兰',
+        weather: '☀️'
+      },
+      {
+        day: 6,
+        date: '05月10日',
+        route: '米兰 > 罗马',
+        weather: '☀️'
+      },
+      {
+        day: 7,
+        date: '05月11日',
+        route: '罗马',
+        weather: '☀️'
+      },
+      {
+        day: 8,
+        date: '05月12日',
+        route: '罗马',
+        weather: '☀️'
+      },
+      {
+        day: 9,
+        date: '05月13日',
+        route: '罗马 > 佛罗伦萨',
+        weather: '☀️'
+      },
+      {
+        day: 10,
+        date: '05月14日',
+        route: '佛罗伦萨',
+        weather: '☀️'
+      },
+      {
+        day: 11,
+        date: '05月15日',
+        route: '佛罗伦萨 > 威尼斯',
+        weather: '☀️'
+      },
+      {
+        day: 12,
+        date: '05月16日',
+        route: '威尼斯 > 北京',
         weather: '☀️'
       }
     ],
     
-    // 当前选中日期的行程信息
+    // All day info data structure
+    allDayInfo: [
+      {
+        day: 1,
+        route: '北京—巴黎',
+        flight: '机场 巴黎 - 戴高乐机场',
+        accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
+        items: [
+          {
+            type: 'food',
+            icon: '🍽️',
+            category: '美食',
+            name: '花神咖啡馆',
+            price: '100',
+            description: '正宗法式咖啡和甜点',
+            image: '/images/cafe.png',
+            location: 'Café de Flore, Paris',
+            distance: '3.2',
+            time: '15'
+          },
+          {
+            type: 'attraction',
+            icon: '🏔️',
+            category: '景点',
+            name: '塞纳河',
+            description: '夜游塞纳河拍照打卡',
+            image: '/images/seine.jpg',
+            location: 'Seine River, Paris',
+            distance: '1.2',
+            time: '5'
+          },
+          {
+            type: 'hotel',
+            icon: '🏨',
+            category: '住宿',
+            name: 'Prais万豪(第7区)',
+            nights: '1',
+            price: '1028',
+            description: '豪华酒店，位置优越',
+            image: '/images/hotel.jpg',
+            location: 'Marriott Hotel, Paris',
+            distance: '2.1',
+            time: '8'
+          }
+        ]
+      },
+      {
+        day: 2,
+        route: '巴黎',
+        flight: null,
+        accommodation: '住宿建议 巴黎市中心 (1,2区)',
+        items: [
+          {
+            type: 'attraction',
+            icon: '🏔️',
+            category: '景点',
+            name: '埃菲尔铁塔',
+            description: '巴黎标志性建筑，必打卡',
+            image: '/images/eiffel.jpg',
+            location: 'Eiffel Tower, Paris',
+            distance: '0.8',
+            time: '3'
+          },
+          {
+            type: 'food',
+            icon: '🍽️',
+            category: '美食',
+            name: '米其林餐厅',
+            price: '200',
+            description: '精致法式料理',
+            image: '/images/restaurant.jpg',
+            location: 'Michelin Restaurant, Paris',
+            distance: '1.5',
+            time: '10'
+          }
+        ]
+      },
+      {
+        day: 3,
+        route: '巴黎',
+        flight: null,
+        accommodation: '住宿建议 巴黎市中心 (1,2区)',
+        items: [
+          {
+            type: 'attraction',
+            icon: '🏔️',
+            category: '景点',
+            name: '卢浮宫',
+            description: '世界著名艺术博物馆',
+            image: '/images/louvre.jpg',
+            location: 'Louvre Museum, Paris',
+            distance: '1.0',
+            time: '4'
+          }
+        ]
+      }
+    ],
+    
+    // Current selected day's trip info
     currentDayInfo: {
+      day: 1,
       route: '北京—巴黎',
       flight: '机场 巴黎 - 戴高乐机场',
       accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-      food: [
+      items: [
         {
+          type: 'food',
+          icon: '🍽️',
+          category: '美食',
           name: '花神咖啡馆',
           price: '100',
-          distance: '3.2',
-          time: '15',
+          description: '正宗法式咖啡和甜点',
+          image: '/images/cafe.png',
           location: 'Café de Flore, Paris',
-          image: '/images/cafe.jpg'
-        }
-      ],
-      attractions: [
+          distance: '3.2',
+          time: '15'
+        },
         {
+          type: 'attraction',
+          icon: '🏔️',
+          category: '景点',
           name: '塞纳河',
           description: '夜游塞纳河拍照打卡',
-          distance: '1.2',
-          time: '5',
+          image: '/images/seine.jpg',
           location: 'Seine River, Paris',
-          image: '/images/seine.jpg'
-        }
-      ],
-      hotels: [
+          distance: '1.2',
+          time: '5'
+        },
         {
-          name: 'Prais万豪(第7',
+          type: 'hotel',
+          icon: '🏨',
+          category: '住宿',
+          name: 'Prais万豪(第7区)',
           nights: '1',
           price: '1028',
-          image: '/images/hotel.jpg'
+          description: '豪华酒店，位置优越',
+          image: '/images/hotel.jpg',
+          location: 'Marriott Hotel, Paris',
+          distance: '2.1',
+          time: '8'
         }
       ]
     }
   },
 
   onLoad(options) {
-    console.log('团队战略页面加载完成', options);
+    console.log('团队攻略页面加载完成', options);
     
     // 如果有传入的行程数据，则使用传入的数据
     if (options.tripData) {
@@ -116,6 +279,7 @@ Page({
         // 更新行程天数数据
         this.setData({
           tripDays: tripData.days || this.data.tripDays,
+          allDayInfo: tripData.allDayInfo || this.data.allDayInfo, // Added this line
           currentDayInfo: tripData.dayInfo || this.data.currentDayInfo
         });
         
@@ -166,8 +330,8 @@ Page({
       }
     }
     
-    // 生成标题：目的地 + X日游
-    const tripTitle = `${destination}${days}日游`;
+    // 生成标题：团队版 + 目的地 + X日游
+    const tripTitle = `团队版: ${destination}${days}日游`;
     
     // 生成长度：X天X晚
     const tripDuration = `${days}天${nights}晚`;
@@ -203,7 +367,7 @@ Page({
     // 添加搭子
     for (let i = 1; i < totalCount; i++) {
       participants.push({
-        avatar: `/images/avatar${i}.png`,
+        avatar: `/images/avatar${i + 1}.png`,
         isCurrentUser: false,
         name: `搭子${i}`
       });
@@ -213,64 +377,23 @@ Page({
       participants
     });
     
-    console.log('更新参与者数据:', participants);
+    console.log('更新后的参与者:', participants);
   },
 
   /**
    * 初始化地图数据
    */
   initMapData() {
-    // 生成示例地图标记点
-    const markers = [
-      {
-        id: 1,
-        longitude: 116.397128,
-        latitude: 39.916527,
-        title: '起点',
-        iconPath: '/images/marker-start.png',
-        width: 32,
-        height: 32
-      },
-      {
-        id: 2,
-        longitude: 116.407128,
-        latitude: 39.926527,
-        title: '景点1',
-        iconPath: '/images/marker-attraction.png',
-        width: 32,
-        height: 32
-      },
-      {
-        id: 3,
-        longitude: 116.417128,
-        latitude: 39.936527,
-        title: '景点2',
-        iconPath: '/images/marker-attraction.png',
-        width: 32,
-        height: 32
-      }
-    ];
+    // 这里可以根据行程数据初始化地图标记和路线
+    console.log('初始化地图数据');
     
-    // 生成路线连线
-    const polyline = [
-      {
-        points: [
-          { longitude: 116.397128, latitude: 39.916527 },
-          { longitude: 116.407128, latitude: 39.926527 },
-          { longitude: 116.417128, latitude: 39.936527 }
-        ],
-        color: '#FF6B6B',
-        width: 4,
-        arrowLine: true
-      }
-    ];
-    
+    // 示例：设置地图中心点为巴黎
     this.setData({
-      mapMarkers: markers,
-      mapPolyline: polyline
+      mapCenter: {
+        longitude: 2.3522,
+        latitude: 48.8566
+      }
     });
-    
-    console.log('地图数据初始化完成');
   },
 
   /**
@@ -279,40 +402,6 @@ Page({
   goBack() {
     wx.navigateBack({
       delta: 1
-    });
-  },
-
-  /**
-   * 地图标记点击事件
-   */
-  onMarkerTap(e) {
-    const markerId = e.detail.markerId;
-    console.log('点击了地图标记:', markerId);
-    
-    // 这里可以根据标记ID显示对应的景点信息
-    wx.showToast({
-      title: `点击了标记${markerId}`,
-      icon: 'none'
-    });
-  },
-
-  /**
-   * 地图区域变化事件
-   */
-  onRegionChange(e) {
-    if (e.type === 'end') {
-      console.log('地图区域变化:', e.detail);
-    }
-  },
-
-  /**
-   * 分享行程
-   */
-  shareTrip() {
-    console.log('分享行程');
-    wx.showToast({
-      title: '分享功能开发中',
-      icon: 'none'
     });
   },
 
@@ -338,7 +427,7 @@ Page({
       selectedDay: day
     });
     
-    // 这里可以根据选择的日期加载对应的行程信息
+    // 加载对应日期的行程信息
     this.loadDayInfo(day);
   },
 
@@ -348,47 +437,19 @@ Page({
   loadDayInfo(day) {
     console.log('加载第', day, '天的行程信息');
     
-         // 这里可以根据日期从服务器或本地存储加载对应的行程信息
-     // 暂时使用模拟数据
-     const dayInfo = {
-       route: `第${day}天路线`,
-       flight: day === 1 ? '机场 巴黎 - 戴高乐机场' : null,
-       accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-       items: [
-         {
-           type: 'food',
-           name: '花神咖啡馆',
-           price: '100',
-           distance: '3.2',
-           time: '15',
-           location: 'Café de Flore, Paris',
-           image: '/images/cafe.jpg'
-         },
-         {
-           type: 'attraction',
-           name: '塞纳河',
-           description: '夜游塞纳河拍照打卡',
-           distance: '1.2',
-           time: '5',
-           location: 'Seine River, Paris',
-           image: '/images/seine.jpg'
-         },
-         {
-           type: 'hotel',
-           name: 'Prais万豪(第7区)',
-           nights: '1',
-           price: '1028',
-           image: '/images/hotel.jpg',
-           distance: '2.1',
-           time: '8',
-           location: 'Marriott Hotel, Paris'
-         }
-       ]
-     };
+    // Directly get the trip info for the selected day from allDayInfo
+    const dayInfo = this.data.allDayInfo.find(item => item.day === day);
     
+    if (!dayInfo) {
+      console.error('未找到第', day, '天的行程信息');
+      return;
+    }
+    // Update the current selected day's trip info
     this.setData({
       currentDayInfo: dayInfo
     });
+    
+    console.log('更新后的currentDayInfo:', dayInfo);
   },
 
   /**
@@ -403,20 +464,6 @@ Page({
   },
 
   /**
-   * 导航到指定位置
-   */
-  navigateToLocation(e) {
-    const location = e.currentTarget.dataset.location;
-    console.log('导航到位置:', location);
-    
-    // 这里可以调用地图导航功能
-    wx.showToast({
-      title: '导航功能开发中',
-      icon: 'none'
-    });
-  },
-
-  /**
    * 显示项目菜单
    */
   showItemMenu(e) {
@@ -424,15 +471,15 @@ Page({
     console.log('显示项目菜单:', index);
     
     wx.showActionSheet({
-      itemList: ['编辑', '删除', '分享'],
+      itemList: ['查看详情', '添加到收藏', '分享'],
       success: (res) => {
-        console.log('选择了操作:', res.tapIndex);
+        console.log('选择的操作:', res.tapIndex);
         switch (res.tapIndex) {
           case 0:
-            this.editItem(index);
+            this.viewItemDetail(index);
             break;
           case 1:
-            this.deleteItem(index);
+            this.addToFavorites(index);
             break;
           case 2:
             this.shareItem(index);
@@ -443,32 +490,28 @@ Page({
   },
 
   /**
-   * 编辑项目
+   * 查看项目详情
    */
-  editItem(index) {
-    console.log('编辑项目:', index);
+  viewItemDetail(index) {
+    const item = this.data.currentDayInfo.items[index];
+    console.log('查看项目详情:', item);
+    
     wx.showToast({
-      title: '编辑功能开发中',
+      title: '详情功能开发中',
       icon: 'none'
     });
   },
 
   /**
-   * 删除项目
+   * 添加到收藏
    */
-  deleteItem(index) {
-    console.log('删除项目:', index);
-    wx.showModal({
-      title: '确认删除',
-      content: '确定要删除这个项目吗？',
-      success: (res) => {
-        if (res.confirm) {
-          wx.showToast({
-            title: '删除成功',
-            icon: 'success'
-          });
-        }
-      }
+  addToFavorites(index) {
+    const item = this.data.currentDayInfo.items[index];
+    console.log('添加到收藏:', item);
+    
+    wx.showToast({
+      title: '已添加到收藏',
+      icon: 'success'
     });
   },
 
@@ -476,9 +519,24 @@ Page({
    * 分享项目
    */
   shareItem(index) {
-    console.log('分享项目:', index);
+    const item = this.data.currentDayInfo.items[index];
+    console.log('分享项目:', item);
+    
     wx.showToast({
       title: '分享功能开发中',
+      icon: 'none'
+    });
+  },
+
+  /**
+   * 导航到位置
+   */
+  navigateToLocation(e) {
+    const location = e.currentTarget.dataset.location;
+    console.log('导航到位置:', location);
+    
+    wx.showToast({
+      title: '导航功能开发中',
       icon: 'none'
     });
   },
@@ -490,126 +548,197 @@ Page({
     this.setData({
       sidebarOpen: !this.data.sidebarOpen
     });
-    console.log('侧边栏状态:', this.data.sidebarOpen);
   },
 
   /**
    * 路线优化
    */
   onRouteOptimization() {
-    console.log('点击路线优化');
+    console.log('路线优化');
     wx.showToast({
-      title: '正在跳转路线优化...',
-      icon: 'loading',
-      duration: 1500
+      title: '路线优化功能开发中',
+      icon: 'none'
     });
-    
-    setTimeout(() => {
-      this.toggleSidebar(); // 关闭侧边栏
-      // 跳转到路线优化页面
-      wx.navigateTo({
-        url: '/pages/route-optimization/route-optimization',
-        success: () => {
-          console.log('跳转路线优化页面成功');
-        },
-        fail: (error) => {
-          console.error('跳转路线优化页面失败:', error);
-          wx.showToast({
-            title: '页面跳转失败',
-            icon: 'none'
-          });
-        }
-      });
-    }, 1500);
   },
 
   /**
    * 攻略PK
    */
   onStrategyPK() {
-    console.log('点击攻略PK');
+    console.log('攻略PK');
     wx.showToast({
-      title: '正在跳转攻略PK...',
-      icon: 'loading',
-      duration: 1500
+      title: '攻略PK功能开发中',
+      icon: 'none'
     });
-    
-    setTimeout(() => {
-      this.toggleSidebar(); // 关闭侧边栏
-      // 跳转到攻略PK页面
-      wx.navigateTo({
-        url: '/pages/strategy-pk/strategy-pk',
-        success: () => {
-          console.log('跳转攻略PK页面成功');
-        },
-        fail: (error) => {
-          console.error('跳转攻略PK页面失败:', error);
-          wx.showToast({
-            title: '页面跳转失败',
-            icon: 'none'
-          });
-        }
-      });
-    }, 1500);
   },
 
   /**
    * 团队攻略
    */
   onTeamStrategy() {
-    console.log('点击团队攻略，跳转到个人战略页面');
+    console.log('团队攻略');
     wx.showToast({
-      title: '正在跳转个人战略...',
-      icon: 'loading',
-      duration: 1500
+      title: '团队攻略功能开发中',
+      icon: 'none'
     });
-    
-    setTimeout(() => {
-      this.toggleSidebar(); // 关闭侧边栏
-      // 跳转到个人战略页面
-      wx.navigateTo({
-        url: '/pages/trip-detail-map/trip-detail-map',
-        success: () => {
-          console.log('跳转个人战略页面成功');
-        },
-        fail: (error) => {
-          console.error('跳转个人战略页面失败:', error);
-          wx.showToast({
-            title: '页面跳转失败',
-            icon: 'none'
-          });
-        }
-      });
-    }, 1500);
   },
 
   /**
-   * 分享好友
+   * 分享给朋友
    */
   onShareFriends() {
-    console.log('点击分享好友');
-    wx.showToast({
-      title: '正在跳转分享好友...',
-      icon: 'loading',
-      duration: 1500
+    console.log('分享给朋友');
+    this.setData({
+      showShareModal: true
     });
+  },
+
+  /**
+   * 显示分享弹窗
+   */
+  showShareModal() {
+    this.setData({
+      showShareModal: true
+    });
+  },
+
+  /**
+   * 隐藏分享弹窗
+   */
+  hideShareModal() {
+    this.setData({
+      showShareModal: false
+    });
+  },
+
+  /**
+   * 阻止事件冒泡
+   */
+  stopPropagation() {
+    // 阻止事件冒泡
+  },
+
+  /**
+   * 分享到微信
+   */
+  shareToFriend() {
+    console.log('分享到微信');
+    this.updateShareStats('wechatCount');
+    wx.showToast({
+      title: '分享成功',
+      icon: 'success'
+    });
+    this.hideShareModal();
+  },
+
+  /**
+   * 分享到朋友圈
+   */
+  shareToTimeline() {
+    console.log('分享到朋友圈');
+    this.updateShareStats('timelineCount');
+    wx.showToast({
+      title: '分享成功',
+      icon: 'success'
+    });
+    this.hideShareModal();
+  },
+
+  /**
+   * 复制链接
+   */
+  copyLink() {
+    console.log('复制链接');
+    this.updateShareStats('copyCount');
     
-    setTimeout(() => {
-      this.toggleSidebar(); // 关闭侧边栏
-      // 跳转到分享好友页面
-      wx.navigateTo({
-        url: '/pages/share-friends/share-friends',
-        success: () => {
-          console.log('跳转分享好友页面成功');
-        },
-        fail: (error) => {
-          console.error('跳转分享好友页面失败:', error);
-          wx.showToast({
-            title: '页面跳转失败',
-            icon: 'none'
-          });
-        }
-      });
-    }, 1500);
+    // 生成分享链接
+    const shareUrl = `https://miniprogram.com/pages/team-strategy/team-strategy?tripId=${Date.now()}&shared=true&type=copy`;
+    
+    wx.setClipboardData({
+      data: shareUrl,
+      success: () => {
+        wx.showToast({
+          title: '链接已复制',
+          icon: 'success'
+        });
+        this.hideShareModal();
+      }
+    });
+  },
+
+  /**
+   * 更新分享统计
+   */
+  updateShareStats(type) {
+    const shareStats = { ...this.data.shareStats };
+    shareStats[type]++;
+    this.setData({
+      shareStats
+    });
+    console.log('分享统计更新:', shareStats);
+  },
+
+  /**
+   * 分享按钮点击
+   */
+  onShareButtonTap() {
+    this.showShareModal();
+  },
+
+  /**
+   * 地图标记点击
+   */
+  onMarkerTap(e) {
+    console.log('地图标记点击:', e.detail);
+  },
+
+  /**
+   * 地图区域变化
+   */
+  onRegionChange(e) {
+    if (e.type === 'end') {
+      console.log('地图区域变化:', e.detail);
+    }
+  },
+
+  /**
+   * 地图加载完成
+   */
+  onMapLoad(e) {
+    console.log('地图加载完成:', e.detail);
+  },
+
+  onShow() {
+    console.log('团队攻略页面显示');
+  },
+
+  onHide() {
+    console.log('团队攻略页面隐藏');
+  },
+
+  onUnload() {
+    console.log('团队攻略页面卸载');
+  },
+
+  /**
+   * 分享到微信
+   */
+  onShareAppMessage() {
+    return {
+      title: this.data.tripTitle,
+      path: '/pages/team-strategy/team-strategy',
+      imageUrl: '/images/share-cover.jpg'
+    };
+  },
+
+  /**
+   * 分享到朋友圈
+   */
+  onShareTimeline() {
+    return {
+      title: this.data.tripTitle,
+      path: '/pages/team-strategy/team-strategy',
+      imageUrl: '/images/share-cover.jpg'
+    };
   }
 });

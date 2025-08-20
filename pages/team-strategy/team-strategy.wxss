@@ -1,4 +1,4 @@
-/* trip-detail-map.wxss */
+/* team-strategy.wxss - 团队攻略页面样式 */
 .trip-detail-container {
   height: 100vh;
   display: flex;
@@ -379,6 +379,10 @@
   background: #9c27b0;
 }
 
+.checkin-icon {
+  background: #ff6b6b;
+}
+
 .category-label {
   font-size: 24rpx; /* 减少字体大小 */
   font-weight: 600;
@@ -564,6 +568,8 @@
 }
 
 /* 清理重复的样式，保留一个统一的版本 */
+
+/* 确保item-card有正确的间距 */
 
 
 /* 调整分类图标的颜色 */
@@ -1085,4 +1091,4 @@
   display: flex;
   justify-content: center;
   align-items: center;
-} 
+}
