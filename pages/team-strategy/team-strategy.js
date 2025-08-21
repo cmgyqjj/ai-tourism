@@ -137,7 +137,7 @@ Page({
             name: '花神咖啡馆',
             price: '100',
             description: '正宗法式咖啡和甜点',
-            image: '/images/cafe.png',
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
             location: 'Café de Flore, Paris',
             distance: '3.2',
             time: '15'

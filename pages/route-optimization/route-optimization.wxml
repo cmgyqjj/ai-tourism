@@ -40,7 +40,7 @@
   <view class="loading-state" wx:if="{{currentState === 'loading'}}">
     <view class="loading-container">
       <view class="loading-header">
-        <image class="ai-avatar" src="/images/route-optimization/ai.png" />
+        <image class="ai-avatar" src="https://p0.meituan.net/hackathonqjj/1f80a8749cf500a99c5d24805ab395aa16044.png" />
         <text class="loading-title">告诉ai你的优化需求吧~</text>
       </view>
       
@@ -56,7 +56,7 @@
   <view class="question-selection-state" wx:if="{{currentState === 'selecting'}}">
     <view class="question-container">
       <view class="question-header">
-        <image class="ai-avatar" src="/images/route-optimization/ai.png" />
+        <image class="ai-avatar" src="https://p0.meituan.net/hackathonqjj/1f80a8749cf500a99c5d24805ab395aa16044.png" />
         <text class="question-title">选择需要优化的问题：</text>
       </view>
       
@@ -88,7 +88,7 @@
       <view class="bottom-buttons">
         <!-- 换一批按钮 -->
         <button class="btn change-batch {{selectedCount > 0 ? 'has-selection' : ''}}" style="width: 145px;" bindtap="changeBatch">
-          <image class="refresh-icon" src="/images/btn.png" mode="aspectFit"></image>
+          <image class="refresh-icon" src="https://p0.meituan.net/hackathonqjj/ccd1ed86f0302ed992c7b59e961db80c1011.png" mode="aspectFit"></image>
           <text class="change-batch-text">都不是，换一批</text>
         </button>
       </view>

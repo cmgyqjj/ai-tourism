@@ -145,7 +145,7 @@
                       </view>
                       <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
                         <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
-                        <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                        <text class="vote-text {{item.voted ? 'voted-text' : 'not-voted-text'}}">{{item.voted ? '已投票' : '点此投票'}}</text>
                       </view>
                     </view>
                   </view>
@@ -313,7 +313,7 @@
                       </view>
                       <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
                         <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
-                        <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                        <text class="vote-text {{item.voted ? 'voted-text' : 'not-voted-text'}}">{{item.voted ? '已投票' : '点此投票'}}</text>
                       </view>
                     </view>
                   </view>
@@ -361,8 +361,8 @@
 
     <!-- AI融合页面 -->
     <view wx:if="{{currentTab === 2}}" class="ai-fusion-content">
-      <view class="fusion-plans-grid {{layoutClass}}">
-        <view class="fusion-plan-card" wx:for="{{existingPlans}}" wx:key="id">
+      <view class="ai-fusion-plans-grid four-plans">
+        <view class="ai-fusion-plan-card" wx:for="{{existingPlans}}" wx:key="id">
           <view class="plan-status">
             <view class="status-badge {{item.voted ? 'voted' : 'not-voted'}}">
               <text class="check-icon">✓</text>
@@ -383,7 +383,7 @@
               </view>
               <view class="vote-btn {{item.voted ? 'voted' : ''}}" bindtap="toggleVote" data-id="{{item.id}}">
                 <text class="vote-icon">{{item.voted ? '✓' : '👍'}}</text>
-                <text>{{item.voted ? '已投票' : '点此投票'}}</text>
+                <text class="vote-text {{item.voted ? 'voted-text' : 'not-voted-text'}}">{{item.voted ? '已投票' : '点此投票'}}</text>
               </view>
             </view>
           </view>
@@ -398,9 +398,18 @@
       <text>下载对比报告</text>
     </view>
     <view class="action-btn primary" bindtap="shareItinerary">
-      <image class="share-icon" src="/images/upload.png" mode="aspectFit"></image>
+      <image class="share-icon" src="https://p0.meituan.net/hackathonqjj/8572dd552d155204f3f0e157b20532f4698.png" mode="aspectFit"></image>
       <text>分享对比行程</text>
     </view>
+  </view>
+
+  <!-- AI融合按钮 - 固定在屏幕底部 -->
+  <view class="ai-fusion-actions-fixed" wx:if="{{currentTab === 2}}">
+    <!-- 呼唤队长解锁语音气泡 -->
+    <image class="captain-call-bubble" src="https://p0.meituan.net/hackathonqjj/20f4a5b781dcd7d81577d68ee48a47ca20888.png" mode="aspectFill"></image>
+    
+    <!-- AI融合图片按钮 -->
+    <image class="ai-fusion-image-btn" src="https://p0.meituan.net/hackathonqjj/516dfdc8dcfbbbc44d5b667aee88041e9472.png" mode="aspectFill" bindtap="generateFusionPlan"></image>
   </view>
 
   <!-- Canvas画布 - 用于生成对比图 -->
@@ -410,16 +419,4 @@
     style="width: 600px; height: 800px; position: fixed; top: -9999px; left: 0;"
   ></canvas>
 
-  <!-- AI融合按钮 -->
-  <view class="ai-fusion-actions" wx:if="{{currentTab === 2}}">
-    <!-- 呼唤队长解锁语音气泡 -->
-    <image class="captain-call-bubble" src="https://p0.meituan.net/hackathonqjj/20f4a5b781dcd7d81577d68ee48a47ca20888.png" mode="aspectFill"></image>
-    
-    <view class="ai-fusion-btn" bindtap="generateFusionPlan">
-      <image class="ai-fusion-bg" src="https://p0.meituan.net/hackathonqjj/516dfdc8dcfbbbc44d5b667aee88041e9472.png" mode="aspectFill"></image>
-      <view class="ai-fusion-content">
-      
-      </view>
-    </view>
-  </view>
 </view>

@@ -55,7 +55,7 @@
                    data-day="{{item.day}}">
                <!-- 顶部行：日历图标 + 日期数字 + 天气图标 -->
                <view class="date-top-row">
-                 <image class="calendar-icon" src="/images/calendar.png" mode="aspectFit"></image>
+                 <image class="calendar-icon" src="https://p0.meituan.net/hackathonqjj/866ab254da43a9b9188e3b7924cdc3c6438.png" mode="aspectFit"></image>
                  <text class="day-number">{{item.day}}</text>
                  <text class="weather-icon">{{item.weather}}</text>
                </view>
@@ -202,12 +202,6 @@
           </button>
         </view>
         
-        <view class="share-option" bindtap="copyLink">
-          <view class="share-icon-wrapper">
-            <image class="share-option-icon" src="https://p0.meituan.net/hackathonqjj/a351cb132c75aa8b5e3f2b0b71630445614.png" mode="aspectFit" />
-          </view>
-          <text class="share-option-text">复制链接</text>
-        </view>
       </view>
       
       <view class="share-modal-footer">

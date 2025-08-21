@@ -11,11 +11,8 @@
   background: white;
   border-radius: 16rpx 16rpx 0 0;
   box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.1);
-  margin: 0 32rpx;
-  margin-top: -16rpx;
   position: relative;
   z-index: 10;
-  padding: 24rpx;
   min-height: calc(100vh - 35vh);
   max-height: calc(100vh - 30vh); /* 限制最大高度确保滚动 */
 }
@@ -167,8 +164,8 @@
   overflow: hidden;
   position: relative;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
-  margin: 0 32rpx;
-  margin-bottom: 24rpx;
+  /* margin: 0 32rpx;
+  margin-bottom: 24rpx; */
 }
 
 .trip-map {

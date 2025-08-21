@@ -13,18 +13,33 @@ Component({
     canIUseGetUserProfile: wx.canIUse('getUserProfile'),
     canIUseNicknameComp: wx.canIUse('input.type.nickname'),
     showModal: false, // 控制悬浮框显示
+    
+    // 团队邀请弹窗相关
+    invite: {
+      open: false,
+      loading: false
+    },
+    teamInfo: null, // 团队详情数据
+    currentTeamId: '', // 当前邀请的团队ID
+    
+    // 满员提示弹窗
+    fullTeamModal: {
+      open: false
+    },
   },
   
   // 组件生命周期
   attached() {
     console.log('首页组件加载')
     this.initUserInfo()
+    this.checkTeamInvite()
   },
   
   pageLifetimes: {
     show() {
       console.log('首页页面显示')
       this.initUserInfo()
+      this.checkTeamInvite()
     }
   },
   methods: {
@@ -101,6 +116,81 @@ Component({
           this.setData({
             userInfo: res.userInfo,
             hasUserInfo: true
+          })
+        }
+      })
+    },
+    
+    // 检查团队邀请
+    checkTeamInvite() {
+      const pages = getCurrentPages()
+      const currentPage = pages[pages.length - 1]
+      const options = currentPage.options
+      
+      if (options && options.teamId) {
+        console.log('检测到团队邀请:', options.teamId)
+        this.setData({ currentTeamId: options.teamId })
+        
+        // 检查登录状态
+        const userId = wx.getStorageSync('userId')
+        if (!userId) {
+          // 未登录，跳转登录页并带redirect回传
+          const redirect = encodeURIComponent(`/pages/index/index?teamId=${options.teamId}`)
+          wx.navigateTo({
+            url: `/pages/login-placeholder/login-placeholder?redirect=${redirect}`
+          })
+          return
+        }
+        
+        // 已登录，拉取团队详情
+        this.fetchTeamDetail(options.teamId)
+      }
+    },
+    
+    // 拉取团队详情
+    fetchTeamDetail(teamId) {
+      wx.showLoading({ title: '加载中...' })
+      
+      // 调用团队详情接口
+      wx.request({
+        url: `https://meituan.mynatapp.cc/api/teams/detail?teamId=${teamId}`,
+        method: 'GET',
+        success: (res) => {
+          wx.hideLoading()
+          
+          if (res.data && res.data.code === 0) {
+            const teamData = res.data.data
+            
+            // 检查团队是否满员
+            if (teamData.memberCount >= teamData.maxMembers) {
+              // 显示满员提示弹窗
+              this.setData({
+                'fullTeamModal.open': true
+              })
+            } else {
+              // 显示正常邀请弹窗
+              this.setData({
+                teamInfo: teamData,
+                'invite.open': true
+              })
+            }
+            
+            console.log('团队详情获取成功:', teamData)
+          } else {
+            wx.showToast({
+              title: res.data?.msg || '获取团队信息失败',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        },
+        fail: (error) => {
+          wx.hideLoading()
+          console.error('获取团队详情失败:', error)
+          wx.showToast({
+            title: '网络错误，请重试',
+            icon: 'none',
+            duration: 2000
           })
         }
       })
@@ -374,6 +464,131 @@ Component({
         imageUrl: '/images/img.png',
         query: 'from=timeline'
       }
+    },
+    
+    // 团队邀请相关方法
+    // 接受邀请
+    acceptInvite() {
+      const { teamInfo, currentTeamId } = this.data
+      const userId = wx.getStorageSync('userId')
+      
+      if (!userId) {
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+      
+      // 设置loading状态
+      this.setData({ 'invite.loading': true })
+      
+      // 调用加入接口
+      wx.request({
+        url: `https://meituan.mynatapp.cc/api/teams/join?teamId=${currentTeamId}&userId=${userId}`,
+        method: 'POST',
+        success: (res) => {
+          this.setData({ 'invite.loading': false })
+          
+          if (res.data && res.data.code === 0) {
+            wx.showToast({
+              title: '加入成功！',
+              icon: 'success',
+              duration: 2000
+            })
+            
+            // 关闭弹窗
+            this.setData({ 'invite.open': false })
+            
+            // 延迟跳转到问答页面
+            setTimeout(() => {
+              this.navigateToQuestions()
+            }, 2000)
+          } else {
+            wx.showToast({
+              title: res.data?.msg || '加入失败',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        },
+        fail: (error) => {
+          this.setData({ 'invite.loading': false })
+          console.error('加入团队失败:', error)
+          wx.showToast({
+            title: '网络错误，请重试',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    },
+    
+    // 拒绝邀请
+    declineInvite() {
+      const { currentTeamId } = this.data
+      
+      // 可选：上报拒绝
+      const userId = wx.getStorageSync('userId')
+      if (userId) {
+        wx.request({
+          url: `https://meituan.mynatapp.cc/api/teams/decline?teamId=${currentTeamId}&userId=${userId}`,
+          method: 'POST',
+          success: (res) => {
+            console.log('拒绝邀请上报成功:', res.data)
+          },
+          fail: (error) => {
+            console.error('拒绝邀请上报失败:', error)
+          }
+        })
+      }
+      
+      // 关闭弹窗
+      this.closeInviteModal()
+    },
+    
+    // 关闭邀请弹窗
+    closeInviteModal() {
+      this.setData({ 'invite.open': false })
+    },
+    
+    // 关闭满员弹窗
+    closeFullTeamModal() {
+      this.setData({ 'fullTeamModal.open': false })
+    },
+    
+    // 点击背景关闭弹窗
+    onModalBackgroundTap() {
+      this.closeInviteModal()
+      this.closeFullTeamModal()
+    },
+    
+    // 阻止事件冒泡
+    stopPropagation() {
+      // 空函数，用于阻止事件冒泡
+    },
+    
+    // 跳转到问答页面
+    navigateToQuestions() {
+      const { teamInfo, currentTeamId } = this.data
+      
+      // 构建行程信息
+      const tripInfo = {
+        destination: teamInfo.place,
+        duration: teamInfo.duration,
+        companionCount: (teamInfo.maxMembers - 1).toString(),
+        currentUser: {
+          avatarUrl: wx.getStorageSync('userInfo')?.avatarUrl || '',
+          nickName: wx.getStorageSync('userInfo')?.nickName || '我'
+        },
+        teamId: currentTeamId
+      }
+      
+      // 跳转到第一个问题页面
+      wx.navigateTo({
+        url: `/pages/trip-questions-1/trip-questions-1?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
+      })
     },
   },
 })
