@@ -443,25 +443,55 @@
   border-top: 1rpx solid #f0f0f0;
 }
 
-.cancel-btn, .confirm-btn {
+.cancel-btn {
   flex: 1;
   height: 80rpx;
   border: none;
   border-radius: 0;
   font-size: 30rpx;
-}
-
-.cancel-btn {
   background-color: #f8f9fa;
   color: #666;
 }
 
-.confirm-btn {
-  background-color: #007aff;
-  color: #ffffff;
+.cancel-btn::after {
+  border: none;
 }
 
-.cancel-btn::after, .confirm-btn::after {
+.confirm-section {
+  padding: 20rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.btn.confirm-update {
+  background: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  width: 200rpx;
+  height: 80rpx;
+  border: none;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.check-icon {
+  width: 28rpx;
+  height: 28rpx;
+  background: #FFEE07;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 18rpx;
+  font-weight: bold;
+}
+
+.btn.confirm-update::after {
   border: none;
 }
 

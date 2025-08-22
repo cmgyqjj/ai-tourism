@@ -158,3 +158,132 @@
     <text class="close-icon">✕</text>
   </view>
 </view>
+
+<!-- 团队邀请弹窗 -->
+<cover-view class="invite-modal" wx:if="{{invite.open}}" bindtap="onModalBackgroundTap">
+  <cover-view class="invite-content" catchtap="stopPropagation">
+    <!-- 弹窗头部 -->
+    <cover-view class="invite-header">
+      <cover-view class="invite-title-container">
+        <text class="invite-title">🎯 团队邀请</text>
+        <text class="invite-subtitle">邀请你加入旅行团队</text>
+      </cover-view>
+      <cover-view class="close-btn" bindtap="declineInvite">
+        <text class="close-icon">✕</text>
+      </cover-view>
+    </cover-view>
+    
+    <!-- 行程信息卡片 -->
+    <cover-view class="trip-info-card">
+      <cover-view class="destination-row">
+        <cover-view class="destination-icon">🌍</cover-view>
+        <cover-view class="destination-info">
+          <text class="destination-text">{{teamInfo.place}}</text>
+          <text class="duration-text">{{teamInfo.duration}}</text>
+        </cover-view>
+      </cover-view>
+      <cover-view class="member-count-row">
+        <cover-view class="count-icon">👥</cover-view>
+        <text class="count-text">{{teamInfo.memberCount}}/{{teamInfo.maxMembers}}人</text>
+        <cover-view class="count-badge {{teamInfo.memberCount >= teamInfo.maxMembers ? 'full' : 'available'}}">
+          {{teamInfo.maxMembers - teamInfo.memberCount}}个名额
+        </cover-view>
+      </cover-view>
+    </cover-view>
+    
+    <!-- 团队成员展示 -->
+    <cover-view class="team-members-section">
+      <cover-view class="members-header">
+        <text class="members-title">团队成员</text>
+        <text class="members-count">({{teamInfo.memberCount}}人)</text>
+      </cover-view>
+      <cover-view class="avatars-container">
+        <cover-view 
+          wx:for="{{teamInfo.members}}" 
+          wx:key="id"
+          class="member-item"
+        >
+          <image 
+            class="member-avatar" 
+            src="{{item.avatarUrl}}" 
+            mode="aspectFill"
+          ></image>
+          <text class="member-name">{{item.nickName || '成员' + (index + 1)}}</text>
+          <cover-view wx:if="{{index === 0}}" class="creator-badge">团长</cover-view>
+        </cover-view>
+        
+        <!-- 空位显示 -->
+        <cover-view 
+          wx:for="{{teamInfo.maxMembers - teamInfo.memberCount}}" 
+          wx:key="*this"
+          class="member-item empty-slot"
+        >
+          <cover-view class="empty-avatar">
+            <text class="plus-icon">+</text>
+          </cover-view>
+          <text class="empty-text">待加入</text>
+        </cover-view>
+      </cover-view>
+    </cover-view>
+    
+    <!-- 状态提示 -->
+    <cover-view class="status-tips" wx:if="{{teamInfo.expired || teamInfo.full || teamInfo.alreadyIn}}">
+      <cover-view class="tip-icon">
+        <text wx:if="{{teamInfo.expired}}">⏰</text>
+        <text wx:if="{{teamInfo.full}}">🚫</text>
+        <text wx:if="{{teamInfo.alreadyIn}}">✅</text>
+      </cover-view>
+      <text class="tip-text" wx:if="{{teamInfo.expired}}">邀请已过期，无法加入</text>
+      <text class="tip-text" wx:if="{{teamInfo.full}}">团队已满员，无法加入</text>
+      <text class="tip-text" wx:if="{{teamInfo.alreadyIn}}">你已在团队中</text>
+    </cover-view>
+    
+    <!-- 操作按钮 -->
+    <cover-view class="invite-actions">
+      <button 
+        class="action-btn decline-btn" 
+        bindtap="declineInvite"
+        hover-class="btn-hover"
+      >
+        <text class="btn-icon">⏰</text>
+        <text class="btn-text">稍后再说</text>
+      </button>
+      <button 
+        class="action-btn accept-btn {{(teamInfo.expired || teamInfo.full || teamInfo.alreadyIn) ? 'disabled' : ''}}" 
+        bindtap="acceptInvite"
+        disabled="{{teamInfo.expired || teamInfo.full || teamInfo.alreadyIn}}"
+        hover-class="btn-hover"
+      >
+        <text class="btn-icon" wx:if="{{!invite.loading}}">🎯</text>
+        <text class="btn-text" wx:if="{{invite.loading}}">加入中...</text>
+        <text class="btn-text" wx:else>立即加入</text>
+      </button>
+    </cover-view>
+  </cover-view>
+</cover-view>
+
+<!-- 满员提示弹窗 -->
+<cover-view class="full-team-modal" wx:if="{{fullTeamModal.open}}" bindtap="onModalBackgroundTap">
+  <cover-view class="full-team-content" catchtap="stopPropagation">
+    <!-- 满员图标 -->
+    <cover-view class="full-team-icon">
+      <text class="full-team-emoji">😅</text>
+    </cover-view>
+    
+    <!-- 满员标题 -->
+    <cover-view class="full-team-title">
+      <text class="title-text">opps, 来晚了~</text>
+    </cover-view>
+    
+    <!-- 满员说明 -->
+    <cover-view class="full-team-description">
+      <text class="desc-text">本次成团人数已满,当前</text>
+      <text class="desc-text">人数已超上限!</text>
+    </cover-view>
+    
+    <!-- 关闭按钮 -->
+    <cover-view class="full-team-close" bindtap="closeFullTeamModal">
+      <text class="full-team-close-icon">✕</text>
+    </cover-view>
+  </cover-view>
+</cover-view>
