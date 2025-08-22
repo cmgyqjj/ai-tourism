@@ -263,8 +263,8 @@ Page({
     
     // 如果垂直移动距离大于水平移动距离，说明是垂直滑动
     if (deltaY > deltaX && deltaY > 10) {
-      // 阻止默认行为，允许自定义滚动
-      e.preventDefault()
+      // 注释掉preventDefault，避免影响输入框交互
+      // e.preventDefault()
     }
   },
 
@@ -827,6 +827,7 @@ Page({
 
   // 旅行搭子数量输入
   onCompanionInput(e) {
+    console.log('搭子数量输入事件触发:', e.detail.value)
     let companionCount = e.detail.value
     
     // 限制输入长度和类型
@@ -856,6 +857,18 @@ Page({
       companionCount,
       remainingCompanions
     })
+    
+    console.log('搭子数量已更新:', companionCount, '剩余搭子数:', remainingCompanions)
+  },
+
+  // 搭子数量输入框获得焦点
+  onCompanionFocus(e) {
+    console.log('搭子数量输入框获得焦点')
+  },
+
+  // 搭子数量输入框失去焦点
+  onCompanionBlur(e) {
+    console.log('搭子数量输入框失去焦点，当前值:', e.detail.value)
   },
 
   // 获取用户头像

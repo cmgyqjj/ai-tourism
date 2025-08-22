@@ -55,6 +55,8 @@
           placeholder="输入搭子数量 (最多3人)" 
           value="{{companionCount}}"
           bindinput="onCompanionInput"
+          bindfocus="onCompanionFocus"
+          bindblur="onCompanionBlur"
           maxlength="1"
           type="number"
         />
