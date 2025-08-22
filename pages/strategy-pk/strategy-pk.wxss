@@ -81,10 +81,12 @@
   .content-area {
     flex: 1;
     padding: 0 0 160rpx 0;
+    background-color: #fff;
   }
   
   .basic-info-content {
     padding: 10rpx;
+    background-color: #fff;
   }
   
   /* 通用section样式 */
@@ -307,7 +309,10 @@
     color: #999;
     background: none;
     border: none;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: #999;
+    text-underline-offset: 6rpx;
+    text-decoration-thickness: 2rpx;
   }
   
   .vote-btn:active {
@@ -666,157 +671,207 @@
   
   /* AI融合页面 */
   .ai-fusion-content {
-    padding: 8rpx 16rpx 120rpx;
+    padding: 24rpx 24rpx 40rpx;
     min-height: calc(100vh - 200rpx);
+    background-color: #f5f5f5;
   }
   
+  /* AI融合网格容器 - 独立样式 */
+  .ai-fusion-plans-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16rpx;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: stretch;
+    margin-bottom: 0;
+  }
   
-  .fusion-plan-card {
+  /* AI融合卡片基础样式 - 独立设计 */
+  .ai-fusion-plan-card {
     background-color: #fff;
-    border-radius: 16rpx;
+    border-radius: 12rpx;
     overflow: hidden;
-    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.08);
-    height: 400rpx;
+    box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+    height: 480rpx; /* 从380rpx增加到480rpx */
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: calc(50% - 8rpx);
     position: relative;
+    box-sizing: border-box;
   }
   
-  /* AI融合页面卡片内容样式 - 复用通用样式 */
-  .fusion-plan-card .plan-status {
+  /* AI融合卡片状态徽标 */
+  .ai-fusion-plan-card .plan-status {
     position: absolute;
-    top: 8rpx;
-    left: 8rpx;
-    padding: 0;
-    background-color: transparent;
-    transform: none;
+    top: 12rpx;
+    left: 12rpx;
+    z-index: 10;
   }
   
-  /* 缩小投票徽标尺寸，做成左上角小胶囊 */
-  .fusion-plan-card .plan-status .status-badge {
+  .ai-fusion-plan-card .status-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 4rpx 12rpx;
-    font-size: 20rpx; /* 再缩小一半视觉体量 */
-    border-radius: 24rpx;
-  }
-  .fusion-plan-card .plan-status .status-badge .check-icon {
-    font-size: 18rpx;
-    margin-right: 6rpx;
+    border-radius: 20rpx;
+    font-size: 20rpx;
+    min-width: 80rpx;
   }
   
-  .fusion-plan-card .plan-content {
+  .ai-fusion-plan-card .status-badge.not-voted {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .ai-fusion-plan-card .status-badge.voted {
+    background-color: #FFD700;
+    color: #333;
+  }
+  
+  .ai-fusion-plan-card .check-icon {
+    display: inline-block;
+    font-size: 16rpx;
+    margin-right: 6rpx;
+    width: 20rpx;
+    height: 20rpx;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  
+  .ai-fusion-plan-card .status-badge.voted .check-icon {
+    background-color: rgba(25, 4, 4, 0.27);
+  }
+  
+  /* AI融合卡片内容区域 */
+  .ai-fusion-plan-card .plan-content {
     flex: 1;
-    padding: 150rpx 20rpx 20rpx; /* 增加顶部间距，将文字内容下移 */
+    padding: 40rpx 20rpx 20rpx;
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
   
-  .fusion-plan-card .title-row {
+  .ai-fusion-plan-card .title-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16rpx;
-    margin-bottom: 8rpx; /* 调整标题与副标题的间距 */
+    gap: 12rpx;
+    margin-top: 240rpx;
+    margin-bottom: 8rpx;
   }
   
-  .fusion-plan-card .plan-icon {
-    width: 36rpx;
-    height: 36rpx;
+  .ai-fusion-plan-card .plan-icon {
+    width: 32rpx;
+    height: 32rpx;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
   
-  .fusion-plan-card .icon-text {
-    font-size: 28rpx;
+  .ai-fusion-plan-card .icon-text {
+    font-size: 26rpx;
     line-height: 1;
-    margin-top: 0;
   }
   
-  .fusion-plan-card .plan-title {
-    font-size: 30rpx;
+  .ai-fusion-plan-card .plan-title {
+    font-size: 28rpx;
     font-weight: 600;
     color: #333;
     line-height: 1.2;
   }
   
-  .fusion-plan-card .plan-subtitle {
-    font-size: 26rpx;
+  .ai-fusion-plan-card .plan-subtitle {
+    font-size: 24rpx;
     color: #666;
     margin-top: 4rpx;
-    margin-bottom: 20rpx; /* 调整与投票区域的间距 */
+    padding-top: 10rpx;
+    margin-bottom: 56rpx;
     line-height: 1.2;
+    text-align: left;
   }
   
-  .fusion-plan-card .vote-section {
+  /* AI融合投票区域 */
+  .ai-fusion-plan-card .vote-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 20rpx;
+    margin-top: 16rpx;
   }
   
-  .fusion-plan-card .avatar-badge {
+  .ai-fusion-plan-card .avatar-badge {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40rpx;
-    height: 40rpx;
+    width: 60rpx;
+    height: 60rpx;
     border-radius: 50%;
     overflow: hidden;
   }
   
-  .fusion-plan-card .avatar-img {
+  .ai-fusion-plan-card .avatar-img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
   }
   
-  .fusion-plan-card .vote-btn {
+  .ai-fusion-plan-card .vote-btn {
     display: flex;
     align-items: center;
-    padding: 6rpx 12rpx;
+    padding: 4rpx 8rpx;
     font-size: 22rpx;
     color: #007AFF;
     background: none;
     border: none;
     text-decoration: underline;
     text-decoration-color: #007AFF;
-    text-underline-offset: 6rpx;
-    text-decoration-thickness: 2rpx;
+    text-underline-offset: 4rpx;
+    text-decoration-thickness: 1rpx;
   }
   
-  .fusion-plan-card .vote-btn.voted {
+  .ai-fusion-plan-card .vote-btn.voted {
     color: #999;
     background: none;
     border: none;
     text-decoration: none;
   }
   
-  .fusion-plan-card .vote-icon {
+  .ai-fusion-plan-card .vote-icon {
     display: inline-block;
-    font-size: 20rpx;
-    margin-right: 6rpx;
+    font-size: 18rpx;
+    margin-right: 4rpx;
     color: #D2B48C;
   }
   
-  
-  
-  /* AI融合按钮 */
-  .ai-fusion-actions {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 24rpx 32rpx 24rpx 32rpx;
-    background-color: #fff;
-    border-top: 1rpx solid #f0f0f0;
-    padding-top: 40rpx;
+  /* AI融合投票区域头像 */
+  .ai-fusion-avatar {
+    width: 56rpx; /* 从48rpx增加到56rpx */
+    height: 56rpx; /* 从48rpx增加到56rpx */
+    border-radius: 50%;
+    border: 2rpx solid #fff;
+    box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+    overflow: hidden;
+    flex-shrink: 0;
   }
   
-  .ai-fusion-btn {
+  /* AI融合按钮区域 - 内联样式 */
+  .ai-fusion-actions-inline {
+    margin-top: 20rpx;
+    padding: 24rpx 8rpx 32rpx 8rpx;
+    background-color: #fff;
+    border-top: none;
+    position: sticky;
+    bottom: 0;
+  }
+  
+  .ai-fusion-actions-inline .ai-fusion-btn {
     width: 100%;
     height: 88rpx;
     border-radius: 44rpx;
@@ -831,7 +886,7 @@
     overflow: hidden;
   }
   
-  .ai-fusion-bg {
+  .ai-fusion-actions-inline .ai-fusion-bg {
     position: absolute;
     top: 0;
     left: 0;
@@ -840,7 +895,12 @@
     z-index: 1;
   }
   
-  .captain-call-bubble {
+  .ai-fusion-actions-inline .ai-fusion-btn-content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .ai-fusion-actions-inline .captain-call-bubble {
     width: 300rpx;
     height: 80rpx;
     margin: 0 0 0 auto;
@@ -848,140 +908,9 @@
     position: relative;
     z-index: 3;
     margin-bottom: -20rpx;
-       margin-left: 400rpx;
+    margin-left: 400rpx;
   }
   
-  .ai-fusion-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16rpx;
-    z-index: 2;
-    position: relative;
-  }
-  
-  .ai-logo {
-    width: 48rpx;
-    height: 48rpx;
-    background-color: #333;
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24rpx;
-    font-weight: bold;
-  }
-  
-  /* 动态布局支持 - 基本信息和差异点页面的横向滚动布局 */
-  .plans-wrapper.one-plan .plan-card { flex: 1; min-width: 320rpx; max-width: 400rpx; }
-  .plans-wrapper.two-plans .plan-card { flex: 1; min-width: 300rpx; max-width: 400rpx; }
-  .plans-wrapper.three-plans .plan-card { flex: 1; min-width: 260rpx; max-width: 350rpx; }
-  .plans-wrapper.four-plans .plan-card { flex: 1; min-width: 240rpx; max-width: 320rpx; }
-  .plans-wrapper.five-plus .plan-card { flex: 1; min-width: 220rpx; max-width: 300rpx; }
-  
-  
-  /* 响应式调整 */
-  @media (max-width: 375px) {
-    .plan-card {
-      width: 240rpx;
-    }
-    
-    .highlight-card {
-      width: 180rpx;
-    }
-    
-    .nav-title {
-      font-size: 32rpx;
-    }
-    
-    .tab-item {
-      font-size: 28rpx;
-    }
-    
-    .fusion-plans-grid { gap: 12rpx; padding: 12rpx; }
-    .fusion-plan-card { height: 320rpx; min-height: 300rpx; }
-    .fusion-plans-grid.three-plans .fusion-plan-card:nth-child(3),
-    .fusion-plans-grid.five-plus .fusion-plan-card:last-child:nth-child(odd) { max-width: 250rpx; }
-  }
-  
-  /* 确保滚动容器在移动端有更好的体验 */
-  .plans-container {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  /* Canvas画布样式 */
-  .comparison-canvas {
-    position: fixed;
-    top: -9999px;
-    left: 0;
-    width: 600px;
-    height: 800px;
-    background-color: #fff;
-  }
-  
-  /* AI融合页面的布局（使用flex实现，兼容性更好） */
-  .fusion-plans-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40rpx;
-    padding: 24rpx;
-    width: 100%;
-    box-sizing: border-box;
-    align-items: stretch;
-    margin-top: -600rpx;
-    row-gap: 40rpx;
-  }
-  
-  /* 默认两列 */
-  .fusion-plans-grid .fusion-plan-card {
-    box-sizing: border-box;
-    width: calc(50% - 20rpx);
-    margin-bottom: 8rpx;
-  }
-  
-  /* 1个方案：居中显示 */
-  .fusion-plans-grid.one-plan {
-    justify-content: center;
-  }
-  .fusion-plans-grid.one-plan .fusion-plan-card {
-    width: 80%;
-    max-width: 520rpx;
-  }
-  
-  /* 2个方案：左右并排 */
-  .fusion-plans-grid.two-plans .fusion-plan-card {
-    width: calc(50% - 12rpx);
-  }
-  
-  /* 3个方案：前两张并排，最后一张居中 */
-  .fusion-plans-grid.three-plans .fusion-plan-card {
-    width: calc(50% - 12rpx);
-  }
-  .fusion-plans-grid.three-plans .fusion-plan-card:nth-child(3) {
-    width: 60%;
-    max-width: 520rpx;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 16rpx;
-  }
-  
-  /* 4个方案：2x2 */
-  .fusion-plans-grid.four-plans .fusion-plan-card {
-    width: calc(50% - 12rpx);
-  }
-  
-  /* 5个及以上：保持两列，若为奇数最后一张居中 */
-  .fusion-plans-grid.five-plus .fusion-plan-card {
-    width: calc(50% - 12rpx);
-  }
-  .fusion-plans-grid.five-plus .fusion-plan-card:last-child:nth-child(odd) {
-    width: 60%;
-    max-width: 520rpx;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
   /* 核心差异对比样式 */
   .core-differences-section {
     margin-bottom: 40rpx;
@@ -1415,7 +1344,7 @@
 .unified-layout-container {
   display: flex;
   width: 100%;
-  background-color: transparent;
+  background-color: white;
   border-radius: 0;
   overflow: visible;
   margin-bottom: 24rpx;
@@ -1581,3 +1510,119 @@
 }
 
 /* 数据单元格组基础样式 */
+/* ===========================================
+   AI融合页面独立样式 - 不与其他页面共用
+   =========================================== */
+
+/* AI融合页面主容器 */
+.ai-fusion-content {
+  padding: 16rpx 24rpx 120rpx;
+  min-height: auto;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* AI融合按钮区域 - 内联样式 */
+.ai-fusion-actions-inline {
+  margin-top: 20rpx;
+  padding: 24rpx 8rpx 32rpx 8rpx;
+  background-color: #fff;
+  border-top: none;
+  position: sticky;
+  bottom: 0;
+}
+
+.ai-fusion-actions-inline .ai-fusion-btn {
+  width: 100%;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  gap: 16rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-fusion-actions-inline .ai-fusion-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.ai-fusion-actions-inline .captain-call-bubble {
+  width: 300rpx;
+  height: 80rpx;
+  margin: 0 0 0 auto;
+  display: block;
+  position: relative;
+  z-index: 3;
+  margin-bottom: -20rpx;
+  margin-left: 400rpx;
+}
+
+/* AI融合按钮区域 - 固定在屏幕底部 */
+.ai-fusion-actions-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 24rpx 32rpx 32rpx;
+  box-shadow: 0 -2rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* AI融合图片按钮 */
+.ai-fusion-image-btn {
+  width: 100%;
+  height: 88rpx;
+  border-radius: 44rpx;
+  cursor: pointer;
+}
+
+.ai-fusion-actions-fixed .captain-call-bubble {
+  position: absolute;
+  top: -20rpx;
+  right: 32rpx;
+  width: 240rpx;
+  height: 60rpx;
+  z-index: 1001;
+}
+
+/* AI融合卡片标题 */
+.ai-fusion-plan-card .plan-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+  text-align: left;
+}
+
+/* AI融合投票按钮文字下划线 */
+.vote-text {
+  text-decoration: underline !important;
+  text-underline-offset: 2rpx !important;
+  text-decoration-thickness: 1rpx !important;
+}
+
+/* 已投票状态 - 灰色下划线 */
+.voted-text {
+  text-decoration-color: #999 !important;
+}
+
+/* 未投票状态 - 蓝色下划线 */
+.not-voted-text {
+  text-decoration-color: #007AFF !important;
+}

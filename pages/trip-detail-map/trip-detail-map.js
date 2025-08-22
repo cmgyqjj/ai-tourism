@@ -25,7 +25,7 @@
         // 参与者信息
         participants: [
         { 
-            avatar: '/images/avatar1.png',
+            avatar: '/images/https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
             isCurrentUser: true,
             name: '当前用户'
         },
@@ -122,42 +122,435 @@
         }
         ],
         
-        // 当前选中日期的行程信息
+        // 所有天数的行程信息集合
+        allDayInfo: [
+            {
+                day: 1,
+                route: '北京—巴黎',
+                flight: '机场 巴黎 - 戴高乐机场',
+                accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
+                items: [
+                    {
+                        type: 'food',
+                        icon: '🍽️',
+                        category: '美食',
+                        name: '花神咖啡馆',
+                        price: '100',
+                        distance: '3.2',
+                        time: '15',
+                        location: 'Café de Flore, Paris',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    },
+                    {
+                        type: 'attraction',
+                        icon: '🏔️',
+                        category: '景点',
+                        name: '塞纳河',
+                        description: '夜游塞纳河拍照打卡',
+                        distance: '1.2',
+                        time: '5',
+                        location: 'Seine River, Paris',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'hotel',
+                        icon: '🛏️',
+                        category: '住宿推荐',
+                        name: 'Prais万豪(第7区)',
+                        nights: '1',
+                        price: '1028',
+                        image: '/images/cafe.png',
+                        distance: '2.1',
+                        time: '8',
+                        location: 'Marriott Hotel, Paris'
+                    }
+                ]
+            },
+            {
+                day: 2,
+                route: '巴黎',
+                flight: null,
+                accommodation: '住宿建议 巴黎市中心 (1,2区)',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '🗼',
+                        category: '景点',
+                        name: '埃菲尔铁塔',
+                        description: '巴黎地标建筑',
+                        distance: '2.5',
+                        time: '20',
+                        location: 'Eiffel Tower, Paris',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🥐',
+                        category: '美食',
+                        name: '法式面包店',
+                        price: '15',
+                        distance: '0.8',
+                        time: '5',
+                        location: 'French Bakery, Paris',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 3,
+                route: '巴黎',
+                flight: null,
+                accommodation: '住宿建议 巴黎市中心 (1,2区)',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '🏛️',
+                        category: '景点',
+                        name: '卢浮宫',
+                        description: '世界著名艺术博物馆',
+                        distance: '1.8',
+                        time: '25',
+                        location: 'Louvre Museum, Paris',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🍷',
+                        category: '美食',
+                        name: '法式餐厅',
+                        price: '180',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'French Restaurant, Paris',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'checkin',
+                        icon: '📸',
+                        category: '打卡点',
+                        name: '凯旋门',
+                        description: '巴黎标志性建筑，拿破仑时期建造',
+                        distance: '2.1',
+                        time: '18',
+                        location: 'Arc de Triomphe, Paris',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 4,
+                route: '巴黎—米兰',
+                flight: '机场 米兰 - 马尔彭萨机场',
+                accommodation: '住宿建议 米兰市中心 (1,2区)',
+                items: [
+                    {
+                        type: 'food',
+                        icon: '🍽️',
+                        category: '美食',
+                        name: '米兰大教堂餐厅',
+                        price: '150',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'Duomo Restaurant, Milan',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'attraction',
+                        icon: '🏔️',
+                        category: '景点',
+                        name: '米兰大教堂',
+                        description: '哥特式建筑杰作',
+                        distance: '0.3',
+                        time: '3',
+                        location: 'Duomo di Milano, Milan',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 5,
+                route: '米兰',
+                flight: null,
+                accommodation: '住宿建议 米兰市中心 (1,2区)',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '🎭',
+                        category: '景点',
+                        name: '斯卡拉歌剧院',
+                        description: '世界著名歌剧院',
+                        distance: '1.2',
+                        time: '15',
+                        location: 'La Scala, Milan',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🍕',
+                        category: '美食',
+                        name: '正宗意式披萨',
+                        price: '25',
+                        distance: '0.6',
+                        time: '10',
+                        location: 'Authentic Italian Pizza, Milan',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 6,
+                route: '米兰—罗马',
+                flight: '机场 罗马 - 菲乌米奇诺机场',
+                accommodation: '住宿建议 罗马古城区 (1,2区)',
+                items: [
+                    {
+                        type: 'food',
+                        icon: '🍽️',
+                        category: '美食',
+                        name: '罗马传统餐厅',
+                        price: '120',
+                        distance: '0.8',
+                        time: '12',
+                        location: 'Traditional Roman Restaurant',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'attraction',
+                        icon: '🏔️',
+                        category: '景点',
+                        name: '斗兽场',
+                        description: '古罗马竞技场遗址',
+                        distance: '1.5',
+                        time: '20',
+                        location: 'Colosseum, Rome',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 7,
+                route: '罗马',
+                flight: null,
+                accommodation: '住宿建议 罗马古城区 (1,2区)',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '⛪',
+                        category: '景点',
+                        name: '梵蒂冈博物馆',
+                        description: '天主教艺术宝库',
+                        distance: '2.0',
+                        time: '30',
+                        location: 'Vatican Museums, Vatican City',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🍝',
+                        category: '美食',
+                        name: '罗马意面',
+                        price: '18',
+                        distance: '0.4',
+                        time: '8',
+                        location: 'Roman Pasta Restaurant',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 8,
+                route: '罗马',
+                flight: null,
+                accommodation: '住宿建议 罗马古城区 (1,2区)',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '🏛️',
+                        category: '景点',
+                        name: '万神殿',
+                        description: '古罗马建筑奇迹',
+                        distance: '1.8',
+                        time: '15',
+                        location: 'Pantheon, Rome',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🍦',
+                        category: '美食',
+                        name: '意式冰淇淋',
+                        price: '8',
+                        distance: '0.3',
+                        time: '5',
+                        location: 'Italian Gelato Shop',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 9,
+                route: '罗马—佛罗伦萨',
+                flight: '机场 佛罗伦萨 - 佩雷托拉机场',
+                accommodation: '住宿建议 佛罗伦萨老城区',
+                items: [
+                    {
+                        type: 'food',
+                        icon: '🍽️',
+                        category: '美食',
+                        name: '托斯卡纳餐厅',
+                        price: '130',
+                        distance: '0.6',
+                        time: '10',
+                        location: 'Tuscany Restaurant, Florence',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'attraction',
+                        icon: '🏛️',
+                        category: '景点',
+                        name: '圣母百花大教堂',
+                        description: '文艺复兴建筑代表',
+                        distance: '0.4',
+                        time: '5',
+                        location: 'Cathedral of Santa Maria del Fiore',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 10,
+                route: '佛罗伦萨',
+                flight: null,
+                accommodation: '住宿建议 佛罗伦萨老城区',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '🎨',
+                        category: '景点',
+                        name: '乌菲兹美术馆',
+                        description: '文艺复兴艺术殿堂',
+                        distance: '0.8',
+                        time: '25',
+                        location: 'Uffizi Gallery, Florence',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🥩',
+                        category: '美食',
+                        name: '托斯卡纳牛排',
+                        price: '45',
+                        distance: '0.5',
+                        time: '12',
+                        location: 'Tuscany Steakhouse',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 11,
+                route: '佛罗伦萨—威尼斯',
+                flight: '机场 威尼斯 - 马可波罗机场',
+                accommodation: '住宿建议 威尼斯主岛',
+                items: [
+                    {
+                        type: 'food',
+                        icon: '🍽️',
+                        category: '美食',
+                        name: '威尼斯海鲜餐厅',
+                        price: '180',
+                        distance: '0.7',
+                        time: '15',
+                        location: 'Venetian Seafood Restaurant',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'attraction',
+                        icon: '🏛️',
+                        category: '景点',
+                        name: '圣马可广场',
+                        description: '威尼斯地标广场',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'Piazza San Marco, Venice',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            },
+            {
+                day: 12,
+                route: '威尼斯—北京',
+                flight: '机场 北京 - 首都国际机场',
+                accommodation: '返程',
+                items: [
+                    {
+                        type: 'attraction',
+                        icon: '🚣',
+                        category: '体验',
+                        name: '贡多拉游船',
+                        description: '威尼斯传统交通工具',
+                        distance: '0.2',
+                        time: '10',
+                        location: 'Gondola Ride, Venice',
+                        image: '/images/cafe.png'
+                    },
+                    {
+                        type: 'food',
+                        icon: '🍰',
+                        category: '美食',
+                        name: '威尼斯甜点',
+                        price: '12',
+                        distance: '0.3',
+                        time: '5',
+                        location: 'Venetian Pastry Shop',
+                        image: '/images/cafe.png'
+                    }
+                ]
+            }
+        ],
+
+        // 当前选中天数的行程信息
         currentDayInfo: {
-        route: '北京—巴黎',
-        flight: '机场 巴黎 - 戴高乐机场',
-        accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-        food: [
-            {
-            name: '花神咖啡馆',
-            price: '100',
-            distance: '3.2',
-            time: '15',
-            location: 'Café de Flore, Paris',
-            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-            }
-        ],
-        attractions: [
-            {
-            name: '塞纳河',
-            description: '夜游塞纳河拍照打卡',
-            distance: '1.2',
-            time: '5',
-            location: 'Seine River, Paris',
-            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-            }
-        ],
-        hotels: [
-            {
-            name: 'Prais万豪(第7区)',
-            nights: '1',
-            price: '1028',
-            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
-            distance: '2.1',
-            time: '8',
-            location: 'Marriott Hotel, Paris'
-            }
-        ]
+            day: 1,
+            route: '北京—巴黎',
+            flight: '机场 巴黎 - 戴高乐机场',
+            accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
+            items: [
+                {
+                    type: 'food',
+                    icon: '🍽️',
+                    category: '美食',
+                    name: '花神咖啡馆',
+                    price: '100',
+                    distance: '3.2',
+                    time: '15',
+                    location: 'Café de Flore, Paris',
+                    image: '/images/cafe.png'
+                },
+                {
+                    type: 'attraction',
+                    icon: '🏔️',
+                    category: '景点',
+                    name: '塞纳河',
+                    description: '夜游塞纳河拍照打卡',
+                    distance: '1.2',
+                    time: '5',
+                    location: 'Seine River, Paris',
+                    image: '/images/cafe.png'
+                },
+                {
+                    type: 'hotel',
+                    icon: '🛏️',
+                    category: '住宿推荐',
+                    name: 'Prais万豪(第7区)',
+                    nights: '1',
+                    price: '1028',
+                    image: '/images/cafe.png',
+                    distance: '2.1',
+                    time: '8',
+                    location: 'Marriott Hotel, Paris'
+                }
+            ]
         }
     },
 
@@ -172,8 +565,9 @@
             
             // 更新行程天数数据
             this.setData({
-            tripDays: tripData.days || this.data.tripDays,
-            currentDayInfo: tripData.dayInfo || this.data.currentDayInfo
+                tripDays: tripData.days || this.data.tripDays,
+                allDayInfo: tripData.allDayInfo || this.data.allDayInfo,
+                currentDayInfo: tripData.dayInfo || this.data.currentDayInfo
             });
             
             console.log('设置后的tripDays:', this.data.tripDays);
@@ -528,191 +922,19 @@
     loadDayInfo(day) {
         console.log('加载第', day, '天的行程信息');
         
-        // 根据天数获取对应的行程信息
-        const tripDay = this.data.tripDays.find(item => item.day === day);
-        if (!tripDay) {
+        // 直接从 allDayInfo 中获取对应天数的行程信息
+        const dayInfo = this.data.allDayInfo.find(item => item.day === day);
+
+        if (!dayInfo) {
             console.error('未找到第', day, '天的行程信息');
             return;
         }
-        
-        // 根据不同的天数显示不同的行程信息
-        let dayInfo = {
-            route: tripDay.route,
-            flight: null,
-            accommodation: '',
-            food: [],
-            attractions: [],
-            hotels: []
-        };
-        
-        // 根据天数设置不同的内容
-        switch (day) {
-            case 1: // 第一天：北京-巴黎
-                dayInfo.flight = '机场 巴黎 - 戴高乐机场';
-                dayInfo.accommodation = '住宿建议 巴黎景区附近 (1,7,9区)';
-                dayInfo.food = [
-                    {
-                        name: '花神咖啡馆',
-                        price: '100',
-                        distance: '3.2',
-                        time: '15',
-                        location: 'Café de Flore, Paris',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '塞纳河',
-                        description: '夜游塞纳河拍照打卡',
-                        distance: '1.2',
-                        time: '5',
-                        location: 'Seine River, Paris',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 4: // 第四天：巴黎-米兰
-                dayInfo.flight = '机场 米兰 - 马尔彭萨机场';
-                dayInfo.accommodation = '住宿建议 米兰市中心 (1,2区)';
-                dayInfo.food = [
-                    {
-                        name: '米兰大教堂餐厅',
-                        price: '150',
-                        distance: '0.5',
-                        time: '8',
-                        location: 'Duomo Restaurant, Milan',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '米兰大教堂',
-                        description: '哥特式建筑杰作',
-                        distance: '0.3',
-                        time: '3',
-                        location: 'Duomo di Milano, Milan',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 6: // 第六天：米兰-罗马
-                dayInfo.flight = '机场 罗马 - 菲乌米奇诺机场';
-                dayInfo.accommodation = '住宿建议 罗马古城区 (1,2区)';
-                dayInfo.food = [
-                    {
-                        name: '罗马传统餐厅',
-                        price: '120',
-                        distance: '0.8',
-                        time: '12',
-                        location: 'Traditional Roman Restaurant',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '斗兽场',
-                        description: '古罗马竞技场遗址',
-                        distance: '1.5',
-                        time: '20',
-                        location: 'Colosseum, Rome',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 9: // 第九天：罗马-佛罗伦萨
-                dayInfo.flight = '机场 佛罗伦萨 - 佩雷托拉机场';
-                dayInfo.accommodation = '住宿建议 佛罗伦萨老城区';
-                dayInfo.food = [
-                    {
-                        name: '托斯卡纳餐厅',
-                        price: '130',
-                        distance: '0.6',
-                        time: '10',
-                        location: 'Tuscany Restaurant, Florence',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '圣母百花大教堂',
-                        description: '文艺复兴建筑代表',
-                        distance: '0.4',
-                        time: '5',
-                        location: 'Cathedral of Santa Maria del Fiore',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 11: // 第十一天：佛罗伦萨-威尼斯
-                dayInfo.flight = '机场 威尼斯 - 马可波罗机场';
-                dayInfo.accommodation = '住宿建议 威尼斯主岛';
-                dayInfo.food = [
-                    {
-                        name: '威尼斯海鲜餐厅',
-                        price: '180',
-                        distance: '0.7',
-                        time: '15',
-                        location: 'Venetian Seafood Restaurant',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '圣马可广场',
-                        description: '威尼斯地标广场',
-                        distance: '0.5',
-                        time: '8',
-                        location: 'Piazza San Marco, Venice',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            default: // 其他天数：显示当地信息
-                dayInfo.accommodation = '住宿建议 当地景区附近';
-                dayInfo.food = [
-                    {
-                        name: '当地特色餐厅',
-                        price: '100-150',
-                        distance: '0.5-1.0',
-                        time: '10-15',
-                        location: 'Local Restaurant',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '当地景点',
-                        description: '探索当地特色文化',
-                        distance: '1.0',
-                        time: '15',
-                        location: 'Local Attraction',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-        }
-        
-        // 为所有天数添加酒店推荐
-        dayInfo.hotels = [
-            {
-                name: '当地精品酒店',
-                nights: '1',
-                price: '800-1500',
-                image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
-                distance: '1.5',
-                time: '12',
-                location: 'Local Boutique Hotel'
-            }
-        ];
-        
+        // 更新当前选中天数的行程信息
         this.setData({
             currentDayInfo: dayInfo
         });
+
+        console.log('更新后的currentDayInfo:', dayInfo);
     },
 
     /**

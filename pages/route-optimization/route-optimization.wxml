@@ -86,16 +86,16 @@
 
       <!-- 底部按钮区域 -->
       <view class="bottom-buttons">
-        <!-- 确认提交按钮 -->
-        <view wx:if="{{selectedCount > 0}}" class="confirm-btn-wrapper">
-          <button class="btn confirm" bindtap="confirmSelection">确认提交</button>
-        </view>
-        
         <!-- 换一批按钮 -->
         <button class="btn change-batch {{selectedCount > 0 ? 'has-selection' : ''}}" style="width: 145px;" bindtap="changeBatch">
           <image class="refresh-icon" src="https://p0.meituan.net/hackathonqjj/ccd1ed86f0302ed992c7b59e961db80c1011.png" mode="aspectFit"></image>
           <text class="change-batch-text">都不是，换一批</text>
         </button>
+      </view>
+      
+      <!-- 确认提交按钮 - 单独放在下面一行 -->
+      <view wx:if="{{selectedCount > 0}}" class="confirm-btn-wrapper">
+        <button class="btn confirm" bindtap="confirmSelection">确认提交</button>
       </view>
     </view>
   </view>

@@ -11,11 +11,8 @@
   background: white;
   border-radius: 16rpx 16rpx 0 0;
   box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.1);
-  margin: 0 32rpx;
-  margin-top: -16rpx;
   position: relative;
   z-index: 10;
-  padding: 24rpx;
   min-height: calc(100vh - 35vh);
   max-height: calc(100vh - 30vh); /* 限制最大高度确保滚动 */
 }
@@ -167,8 +164,8 @@
   overflow: hidden;
   position: relative;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
-  margin: 0 32rpx;
-  margin-bottom: 24rpx;
+  /* margin: 0 32rpx;
+  margin-bottom: 24rpx; */
 }
 
 .trip-map {
@@ -379,6 +376,10 @@
   background: #9c27b0;
 }
 
+.checkin-icon {
+  background: #ff6b6b;
+}
+
 .category-label {
   font-size: 24rpx; /* 减少字体大小 */
   font-weight: 600;
@@ -582,6 +583,73 @@
 .hotel-icon {
   background: #9c27b0;
   color: white;
+}
+
+/* 新增类型图标样式 */
+.flight-icon {
+  background: #2196f3;
+  color: white;
+}
+
+.accommodation-icon {
+  background: #ff5722;
+  color: white;
+}
+
+.checkpoint-icon {
+  background: #ff6b6b;
+  color: white;
+}
+
+.checkin-icon {
+  background: #ff6b6b;
+  color: white;
+}
+
+.shopping-icon {
+  background: #4ecdc4;
+  color: white;
+}
+
+.transport-icon {
+  background: #45b7d1;
+  color: white;
+}
+
+.entertainment-icon {
+  background: #96ceb4;
+  color: white;
+}
+
+/* 信息类型项目样式 */
+.info-section {
+  background: transparent;
+  border-bottom: 1rpx solid #f0f0f0;
+  padding-bottom: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.info-section .section-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.info-section .section-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.info-section .section-content {
+  padding-left: 44rpx;
+}
+
+.info-content {
+  font-size: 20rpx;
+  color: #666;
+  line-height: 1.4;
 }
 
 /* 优化底部信息区的样式 */
