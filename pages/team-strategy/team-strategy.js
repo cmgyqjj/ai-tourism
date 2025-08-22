@@ -25,22 +25,22 @@ Page({
     // 参与者信息 - 团队版
     participants: [
       { 
-        avatar: '/images/avatar1.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
         isCurrentUser: true,
         name: '当前用户'
       },
       { 
-        avatar: '/images/avatar2.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
         isCurrentUser: false,
         name: '搭子1'
       },
       { 
-        avatar: '/images/avatar3.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
         isCurrentUser: false,
         name: '搭子2'
       },
       { 
-        avatar: '/images/avatar4.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
         isCurrentUser: false,
         name: '搭子3'
       }

@@ -25,7 +25,7 @@
         // 参与者信息
         participants: [
         { 
-            avatar: '/images/avatar1.png',
+            avatar: '/images/https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
             isCurrentUser: true,
             name: '当前用户'
         },
@@ -139,7 +139,7 @@
                         distance: '3.2',
                         time: '15',
                         location: 'Café de Flore, Paris',
-                        image: '/images/cafe.png'
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
                     },
                     {
                         type: 'attraction',

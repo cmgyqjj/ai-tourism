@@ -14,7 +14,7 @@ Page({
         title: '高端舒适型',
         subtitle: '南方海滨度假',
         iconText: '💎',
-        avatar: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
+        avatar: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
         voted: true
       },
       {
@@ -623,33 +623,74 @@ Page({
       }, 500);
     });
   },
-
-  // 分享行程
-  shareItinerary: function() {
-    wx.showShareMenu({
-      withShareTicket: true,
-      menus: ['shareAppMessage', 'shareTimeline']
-    });
+  // 分享行程  // 分享行程
+//   shareItinerary: function() {
+//     console.log(' 分享按钮被点击了！');
     
-    wx.showToast({
-      title: '请选择分享方式',
-      icon: 'none',
-      duration: 1500
-    });
-  },
+//     // 显示分享提示
+//     wx.showToast({
+//       title: '分享功能已启用',
+//       icon: 'success',
+//       duration: 1500
+//     });
+    
+//     console.log('✅ 分享功能已启用');
+//   },
 
-  // 分享给朋友
+  // 微信分享接口 - 当用户点击分享按钮时自动调用
   onShareAppMessage: function() {
-    return {
-      title: '行程PK对比 - 找到最适合的旅行方案',
-      path: '/pages/strategy-pk/strategy-pk'
+    console.log('🎯 分享功能被调用了！');
+    
+    const { existingPlans, currentTab } = this.data;
+    
+    // 生成分享标题
+    let shareTitle = '行程PK对比报告';
+    if (existingPlans && existingPlans.length > 0) {
+      const planNames = existingPlans.map(plan => plan.title).join(' vs ');
+      shareTitle = `${planNames} - 行程PK对比`;
+    }
+    
+    // 生成分享描述
+    let shareDesc = 'AI智能行程对比，帮你选择最佳旅行方案';
+    if (existingPlans && existingPlans.length > 0) {
+      shareDesc = `${existingPlans.length}个行程方案详细对比，包含预算、体验、住宿等全方位分析`;
+    }
+    
+    // 生成分享路径
+    const sharePath = `/pages/strategy-pk/strategy-pk?shared=true&timestamp=${Date.now()}`;
+    
+    // 如果有行程数据，添加到分享路径
+    if (existingPlans && existingPlans.length > 0) {
+      const planIds = existingPlans.map(plan => plan.id).join(',');
+      sharePath += `&planIds=${planIds}`;
+    }
+    
+    const shareData = {
+      title: shareTitle,
+      desc: shareDesc,
+      path: sharePath,
+      imageUrl: '/images/avatar1.png' // 可以替换为实际的分享图片
     };
+    
+    console.log('📤 分享数据:', shareData);
+    
+    return shareData;
   },
 
   // 分享到朋友圈
   onShareTimeline: function() {
+    const { existingPlans } = this.data;
+    
+    let timelineTitle = '行程PK对比报告';
+    if (existingPlans && existingPlans.length > 0) {
+      const planNames = existingPlans.map(plan => plan.title).join(' vs ');
+      timelineTitle = `${planNames} - 行程PK对比`;
+    }
+    
     return {
-      title: '行程PK对比 - 找到最适合的旅行方案'
+      title: timelineTitle,
+      imageUrl: '/images/avatar1.png',
+      query: `shared=true&timestamp=${Date.now()}`
     };
   },
 
