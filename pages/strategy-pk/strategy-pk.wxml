@@ -416,7 +416,15 @@
   <canvas 
     canvas-id="comparisonCanvas" 
     class="comparison-canvas"
-    style="width: 600px; height: 800px; position: fixed; top: -9999px; left: 0;"
+    style="width: 900px; height: 1200px; position: fixed; top: -9999px; left: 0;"
+  ></canvas>
+
+  <!-- 原生 Canvas - 用于生成整页长图 -->
+  <canvas 
+    type="2d"
+    id="exportCanvas" 
+    class="export-canvas"
+    style="position: fixed; top: -9999px; left: 0; width: 750px; height: {{exportHeight || 1200}}px;"
   ></canvas>
 
 </view>

@@ -655,6 +655,12 @@
     color: #666;
     border: 1rpx solid #e0e0e0;
   }
+
+  .action-btn.export {
+    background-color: #4CAF50;
+    color: #fff;
+    border: 1rpx solid #4CAF50;
+  }
   
   .action-btn.primary {
     background-color: #333;

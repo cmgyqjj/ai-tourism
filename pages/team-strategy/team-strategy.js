@@ -236,9 +236,10 @@ Page({
           description: '正宗法式咖啡和甜点',
           image: '/images/cafe.png',
           location: 'Café de Flore, Paris',
-          distance: '3.2',
-          time: '15'
-        },
+          image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+        }
+      ],
+      attractions: [
         {
           type: 'attraction',
           icon: '🏔️',
@@ -437,8 +438,41 @@ Page({
   loadDayInfo(day) {
     console.log('加载第', day, '天的行程信息');
     
-    // Directly get the trip info for the selected day from allDayInfo
-    const dayInfo = this.data.allDayInfo.find(item => item.day === day);
+    // 这里可以根据日期从服务器或本地存储加载对应的行程信息
+    // 暂时使用模拟数据
+    const dayInfo = {
+      route: `第${day}天路线`,
+      flight: day === 1 ? '机场 巴黎 - 戴高乐机场' : null,
+      accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
+      food: [
+        {
+          name: '花神咖啡馆',
+          price: '100',
+          distance: '3.2',
+          time: '15',
+          location: 'Café de Flore, Paris',
+          image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+        }
+      ],
+      attractions: [
+        {
+          name: '塞纳河',
+          description: '夜游塞纳河拍照打卡',
+          distance: '1.2',
+          time: '5',
+          location: 'Seine River, Paris',
+          image: '/images/seine.jpg'
+        }
+      ],
+      hotels: [
+        {
+          name: 'Prais万豪(第7',
+          nights: '1',
+          price: '1028',
+          image: '/images/hotel.jpg'
+        }
+      ]
+    };
     
     if (!dayInfo) {
       console.error('未找到第', day, '天的行程信息');
@@ -551,24 +585,46 @@ Page({
   },
 
   /**
-   * 路线优化
+   * 路线优化 - 跳转到路线优化页面
    */
   onRouteOptimization() {
-    console.log('路线优化');
-    wx.showToast({
-      title: '路线优化功能开发中',
-      icon: 'none'
+    console.log('跳转到路线优化页面');
+    
+    // 跳转到路线优化页面
+    wx.navigateTo({
+      url: '/pages/route-optimization/route-optimization',
+      success: () => {
+        console.log('成功跳转到路线优化页面');
+      },
+      fail: (error) => {
+        console.error('跳转失败:', error);
+        wx.showToast({
+          title: '跳转失败，请重试',
+          icon: 'none'
+        });
+      }
     });
   },
 
   /**
-   * 攻略PK
+   * 攻略PK - 跳转到攻略PK页面
    */
   onStrategyPK() {
-    console.log('攻略PK');
-    wx.showToast({
-      title: '攻略PK功能开发中',
-      icon: 'none'
+    console.log('跳转到攻略PK页面');
+    
+    // 跳转到攻略PK页面
+    wx.navigateTo({
+      url: '/pages/strategy-pk/strategy-pk',
+      success: () => {
+        console.log('成功跳转到攻略PK页面');
+      },
+      fail: (error) => {
+        console.error('跳转失败:', error);
+        wx.showToast({
+          title: '跳转失败，请重试',
+          icon: 'none'
+        });
+      }
     });
   },
 

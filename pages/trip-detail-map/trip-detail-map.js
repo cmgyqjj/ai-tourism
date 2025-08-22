@@ -511,46 +511,40 @@
         
         // 当前选中天数的行程信息
         currentDayInfo: {
-            day: 1,
-            route: '北京—巴黎',
-            flight: '机场 巴黎 - 戴高乐机场',
-            accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-            items: [
-                {
-                    type: 'food',
-                    icon: '🍽️',
-                    category: '美食',
-                    name: '花神咖啡馆',
-                    price: '100',
-                    distance: '3.2',
-                    time: '15',
-                    location: 'Café de Flore, Paris',
-                    image: '/images/cafe.png'
-                },
-                {
-                    type: 'attraction',
-                    icon: '🏔️',
-                    category: '景点',
-                    name: '塞纳河',
-                    description: '夜游塞纳河拍照打卡',
-                    distance: '1.2',
-                    time: '5',
-                    location: 'Seine River, Paris',
-                    image: '/images/cafe.png'
-                },
-                {
-                    type: 'hotel',
-                    icon: '🛏️',
-                    category: '住宿推荐',
-                    name: 'Prais万豪(第7区)',
-                    nights: '1',
-                    price: '1028',
-                    image: '/images/cafe.png',
-                    distance: '2.1',
-                    time: '8',
-                    location: 'Marriott Hotel, Paris'
-                }
-            ]
+        route: '北京—巴黎',
+        flight: '机场 巴黎 - 戴高乐机场',
+        accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
+        food: [
+            {
+            name: '花神咖啡馆',
+            price: '100',
+            distance: '3.2',
+            time: '15',
+            location: 'Café de Flore, Paris',
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+            }
+        ],
+        attractions: [
+            {
+            name: '塞纳河',
+            description: '夜游塞纳河拍照打卡',
+            distance: '1.2',
+            time: '5',
+            location: 'Seine River, Paris',
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+            }
+        ],
+        hotels: [
+            {
+            name: 'Prais万豪(第7区)',
+            nights: '1',
+            price: '1028',
+            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
+            distance: '2.1',
+            time: '8',
+            location: 'Marriott Hotel, Paris'
+            }
+        ]
         }
     },
 
@@ -923,13 +917,188 @@
         console.log('加载第', day, '天的行程信息');
         
         // 直接从 allDayInfo 中获取对应天数的行程信息
-        const dayInfo = this.data.allDayInfo.find(item => item.day === day);
+        const existingDayInfo = this.data.allDayInfo.find(item => item.day === day);
         
-        if (!dayInfo) {
+        if (!existingDayInfo) {
             console.error('未找到第', day, '天的行程信息');
             return;
         }
-        // 更新当前选中天数的行程信息
+        
+        // 根据不同的天数显示不同的行程信息
+        let dayInfo = {
+            route: existingDayInfo.route || '',
+            flight: null,
+            accommodation: '',
+            food: [],
+            attractions: [],
+            hotels: []
+        };
+        
+        // 根据天数设置不同的内容
+        switch (day) {
+            case 1: // 第一天：北京-巴黎
+                dayInfo.flight = '机场 巴黎 - 戴高乐机场';
+                dayInfo.accommodation = '住宿建议 巴黎景区附近 (1,7,9区)';
+                dayInfo.food = [
+                    {
+                        name: '花神咖啡馆',
+                        price: '100',
+                        distance: '3.2',
+                        time: '15',
+                        location: 'Café de Flore, Paris',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '塞纳河',
+                        description: '夜游塞纳河拍照打卡',
+                        distance: '1.2',
+                        time: '5',
+                        location: 'Seine River, Paris',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                break;
+                
+            case 4: // 第四天：巴黎-米兰
+                dayInfo.flight = '机场 米兰 - 马尔彭萨机场';
+                dayInfo.accommodation = '住宿建议 米兰市中心 (1,2区)';
+                dayInfo.food = [
+                    {
+                        name: '米兰大教堂餐厅',
+                        price: '150',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'Duomo Restaurant, Milan',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '米兰大教堂',
+                        description: '哥特式建筑杰作',
+                        distance: '0.3',
+                        time: '3',
+                        location: 'Duomo di Milano, Milan',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                break;
+                
+            case 6: // 第六天：米兰-罗马
+                dayInfo.flight = '机场 罗马 - 菲乌米奇诺机场';
+                dayInfo.accommodation = '住宿建议 罗马古城区 (1,2区)';
+                dayInfo.food = [
+                    {
+                        name: '罗马传统餐厅',
+                        price: '120',
+                        distance: '0.8',
+                        time: '12',
+                        location: 'Traditional Roman Restaurant',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '斗兽场',
+                        description: '古罗马竞技场遗址',
+                        distance: '1.5',
+                        time: '20',
+                        location: 'Colosseum, Rome',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                break;
+                
+            case 9: // 第九天：罗马-佛罗伦萨
+                dayInfo.flight = '机场 佛罗伦萨 - 佩雷托拉机场';
+                dayInfo.accommodation = '住宿建议 佛罗伦萨老城区';
+                dayInfo.food = [
+                    {
+                        name: '托斯卡纳餐厅',
+                        price: '130',
+                        distance: '0.6',
+                        time: '10',
+                        location: 'Tuscany Restaurant, Florence',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '圣母百花大教堂',
+                        description: '文艺复兴建筑代表',
+                        distance: '0.4',
+                        time: '5',
+                        location: 'Cathedral of Santa Maria del Fiore',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                break;
+                
+            case 11: // 第十一天：佛罗伦萨-威尼斯
+                dayInfo.flight = '机场 威尼斯 - 马可波罗机场';
+                dayInfo.accommodation = '住宿建议 威尼斯主岛';
+                dayInfo.food = [
+                    {
+                        name: '威尼斯海鲜餐厅',
+                        price: '180',
+                        distance: '0.7',
+                        time: '15',
+                        location: 'Venetian Seafood Restaurant',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '圣马可广场',
+                        description: '威尼斯地标广场',
+                        distance: '0.5',
+                        time: '8',
+                        location: 'Piazza San Marco, Venice',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                break;
+                
+            default: // 其他天数：显示当地信息
+                dayInfo.accommodation = '住宿建议 当地景区附近';
+                dayInfo.food = [
+                    {
+                        name: '当地特色餐厅',
+                        price: '100-150',
+                        distance: '0.5-1.0',
+                        time: '10-15',
+                        location: 'Local Restaurant',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                dayInfo.attractions = [
+                    {
+                        name: '当地景点',
+                        description: '探索当地特色文化',
+                        distance: '1.0',
+                        time: '15',
+                        location: 'Local Attraction',
+                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+                    }
+                ];
+                break;
+        }
+        
+        // 为所有天数添加酒店推荐
+        dayInfo.hotels = [
+            {
+                name: '当地精品酒店',
+                nights: '1',
+                price: '800-1500',
+                image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
+                distance: '1.5',
+                time: '12',
+                location: 'Local Boutique Hotel'
+            }
+        ];
+        
         this.setData({
             currentDayInfo: dayInfo
         });
