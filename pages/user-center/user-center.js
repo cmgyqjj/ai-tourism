@@ -38,6 +38,13 @@ Page({
         title: '小8的买买买的日本行程',
         days: '7天',
         date: '2025-04-31出发'
+      },
+      {
+        id: 3,
+        image: 'https://ai-public.mastergo.com/ai/img_res/913b10a51bbbfe84586937327693871c.jpg',
+        title: '小8的买买买的日本行程',
+        days: '7天',
+        date: '2023-04-31出发'
       }
     ],
     

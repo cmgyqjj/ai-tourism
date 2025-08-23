@@ -375,7 +375,7 @@ Page({
    */
   getQuestionTitle(questionNumber) {
     const titles = {
-      1: '你和本次同行人的关系（可多选）',
+      1: '宝，你们想去哪里？',
       2: '你的旅行性格标签是? (可多选)',
       3: '本次以哪种交通方式为主? (多选)',
       3.5: '宝，你们想要什么主题的旅行？',
@@ -571,7 +571,7 @@ Page({
           distance: '3.2',
           time: '15',
           location: 'Café de Flore, Paris',
-          image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
+          image: '/images/cafe.jpg'
         }
       ],
       attractions: [
