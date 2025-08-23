@@ -4,9 +4,7 @@
         sidebarOpen: false, // 侧边栏开关状态
         showShareModal: false, // 分享弹窗状态
         shareStats: {
-            wechatCount: 0,    // 微信分享次数
-            timelineCount: 0,  // 朋友圈分享次数
-            copyCount: 0       // 复制链接次数
+            wechatCount: 0    // 微信分享次数
         },
         
         // 行程标题和时长
@@ -21,6 +19,14 @@
         mapScale: 12,
         mapMarkers: [],
         mapPolyline: [],
+        
+        // 当前选中天数的行程信息
+        currentDayInfo: {
+            route: '',
+            flight: null,
+            accommodation: '',
+            items: []
+        },
         
         // 参与者信息
         participants: [
@@ -511,40 +517,10 @@
         
         // 当前选中天数的行程信息
         currentDayInfo: {
-        route: '北京—巴黎',
-        flight: '机场 巴黎 - 戴高乐机场',
-        accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-        food: [
-            {
-            name: '花神咖啡馆',
-            price: '100',
-            distance: '3.2',
-            time: '15',
-            location: 'Café de Flore, Paris',
-            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-            }
-        ],
-        attractions: [
-            {
-            name: '塞纳河',
-            description: '夜游塞纳河拍照打卡',
-            distance: '1.2',
-            time: '5',
-            location: 'Seine River, Paris',
-            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-            }
-        ],
-        hotels: [
-            {
-            name: 'Prais万豪(第7区)',
-            nights: '1',
-            price: '1028',
-            image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
-            distance: '2.1',
-            time: '8',
-            location: 'Marriott Hotel, Paris'
-            }
-        ]
+            route: '',
+            flight: null,
+            accommodation: '',
+            items: []
         }
     },
 
@@ -653,90 +629,6 @@
     onShow() {
         console.log('页面显示事件触发');
         console.log('当前tripDays数据:', this.data.tripDays);
-        
-        // 强制重新设置数据，确保显示正确
-        const freshTripDays = [
-            {
-                day: 1,
-                date: '05月05日',
-                route: '北京 > 巴黎',
-                weather: '☀️'
-            },
-            {
-                day: 2,
-                date: '05月06日',
-                route: '巴黎',
-                weather: '🌧️'
-            },
-            {
-                day: 3,
-                date: '05月07日',
-                route: '巴黎',
-                weather: '☁️'
-            },
-            {
-                day: 4,
-                date: '05月08日',
-                route: '巴黎 > 米兰',
-                weather: '☀️'
-            },
-            {
-                day: 5,
-                date: '05月09日',
-                route: '米兰',
-                weather: '☀️'
-            },
-            {
-                day: 6,
-                date: '05月10日',
-                route: '米兰 > 罗马',
-                weather: '☀️'
-            },
-            {
-                day: 7,
-                date: '05月11日',
-                route: '罗马',
-                weather: '☀️'
-            },
-            {
-                day: 8,
-                date: '05月12日',
-                route: '罗马',
-                weather: '☀️'
-            },
-            {
-                day: 9,
-                date: '05月13日',
-                route: '罗马 > 佛罗伦萨',
-                weather: '☀️'
-            },
-            {
-                day: 10,
-                date: '05月14日',
-                route: '佛罗伦萨',
-                weather: '☀️'
-            },
-            {
-                day: 11,
-                date: '05月15日',
-                route: '佛罗伦萨 > 威尼斯',
-                weather: '☀️'
-            },
-            {
-                day: 12,
-                date: '05月16日',
-                route: '威尼斯 > 北京',
-                weather: '☀️'
-            }
-        ];
-        
-        this.setData({
-            tripDays: freshTripDays
-        });
-
-        
-        // 重新生成标题
-        this.generateTripTitle();
         
         // 重新加载当前选中天数的信息
         this.loadDayInfo(this.data.selectedDay);
@@ -924,180 +816,13 @@
             return;
         }
         
-        // 根据不同的天数显示不同的行程信息
-        let dayInfo = {
+        // 直接使用 allDayInfo 中的数据，因为它已经包含了正确的结构
+        const dayInfo = {
             route: existingDayInfo.route || '',
-            flight: null,
-            accommodation: '',
-            food: [],
-            attractions: [],
-            hotels: []
+            flight: existingDayInfo.flight || null,
+            accommodation: existingDayInfo.accommodation || '',
+            items: existingDayInfo.items || []
         };
-        
-        // 根据天数设置不同的内容
-        switch (day) {
-            case 1: // 第一天：北京-巴黎
-                dayInfo.flight = '机场 巴黎 - 戴高乐机场';
-                dayInfo.accommodation = '住宿建议 巴黎景区附近 (1,7,9区)';
-                dayInfo.food = [
-                    {
-                        name: '花神咖啡馆',
-                        price: '100',
-                        distance: '3.2',
-                        time: '15',
-                        location: 'Café de Flore, Paris',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '塞纳河',
-                        description: '夜游塞纳河拍照打卡',
-                        distance: '1.2',
-                        time: '5',
-                        location: 'Seine River, Paris',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 4: // 第四天：巴黎-米兰
-                dayInfo.flight = '机场 米兰 - 马尔彭萨机场';
-                dayInfo.accommodation = '住宿建议 米兰市中心 (1,2区)';
-                dayInfo.food = [
-                    {
-                        name: '米兰大教堂餐厅',
-                        price: '150',
-                        distance: '0.5',
-                        time: '8',
-                        location: 'Duomo Restaurant, Milan',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '米兰大教堂',
-                        description: '哥特式建筑杰作',
-                        distance: '0.3',
-                        time: '3',
-                        location: 'Duomo di Milano, Milan',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 6: // 第六天：米兰-罗马
-                dayInfo.flight = '机场 罗马 - 菲乌米奇诺机场';
-                dayInfo.accommodation = '住宿建议 罗马古城区 (1,2区)';
-                dayInfo.food = [
-                    {
-                        name: '罗马传统餐厅',
-                        price: '120',
-                        distance: '0.8',
-                        time: '12',
-                        location: 'Traditional Roman Restaurant',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '斗兽场',
-                        description: '古罗马竞技场遗址',
-                        distance: '1.5',
-                        time: '20',
-                        location: 'Colosseum, Rome',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 9: // 第九天：罗马-佛罗伦萨
-                dayInfo.flight = '机场 佛罗伦萨 - 佩雷托拉机场';
-                dayInfo.accommodation = '住宿建议 佛罗伦萨老城区';
-                dayInfo.food = [
-                    {
-                        name: '托斯卡纳餐厅',
-                        price: '130',
-                        distance: '0.6',
-                        time: '10',
-                        location: 'Tuscany Restaurant, Florence',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '圣母百花大教堂',
-                        description: '文艺复兴建筑代表',
-                        distance: '0.4',
-                        time: '5',
-                        location: 'Cathedral of Santa Maria del Fiore',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            case 11: // 第十一天：佛罗伦萨-威尼斯
-                dayInfo.flight = '机场 威尼斯 - 马可波罗机场';
-                dayInfo.accommodation = '住宿建议 威尼斯主岛';
-                dayInfo.food = [
-                    {
-                        name: '威尼斯海鲜餐厅',
-                        price: '180',
-                        distance: '0.7',
-                        time: '15',
-                        location: 'Venetian Seafood Restaurant',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '圣马可广场',
-                        description: '威尼斯地标广场',
-                        distance: '0.5',
-                        time: '8',
-                        location: 'Piazza San Marco, Venice',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-                
-            default: // 其他天数：显示当地信息
-                dayInfo.accommodation = '住宿建议 当地景区附近';
-                dayInfo.food = [
-                    {
-                        name: '当地特色餐厅',
-                        price: '100-150',
-                        distance: '0.5-1.0',
-                        time: '10-15',
-                        location: 'Local Restaurant',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                dayInfo.attractions = [
-                    {
-                        name: '当地景点',
-                        description: '探索当地特色文化',
-                        distance: '1.0',
-                        time: '15',
-                        location: 'Local Attraction',
-                        image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-                    }
-                ];
-                break;
-        }
-        
-        // 为所有天数添加酒店推荐
-        dayInfo.hotels = [
-            {
-                name: '当地精品酒店',
-                nights: '1',
-                price: '800-1500',
-                image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
-                distance: '1.5',
-                time: '12',
-                location: 'Local Boutique Hotel'
-            }
-        ];
         
         this.setData({
             currentDayInfo: dayInfo
@@ -1339,83 +1064,7 @@
         })
     },
 
-    // 分享到朋友圈
-    shareToTimeline() {
-        console.log('分享到朋友圈')
-        const { tripTitle, tripDuration } = this.data
-        
-        // 隐藏分享弹窗
-        this.hideShareModal()
 
-        // 启用朋友圈分享
-        wx.showShareMenu({
-            withShareTicket: true,
-            menus: ['shareTimeline'],
-            success: () => {
-                wx.showToast({
-                    title: '请点击右上角分享到朋友圈',
-                    icon: 'none',
-                    duration: 3000
-                })
-            },
-            fail: (err) => {
-                console.error('朋友圈分享失败', err)
-                wx.showToast({
-                    title: '朋友圈分享暂时不可用',
-                    icon: 'none'
-                })
-            }
-        })
-    },
-
-    // 复制链接
-    copyLink() {
-        console.log('复制链接')
-        const { tripTitle, tripDuration, tripDays, participants } = this.data
-        
-        // 隐藏分享弹窗
-        this.hideShareModal()
-
-        // 生成更丰富的分享内容
-        const shareUrl = `https://miniprogram.com/pages/trip-detail-map/trip-detail-map?tripId=${Date.now()}&shared=true&type=copy`
-        let shareText = `${tripTitle} - 详细行程攻略，包含地图路线和景点推荐`
-        
-        // 如果有队友，显示团队信息
-        if (participants && participants.length > 1) {
-            shareText = `【团队攻略】${tripTitle} - ${participants.length}人同行，${tripDays ? tripDays.length : 0}天行程`
-        }
-        
-        // 添加更多攻略信息
-        if (tripDays && tripDays.length > 0) {
-            shareText += `\n\n行程亮点：`
-            shareText += `\n• ${tripDays.length}天${tripDays.length - 1}晚精心规划`
-            shareText += `\n• 地图路线导航`
-            shareText += `\n• 景点推荐攻略`
-            shareText += `\n• 美食住宿建议`
-        }
-        
-        wx.setClipboardData({
-            data: `${shareText}\n\n查看详情：${shareUrl}`,
-            success: () => {
-                // 记录复制链接行为
-                this.recordShareAction('copy');
-                
-                wx.showModal({
-                    title: '链接已复制',
-                    content: '攻略链接已复制到剪贴板，你可以粘贴到其他应用分享给朋友',
-                    showCancel: false,
-                    confirmText: '知道了'
-                })
-            },
-            fail: (err) => {
-                console.error('复制失败', err)
-                wx.showToast({
-                    title: '复制失败，请重试',
-                    icon: 'none'
-                })
-            }
-        })
-    },
 
     // 阻止事件冒泡
     stopPropagation() {
@@ -1423,27 +1072,16 @@
     },
 
     // 记录分享行为
-    recordShareAction(shareType) {
+    recordShareAction() {
         const { tripTitle, tripDuration, tripDays, participants } = this.data;
         
-        // 更新分享统计
+        // 更新微信分享统计
         const shareStats = { ...this.data.shareStats };
-        switch (shareType) {
-            case 'wechat':
-                shareStats.wechatCount++;
-                break;
-            case 'timeline':
-                shareStats.timelineCount++;
-                break;
-            case 'copy':
-                shareStats.copyCount++;
-                break;
-        }
+        shareStats.wechatCount++;
         
         this.setData({ shareStats });
         
-        console.log('分享行为记录:', {
-            type: shareType,
+        console.log('微信分享记录:', {
             tripTitle,
             tripDuration,
             tripDays: tripDays ? tripDays.length : 0,
@@ -1453,11 +1091,10 @@
         });
         
         // 这里可以添加数据统计或上报逻辑
-        // 比如记录分享次数、分享类型等
     },
 
     // 处理分享后的回调
-    onShareSuccess(shareType) {
+    onShareSuccess() {
         wx.showToast({
             title: '分享成功！',
             icon: 'success',
@@ -1465,7 +1102,7 @@
         });
         
         // 记录分享成功
-        this.recordShareAction(shareType);
+        this.recordShareAction();
         
         // 隐藏分享弹窗
         this.hideShareModal();
@@ -1547,7 +1184,7 @@
         console.log('🎉 分享真正成功了！', res);
         
         // 记录分享成功
-        this.recordShareAction('wechat');
+        this.recordShareAction();
         
         // 显示成功提示
         wx.showToast({
@@ -1560,22 +1197,5 @@
         this.hideShareModal();
     },
 
-    // 分享到朋友圈 - 朋友圈分享接口
-    onShareTimeline() {
-        const { tripTitle, tripDuration, tripDays, participants } = this.data
-        
-        // 生成朋友圈分享标题
-        let timelineTitle = `${tripTitle} - ${tripDuration}详细攻略`
-        
-        // 如果有队友，显示团队信息
-        if (participants && participants.length > 1) {
-            timelineTitle = `【团队攻略】${tripTitle} - ${participants.length}人同行，${tripDays ? tripDays.length : 0}天行程`
-        }
-        
-        return {
-            title: timelineTitle,
-            imageUrl: '/images/avatar1.png',
-            query: `tripId=${Date.now()}&shared=true&type=timeline`
-        }
-    }
+
 });

@@ -5,8 +5,8 @@ Page({
     pageTitle: '',
     
     // 当前步骤
-    currentStep: 11,
-    totalSteps: 13,
+    currentStep: 9,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '在外每餐预算是?',
+      title: '在外每日餐预算是？（单选）',
       options: [
         { id: 1, text: '¥ 100以下', selected: false },
         { id: 2, text: '¥ 100-200', selected: false },

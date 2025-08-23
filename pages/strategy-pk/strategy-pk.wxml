@@ -395,8 +395,9 @@
   <!-- 底部按钮 -->
   <view class="bottom-actions" wx:if="{{currentTab !== 2}}">
     <view class="action-btn secondary" bindtap="downloadReport">
-      <text>下载对比报告</text>
+      <text>下载页面图片</text>
     </view>
+
     <button class="action-btn primary share-btn" open-type="share">
       <image class="share-icon" src="https://p0.meituan.net/hackathonqjj/8572dd552d155204f3f0e157b20532f4698.png" mode="aspectFit"></image>
       <text>分享对比行程</text>
@@ -425,6 +426,14 @@
     id="exportCanvas" 
     class="export-canvas"
     style="position: fixed; top: -9999px; left: 0; width: 750px; height: {{exportHeight || 1200}}px;"
+  ></canvas>
+
+  <!-- 隐藏的 Canvas 元素，用于生成页面截图 -->
+  <canvas 
+    type="2d"
+    id="pageCanvas" 
+    class="page-canvas"
+    style="position: fixed; top: -9999px; left: -9999px; width: 750px; height: 1334px; z-index: -1;"
   ></canvas>
 
 </view>

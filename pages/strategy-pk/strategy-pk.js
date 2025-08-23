@@ -500,10 +500,10 @@ Page({
     wx.stopPullDownRefresh();
   },
 
-  // ==================== 长图生成功能 ====================
+  // ==================== 页面截图功能 ====================
   
-  // 下载对比报告
-  downloadReport: function() {
+   // 下载对比报告
+   downloadReport: function() {
     wx.showLoading({ title: '正在生成对比图...' });
     this.generateComparisonImageNew();
   },

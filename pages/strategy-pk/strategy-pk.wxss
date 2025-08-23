@@ -1632,3 +1632,13 @@
 .not-voted-text {
   text-decoration-color: #007AFF !important;
 }
+
+/* 隐藏的 Canvas 样式 */
+.page-canvas {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 750px;
+  height: 1334px;
+  z-index: -1;
+}

@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '本次以哪种交通方式为主? (多选)',
+      title: 'Pick 你的交通方式（多选）',
       options: [
         { id: 1, text: '飞机', icon: '✈️', selected: false },
         { id: 2, text: '高铁/火车', icon: '🚄', selected: false },

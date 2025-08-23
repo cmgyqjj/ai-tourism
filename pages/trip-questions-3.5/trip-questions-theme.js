@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '希望本次以什么主题为主? (多选)',
+      title: '希望本次是什么旅行主题？（多选）',
       options: [
         { id: 1, text: '美食探店', icon: '🍔', selected: false },
         { id: 2, text: '文化体验', icon: '🖼️', selected: false },

@@ -5,8 +5,8 @@ Page({
     pageTitle: '',
     
     // 当前步骤
-    currentStep: 13,
-    totalSteps: 13,
+    currentStep: 11,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
