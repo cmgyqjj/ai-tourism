@@ -6,7 +6,7 @@ Page({
     
     // 当前步骤
     currentStep: 1,
-    totalSteps: 13,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '你和本次同行人的关系 (可多选)',
+      title: '你和本次同行人的关系?(多选)',
       options: [
         { id: 1, text: '朋友/闺蜜', icon: '👥', selected: false },
         { id: 2, text: '情侣/夫妻', icon: '❤️', selected: false },
@@ -87,12 +87,15 @@ Page({
     if (destination && duration && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
-      if (companionCount === '1') {
+      const companionCountNum = parseInt(companionCount) || 0
+      const totalPeople = companionCountNum + 1 // 搭子数量 + 自己
+      
+      if (totalPeople === 1) {
         companionText = '1人'
-      } else if (companionCount === '2') {
+      } else if (totalPeople === 2) {
         companionText = '2人组'
       } else {
-        companionText = `${companionCount}人组`
+        companionText = `${totalPeople}人组`
       }
       
       // 格式化时长显示，只显示天数
