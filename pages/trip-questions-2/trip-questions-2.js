@@ -12,6 +12,7 @@ Page({
     tripInfo: {
       destination: '',
       duration: '',
+      days: '', // 新增days字段
       companionCount: '',
       currentUser: {
         avatarUrl: '',
@@ -97,9 +98,9 @@ Page({
 
   // 生成动态页面标题
   generatePageTitle() {
-    const { destination, duration, companionCount } = this.data.tripInfo
+    const { destination, duration, days, companionCount } = this.data.tripInfo
     
-    if (destination && duration && companionCount) {
+    if (destination && (duration || days) && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
       const companionCountNum = parseInt(companionCount) || 0
@@ -113,18 +114,52 @@ Page({
         companionText = `${totalPeople}人组`
       }
       
-      // 格式化时长显示，只显示天数
+      // 格式化时长显示，优先使用days字段
       let durationText = ''
-      if (duration.includes('天')) {
-        // 如果已经是"X天"格式，直接使用
-        durationText = duration
-      } else if (duration.includes('年') && duration.includes('月') && duration.includes('日')) {
-        // 如果是完整日期格式，提取天数
+      if (days && days > 0) {
+        // 如果有days字段，直接使用
+        durationText = `${days}日`
+      } else if (duration.includes('天')) {
+        // 如果已经是"X天"格式，提取数字
         const daysMatch = duration.match(/(\d+)天/)
         if (daysMatch) {
           durationText = daysMatch[1] + '日'
         } else {
           durationText = '几日'
+        }
+      } else if (duration.includes('年') && duration.includes('月') && duration.includes('日')) {
+        // 如果是日期范围格式（如：2025年8月13日 - 2025年8月20日），直接提取月-日数字做减法
+        const dateRangeMatch = duration.match(/(\d{4})年(\d{1,2})月(\d{1,2})日\s*-\s*(\d{4})年(\d{1,2})月(\d{1,2})日/)
+        
+        if (dateRangeMatch) {
+          // 解析日期范围
+          const startMonth = parseInt(dateRangeMatch[2])
+          const startDay = parseInt(dateRangeMatch[3])
+          const endMonth = parseInt(dateRangeMatch[5])
+          const endDay = parseInt(dateRangeMatch[6])
+          
+          // 简单计算：如果同月，直接相减；如果跨月，简单估算
+          let calculatedDays = 0
+          if (startMonth === endMonth) {
+            calculatedDays = endDay - startDay + 1
+          } else {
+            // 跨月情况，简单估算（假设每月30天）
+            calculatedDays = (endMonth - startMonth) * 30 + (endDay - startDay) + 1
+          }
+          
+          durationText = `${calculatedDays}日`
+          console.log('简化日期计算:', {
+            startMonth, startDay, endMonth, endDay,
+            calculatedDays: calculatedDays
+          })
+        } else {
+          // 尝试提取其他数字
+          const numberMatch = duration.match(/(\d+)/)
+          if (numberMatch) {
+            durationText = numberMatch[1] + '日'
+          } else {
+            durationText = '几日'
+          }
         }
       } else {
         // 其他格式，尝试提取数字

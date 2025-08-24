@@ -119,12 +119,38 @@ Page({
           durationText = '几日'
         }
       } else if (duration.includes('年') && duration.includes('月') && duration.includes('日')) {
-        // 如果是完整日期格式，提取天数
-        const daysMatch = duration.match(/(\d+)天/)
-        if (daysMatch) {
-          durationText = daysMatch[1] + '日'
+        // 如果是日期范围格式（如：2025年8月13日 - 2025年8月20日），直接提取月-日数字做减法
+        const dateRangeMatch = duration.match(/(\d{4})年(\d{1,2})月(\d{1,2})日\s*-\s*(\d{4})年(\d{1,2})月(\d{1,2})日/)
+        
+        if (dateRangeMatch) {
+          // 解析日期范围
+          const startMonth = parseInt(dateRangeMatch[2])
+          const startDay = parseInt(dateRangeMatch[3])
+          const endMonth = parseInt(dateRangeMatch[5])
+          const endDay = parseInt(dateRangeMatch[6])
+          
+          // 简单计算：如果同月，直接相减；如果跨月，简单估算
+          let calculatedDays = 0
+          if (startMonth === endMonth) {
+            calculatedDays = endDay - startDay + 1
+          } else {
+            // 跨月情况，简单估算（假设每月30天）
+            calculatedDays = (endMonth - startMonth) * 30 + (endDay - startDay) + 1
+          }
+          
+          durationText = `${calculatedDays}日`
+          console.log('简化日期计算:', {
+            startMonth, startDay, endMonth, endDay,
+            calculatedDays: calculatedDays
+          })
         } else {
-          durationText = '几日'
+          // 尝试提取其他数字
+          const numberMatch = duration.match(/(\d+)/)
+          if (numberMatch) {
+            durationText = numberMatch[1] + '日'
+          } else {
+            durationText = '几日'
+          }
         }
       } else {
         // 其他格式，尝试提取数字

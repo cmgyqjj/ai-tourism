@@ -1057,11 +1057,37 @@ Page({
     } else if (this.data.selectedRange && this.data.selectedRange.days) {
       // 固定日期模式：使用已计算的天数
       days = this.data.selectedRange.days
+    } else if (this.data.flexibleDurationText.includes('年') && this.data.flexibleDurationText.includes('月') && this.data.flexibleDurationText.includes('日')) {
+      // 日期范围格式（如：2025年8月13日 - 2025年8月20日），直接提取月-日数字做减法
+      const dateRangeMatch = this.data.flexibleDurationText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日\s*-\s*(\d{4})年(\d{1,2})月(\d{1,2})日/)
+      
+      if (dateRangeMatch) {
+        // 解析日期范围
+        const startMonth = parseInt(dateRangeMatch[2])
+        const startDay = parseInt(dateRangeMatch[3])
+        const endMonth = parseInt(dateRangeMatch[5])
+        const endDay = parseInt(dateRangeMatch[6])
+        
+        // 简单计算：如果同月，直接相减；如果跨月，简单估算
+        if (startMonth === endMonth) {
+          days = endDay - startDay + 1
+        } else {
+          // 跨月情况，简单估算（假设每月30天）
+          days = (endMonth - startMonth) * 30 + (endDay - startDay) + 1
+        }
+        
+        console.log('简化日期计算:', {
+          startMonth, startDay, endMonth, endDay,
+          calculatedDays: days
+        })
+      }
     } else {
       // 尝试从flexibleDurationText中提取数字
       const numberMatch = this.data.flexibleDurationText.match(/(\d+)/)
       days = numberMatch ? parseInt(numberMatch[1]) : 0
     }
+    
+    console.log('计算出的天数:', days)
     return days
   },
 
@@ -1236,6 +1262,30 @@ Page({
     } else if (this.data.selectedRange && this.data.selectedRange.days) {
       // 固定日期模式：使用已计算的天数
       days = this.data.selectedRange.days
+    } else if (this.data.flexibleDurationText.includes('年') && this.data.flexibleDurationText.includes('月') && this.data.flexibleDurationText.includes('日')) {
+      // 日期范围格式（如：2025年8月13日 - 2025年8月20日），直接提取月-日数字做减法
+      const dateRangeMatch = this.data.flexibleDurationText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日\s*-\s*(\d{4})年(\d{1,2})月(\d{1,2})日/)
+      
+      if (dateRangeMatch) {
+        // 解析日期范围
+        const startMonth = parseInt(dateRangeMatch[2])
+        const startDay = parseInt(dateRangeMatch[3])
+        const endMonth = parseInt(dateRangeMatch[5])
+        const endDay = parseInt(dateRangeMatch[6])
+        
+        // 简单计算：如果同月，直接相减；如果跨月，简单估算
+        if (startMonth === endMonth) {
+          days = endDay - startDay + 1
+        } else {
+          // 跨月情况，简单估算（假设每月30天）
+          days = (endMonth - startMonth) * 30 + (endDay - startDay) + 1
+        }
+        
+        console.log('简化日期计算:', {
+          startMonth, startDay, endMonth, endDay,
+          calculatedDays: days
+        })
+      }
     } else {
       // 尝试从flexibleDurationText中提取数字
       const numberMatch = this.data.flexibleDurationText.match(/(\d+)/)
