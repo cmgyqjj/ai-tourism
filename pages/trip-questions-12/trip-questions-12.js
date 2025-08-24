@@ -397,9 +397,14 @@ Page({
     // 将content转换为JSON字符串
     const contentJson = JSON.stringify(content)
     
+    // 获取目的地和天数信息
+    const destination = this.data.tripInfo.destination || ''
+    const days = this.generateTripDays()
+    
     wx.request({
-      url: `https://meituan.mynatapp.cc/api/preferences/user?content=${encodeURIComponent(contentJson)}&userId=${userId}&ext=null`,
+      url: `https://meituan.mynatapp.cc/api/preferences/user?content=${encodeURIComponent(contentJson)}&userId=${userId}&ext=null&destination=${encodeURIComponent(destination)}&days=${days}`,
       method: 'POST',
+      timeout: 1000, // 设置超时时间为10分钟（600000毫秒）
       success: (res) => {
         console.log('生成行程接口调用成功，返回值:', res.data)
         console.log('完整响应对象:', res)
@@ -446,13 +451,174 @@ Page({
         // 隐藏加载提示
         wx.hideLoading()
         
+        // 尝试调用备用接口查询最新行程
+        this.callBackupApi(userId)
+      }
+    })
+  },
+
+  /**
+   * 调用备用接口查询最新行程
+   */
+  callBackupApi(userId) {
+    console.log('开始调用备用接口查询最新行程，userId:', userId)
+    
+    wx.showLoading({
+      title: '查询最新行程...',
+      mask: true
+    })
+    
+    wx.request({
+      url: `https://meituan.mynatapp.cc/api/plans/tripsNew?userId=${userId}`,
+      method: 'GET',
+      timeout: 30000, // 30秒超时
+      success: (res) => {
+        console.log('备用接口调用成功，返回值:', res.data)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
+        // 处理接口返回结果
+        if (res.data && res.data.code === 0 && res.data.data) {
+          // 新接口返回的是对象，不是数组
+          const planData = res.data.data
+          console.log('获取到新接口行程数据:', planData)
+          
+          // 解析行程内容
+          this.parseAndProcessPlan(planData)
+        } else {
+          wx.showToast({
+            title: '没有找到可用行程',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: (error) => {
+        console.error('备用接口调用失败:', error)
+        
+        // 隐藏加载提示
+        wx.hideLoading()
+        
         wx.showToast({
-          title: '网络请求失败，请重试',
+          title: '查询失败，请重试',
           icon: 'none',
           duration: 2000
         })
       }
     })
+  },
+
+  /**
+   * 解析并处理行程数据
+   */
+  parseAndProcessPlan(plan) {
+    try {
+      console.log('解析新接口返回的行程数据:', plan)
+      
+      // 新接口直接返回结构化数据，不需要解析contentJson
+      const tripData = this.extractNewTripData(plan)
+      
+      // 显示成功提示
+      wx.showToast({
+        title: '获取行程成功！',
+        icon: 'success',
+        duration: 2000
+      })
+      
+      // 延迟跳转，让用户看到成功提示
+      setTimeout(() => {
+        wx.redirectTo({
+          url: '/pages/trip-detail-map/trip-detail-map?tripData=' + encodeURIComponent(JSON.stringify(tripData))
+        })
+      }, 2000)
+      
+    } catch (error) {
+      console.error('解析行程数据失败:', error)
+      wx.showToast({
+        title: '行程数据格式错误',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  },
+
+  /**
+   * 从新接口数据中提取行程信息
+   */
+  extractNewTripData(plan) {
+    console.log('开始提取新接口数据，plan:', plan)
+    
+    const tripInfo = this.data.tripInfo || {}
+    
+    // 构建行程数据
+    const tripData = {
+      destination: plan.destination || '未知目的地',
+      days: plan.scheduleCount || 0,
+      tripInfo: {
+        ...tripInfo,
+        title: plan.planTitle || '个性化行程',
+        totalBudget: plan.totalBudget || '未知',
+        highlights: plan.highlights || [],
+        specialExperience: plan.specialExperience || '未知'
+      },
+      // 添加新接口的完整数据
+      newPlanData: plan
+    }
+    
+    console.log('提取的新接口行程数据:', tripData)
+    console.log('数据验证:', {
+      destination: tripData.destination,
+      days: tripData.days,
+      title: tripData.tripInfo.title,
+      hasNewPlanData: !!tripData.newPlanData
+    })
+    
+    return tripData
+  },
+
+  /**
+   * 从行程安排生成天数信息
+   */
+  generateDayInfoFromPlan(tripArrangements) {
+    return tripArrangements.map((day, index) => {
+      const dayNumber = index + 1
+      const dateInfo = day.日期 || `第${dayNumber}天`
+      const city = day.城市 || '未知城市'
+      
+      return {
+        day: dayNumber,
+        date: this.extractDateFromString(dateInfo),
+        city: city,
+        route: day.交通方式 || '',
+        accommodation: day.住宿地点 || '',
+        morning: day.游玩项目?.上午 || {},
+        afternoon: day.游玩项目?.下午 || {},
+        evening: day.游玩项目?.晚上 || {},
+        breakfast: day.餐饮?.早餐 || {},
+        lunch: day.餐饮?.午餐 || {},
+        dinner: day.餐饮?.晚餐 || {},
+        dailyCost: day.费用?.日均总费用 || 0,
+        tips: day.小贴士和注意事项 || ''
+      }
+    })
+  },
+
+  /**
+   * 从日期字符串中提取日期信息
+   */
+  extractDateFromString(dateString) {
+    // 匹配日期格式：第1天（2025-06-01）
+    const dateMatch = dateString.match(/\((\d{4}-\d{2}-\d{2})\)/)
+    if (dateMatch) {
+      const date = new Date(dateMatch[1])
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const day = date.getDate().toString().padStart(2, '0')
+      return `${month}月${day}日`
+    }
+    
+    // 如果没有日期信息，返回默认格式
+    return `${(new Date().getMonth() + 1).toString().padStart(2, '0')}月${new Date().getDate().toString().padStart(2, '0')}日`
   },
 
   // 生成行程天数数据

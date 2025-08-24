@@ -379,10 +379,7 @@ Page({
    */
   viewTripDetails() {
     console.log('查看行程详情');
-    wx.showToast({
-      title: '行程详情功能开发中',
-      icon: 'none'
-    });
+    
   },
 
   /**

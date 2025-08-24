@@ -134,6 +134,9 @@ Page({
     
     // 获取用户头像
     this.getUserAvatar()
+    
+    // 检查缓存中是否有已创建的团队信息
+    this.checkCachedTeamInfo()
   },
 
   onShow() {
@@ -166,6 +169,9 @@ Page({
         })
       }
     }
+    
+    // 每次页面显示时都检查缓存中的团队信息
+    this.checkCachedTeamInfo()
   },
 
   onHide() {
@@ -173,6 +179,41 @@ Page({
     if (this.data.selectedDestinations.length > 0) {
       wx.setStorageSync('createTripSelectedDestinations', this.data.selectedDestinations)
       console.log('页面隐藏，保存已选择目的地数量:', this.data.selectedDestinations.length)
+    }
+  },
+
+  // 检查缓存中的团队信息
+  checkCachedTeamInfo() {
+    console.log('检查缓存中的团队信息')
+    
+    // 检查是否有缓存的团队信息
+    const cachedTeamInfo = wx.getStorageSync('currentTeamInfo')
+    const cachedTripInfo = wx.getStorageSync('currentTripInfo')
+    
+    if (cachedTeamInfo && cachedTeamInfo.teamId) {
+      console.log('发现缓存的团队信息:', cachedTeamInfo)
+      
+      // 恢复团队信息到页面数据
+      this.setData({
+        currentTeamId: cachedTeamInfo.teamId,
+        hasCreatedTeam: true
+      })
+      
+      // 如果有缓存的行程信息，也恢复
+      if (cachedTripInfo) {
+        console.log('发现缓存的行程信息:', cachedTripInfo)
+        
+        // 恢复行程信息到页面数据
+        this.setData({
+          selectedDestination: cachedTripInfo.destination || '',
+          flexibleDurationText: cachedTripInfo.duration || '',
+          companionCount: cachedTripInfo.companionCount || ''
+        })
+      }
+      
+      console.log('团队信息已从缓存恢复，currentTeamId:', this.data.currentTeamId)
+    } else {
+      console.log('缓存中没有团队信息')
     }
   },
 
@@ -942,39 +983,49 @@ Page({
       return
     }
 
-    // 生成行程ID（实际项目中应该由后端生成）
-    const tripId = 'trip_' + Date.now()
-    
-    // 保存行程信息到本地存储（实际项目中应该保存到后端）
-    const tripInfo = {
-      id: tripId,
-      destination: this.data.selectedDestination,
-      duration: this.data.flexibleDurationText,
-      companionCount: parseInt(this.data.companionCount),
-      createTime: new Date().toISOString(),
-      creator: wx.getStorageSync('userInfo')?.nickName || '未知用户'
-    }
-    
-    try {
-      wx.setStorageSync('trip_' + tripId, tripInfo)
-      console.log('行程信息已保存:', tripInfo)
-      
-      // 保存当前行程ID到页面数据中，供 onShareAppMessage 使用
-      this.setData({
-        currentTripId: tripId
+    // 获取当前用户信息
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
+      wx.showToast({
+        title: '用户信息不完整，请重新登录',
+        icon: 'none'
       })
+      return
+    }
+
+    // 如果还没有创建团队，先创建团队
+    if (!this.data.currentTeamId) {
+      // 显示加载提示
+      wx.showLoading({
+        title: '创建团队中...',
+        mask: true
+      })
+
+      // 调用创建团队接口
+      this.createTeamForShare(userId, this.data.companionCount + 1, this.data.flexibleDurationText, this.data.selectedDestination)
       
       wx.showToast({
-        title: '行程信息已保存，点击分享按钮即可分享',
-        icon: 'success',
+        title: '团队创建中，请稍后点击分享按钮',
+        icon: 'none',
         duration: 2000
       })
-    } catch (error) {
-      console.error('保存行程信息失败:', error)
-      wx.showToast({
-        title: '保存失败，请重试',
-        icon: 'error'
-      })
+    } else {
+      // 再次检查缓存中的团队信息，确保状态是最新的
+      this.checkCachedTeamInfo()
+      
+      if (this.data.currentTeamId) {
+        wx.showToast({
+          title: '团队已创建，点击分享按钮即可分享',
+          icon: 'success',
+          duration: 2000
+        })
+      } else {
+        wx.showToast({
+          title: '团队信息异常，请重新创建',
+          icon: 'none',
+          duration: 2000
+        })
+      }
     }
   },
   // 复制分享链接
@@ -1186,12 +1237,6 @@ Page({
         
         // 处理接口返回结果
         if (res.data && res.data.code === 0) {
-          wx.showToast({
-            title: '行程创建成功，可以开始分享了',
-            icon: 'success',
-            duration: 2000
-          })
-          
           // 保存团队ID到页面数据中，供分享使用
           if (res.data.data && res.data.data.teamId) {
             this.setData({
@@ -1200,6 +1245,22 @@ Page({
             })
             console.log('团队ID已保存:', res.data.data.teamId)
             console.log('团队已创建标记:', true)
+
+            // 构建完整的团队信息
+            const teamInfo = {
+              teamId: res.data.data.teamId,
+              creatorId: res.data.data.creatorId || wx.getStorageSync('userId'),
+              maxMembers: res.data.data.maxMembers || (this.data.companionCount + 1),
+              expireTime: res.data.data.expireTime || this.data.flexibleDurationText,
+              place: res.data.data.place || this.data.selectedDestination,
+              createTime: new Date().toISOString(),
+              status: 'active'
+            }
+
+            // 保存团队信息到本地存储
+            wx.setStorageSync('currentTeamInfo', teamInfo)
+            wx.setStorageSync('teamInfo', teamInfo)
+            console.log('团队信息已保存到本地存储:', teamInfo)
 
             // 保存行程信息到本地存储
             const tripInfo = {
@@ -1216,10 +1277,26 @@ Page({
             wx.setStorageSync('currentTripInfo', tripInfo)
             wx.setStorageSync('tripInfo', tripInfo)
             console.log('分享行程信息已保存到本地存储:', tripInfo)
+            
+            wx.showToast({
+              title: '团队创建成功！现在可以分享了',
+              icon: 'success',
+              duration: 3000
+            })
+            
+            // 提示用户现在可以分享
+            setTimeout(() => {
+              wx.showModal({
+                title: '团队创建成功',
+                content: '团队已创建完成，现在可以分享给好友了！点击分享按钮即可分享。',
+                showCancel: false,
+                confirmText: '知道了'
+              })
+            }, 1000)
           }
         } else {
           wx.showToast({
-            title: res.data?.msg || '创建行程失败',
+            title: res.data?.msg || '创建团队失败',
             icon: 'none',
             duration: 2000
           })
@@ -1316,8 +1393,18 @@ Page({
 
   // 分享功能
   onShareAppMessage() {
+    console.log('=== onShareAppMessage 被调用 ===')
+    console.log('当前页面数据:', {
+      selectedDestination: this.data.selectedDestination,
+      flexibleDurationText: this.data.flexibleDurationText,
+      companionCount: this.data.companionCount,
+      currentTeamId: this.data.currentTeamId,
+      hasCreatedTeam: this.data.hasCreatedTeam
+    })
+    
     // 检查是否有行程信息
     if (!this.data.selectedDestination || !this.data.flexibleDurationText || !this.data.companionCount) {
+      console.log('行程信息不完整，返回默认分享内容')
       return {
         title: '邀请你一起规划旅行',
         path: '/pages/create-trip/create-trip',
@@ -1356,43 +1443,46 @@ Page({
       }
     }
 
-    // 显示加载提示
-    wx.showLoading({
-      title: '创建行程中...',
-      mask: true
-    })
-
-    // 调用创建团队接口
-    this.createTeamForShare(userId, companionCount+1, this.data.flexibleDurationText, this.data.selectedDestination)
-
-    // 使用已经保存的行程ID，如果没有则生成新的
-    let tripId = this.data.currentTripId
-    if (!tripId) {
-      tripId = 'trip_' + Date.now()
+    // 如果还没有创建团队，不允许分享，提示用户先创建团队
+    if (!this.data.currentTeamId) {
+      console.log('没有团队ID，不允许分享')
       
-      // 保存行程信息
-      const tripInfo = {
-        id: tripId,
-        destination: this.data.selectedDestination,
-        duration: this.data.flexibleDurationText,
-        companionCount: parseInt(this.data.companionCount),
-        createTime: new Date().toISOString(),
-        creator: wx.getStorageSync('userInfo')?.nickName || '未知用户'
-      }
+      // 显示提示，引导用户先创建团队
+      wx.showModal({
+        title: '需要先创建团队',
+        content: '分享前需要先创建团队，是否现在创建？',
+        confirmText: '创建团队',
+        cancelText: '稍后再说',
+        success: (res) => {
+          if (res.confirm) {
+            // 用户确认创建团队
+            console.log('用户确认创建团队')
+            
+            // 显示加载提示
+            wx.showLoading({
+              title: '创建团队中...',
+              mask: true
+            })
+            
+            // 调用创建团队接口
+            this.createTeamForShare(userId, companionCount + 1, this.data.flexibleDurationText, this.data.selectedDestination)
+          }
+        }
+      })
       
-      try {
-        wx.setStorageSync('trip_' + tripId, tripInfo)
-        // 保存到页面数据中
-        this.setData({
-          currentTripId: tripId
-        })
-      } catch (error) {
-        console.error('保存行程信息失败:', error)
+      // 返回默认分享内容
+      console.log('返回默认分享内容，引导用户先创建团队')
+      return {
+        title: '邀请你一起规划旅行',
+        path: '/pages/create-trip/create-trip',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
       }
     }
 
-    // 如果已经有团队ID，使用真实的团队ID；否则使用临时ID（后续会被更新）
-    const teamId = this.data.currentTeamId || tripId
+    // 使用真实的团队ID构建分享链接
+    const teamId = this.data.currentTeamId
+    console.log('使用真实团队ID构建分享链接:', teamId)
+    console.log('分享链接路径:', `/pages/team-invite/team-invite?userId=${userId}&teamId=${teamId}`)
 
     return {
       title: `邀请你加入${this.data.selectedDestination}${this.data.flexibleDurationText}旅行`,
@@ -1410,36 +1500,30 @@ Page({
       }
     }
 
-    // 使用已经保存的行程ID，如果没有则生成新的
-    let tripId = this.data.currentTripId
-    if (!tripId) {
-      tripId = 'trip_' + Date.now()
-      
-      // 保存行程信息
-      const tripInfo = {
-        id: tripId,
-        destination: this.data.selectedDestination,
-        duration: this.data.flexibleDurationText,
-        companionCount: parseInt(this.data.companionCount),
-        createTime: new Date().toISOString(),
-        creator: wx.getStorageSync('userInfo')?.nickName || '未知用户'
-      }
-      
-      try {
-        wx.setStorageSync('trip_' + tripId, tripInfo)
-        // 保存到页面数据中
-        this.setData({
-          currentTripId: tripId
-        })
-      } catch (error) {
-        console.error('保存行程信息失败:', error)
+    // 获取当前用户信息
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
+      return {
+        title: '邀请你一起规划旅行',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
       }
     }
+
+    // 如果还没有创建团队，不允许分享，返回默认内容
+    if (!this.data.currentTeamId) {
+      return {
+        title: '邀请你一起规划旅行',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
+      }
+    }
+
+    // 使用真实的团队ID构建分享链接
+    const teamId = this.data.currentTeamId
 
     return {
       title: `邀请你加入${this.data.selectedDestination}${this.data.flexibleDurationText}旅行`,
       imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
-      query: `tripId=${tripId}`
+      path: `/pages/team-invite/team-invite?userId=${userId}&teamId=${teamId}`
     }
   },
 

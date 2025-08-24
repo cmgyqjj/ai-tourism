@@ -370,7 +370,7 @@ Component({
           resolve({
             title: '我的旅行计划 - 去哪 Whatever',
             path: 'pages/index/index',
-            imageUrl: '/images/img.png',
+            imageUrl: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
             withShareTicket: true,
             miniprogramType: 0,
             scene: 0,
@@ -381,7 +381,7 @@ Component({
       return {
         title: '我的旅行计划 - 去哪 Whatever',
         path: 'pages/index/index',
-        imageUrl: '/images/img.png',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         withShareTicket: true,
         miniprogramType: 0,
         scene: 0,
@@ -461,7 +461,7 @@ Component({
     onShareTimeline() {
       return {
         title: '我的旅行计划 - 去哪 Whatever',
-        imageUrl: '/images/img.png',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/0ec13a2a63f03daac48863d1fa57995f6194.png',
         query: 'from=timeline'
       }
     },

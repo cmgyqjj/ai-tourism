@@ -203,14 +203,14 @@ Page({
       return {
         title: '邀请你加入我的旅行计划',
         path: '/pages/trip-detail/trip-detail',
-        imageUrl: '/images/img.png'
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
       }
     }
     
     return {
       title: `邀请你加入${tripInfo.destination}${tripInfo.duration}旅行`,
       path: `/pages/index/index?teamId=${tripInfo.id}`,
-      imageUrl: '/images/img.png'
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
     }
   },
 
@@ -220,13 +220,13 @@ Page({
     if (!tripInfo) {
       return {
         title: '邀请你加入我的旅行计划',
-        imageUrl: '/images/img.png',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
       }
     }
     
     return {
       title: `邀请你加入${tripInfo.destination}${tripInfo.duration}旅行`,
-      imageUrl: '/images/img.png',
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
       query: `tripId=${tripInfo.id}`
     }
   }

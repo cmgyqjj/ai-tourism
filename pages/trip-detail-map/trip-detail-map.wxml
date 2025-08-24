@@ -87,7 +87,6 @@
                <text class="flight-info">{{currentDayInfo.flight}}</text>
              </view>
              </view>
-           
            </view>
 
            <!-- 住宿建议 -->
@@ -96,11 +95,28 @@
                <text class="section-title">住宿建议</text>
                <view class="section-content">
                <text class="accommodation-info">{{currentDayInfo.accommodation}}</text>
-            
              </view>
+             </view>
+           </view>
 
+           <!-- 每日费用 -->
+           <view class="detail-section" wx:if="{{currentDayInfo.dailyCost > 0}}">
+             <view class="section-header">
+               <text class="section-title">每日费用</text>
+               <view class="section-content">
+               <text class="cost-info">¥{{currentDayInfo.dailyCost}}/人</text>
              </view>
-          
+             </view>
+           </view>
+
+           <!-- 小贴士 -->
+           <view class="detail-section" wx:if="{{currentDayInfo.tips}}">
+             <view class="section-header">
+               <text class="section-title">小贴士</text>
+               <view class="section-content">
+               <text class="tips-info">{{currentDayInfo.tips}}</text>
+             </view>
+             </view>
            </view>
          </view>
           <!-- 动态渲染所有items -->
@@ -117,20 +133,35 @@
                 <view class="item-info">
                   <!-- 顶部：分类标题 -->
                   <view class="category-header">
-                    <view class="category-icon {{item.type}}-icon">{{item.icon}}</view>
+                    <view class="category-icon {{item.type}}-icon" data-type="{{item.type}}">{{item.icon}}</view>
                     <text class="category-label">{{item.category}}</text>
                   </view>
 
                   <!-- 动态显示内容 -->
-                  <text class="item-name" wx:if="{{item.type === 'food' || item.type === 'hotel'}}">{{item.name}}</text>
+                  <text class="item-name" wx:if="{{item.type === 'food'}}">{{item.name}}</text>
+                  <text class="item-name" wx:elif="{{item.type === 'hotel'}}">{{item.name}}</text>
                   <text class="item-number" wx:elif="{{item.type === 'attraction'}}">{{index + 1}}.{{item.name}}</text>
+                  <text class="item-name" wx:elif="{{item.type === 'flight'}}">{{item.name}}</text>
                   <text class="item-name" wx:else>{{item.name}}</text>
 
                   <!-- 动态显示价格/描述 -->
                   <text class="item-price" wx:if="{{item.type === 'food'}}">人均: ¥{{item.price}}</text>
-                  <text class="item-price" wx:elif="{{item.type === 'hotel'}}">{{item.nights}}晚:¥{{item.price}}</text>
-                  <text class="item-desc" wx:elif="{{item.type === 'attraction'}}">{{item.description}}</text>
-                  <text class="item-desc" wx:else>{{item.description}}</text>
+                  <text class="item-price" wx:elif="{{item.type === 'hotel'}}">住宿</text>
+                  <view class="item-desc-container" wx:elif="{{item.type === 'attraction'}}">
+                    <text class="item-desc" wx:if="{{!item.showFullDesc}}">{{item.description}}</text>
+                    <text class="item-desc" wx:else>{{item.description}}</text>
+                    <text class="expand-btn" wx:if="{{item.description && item.description.length > 50}}" bindtap="toggleDescription" data-index="{{index}}">{{item.showFullDesc ? '收起' : '展开'}}</text>
+                  </view>
+                  <view class="item-desc-container" wx:elif="{{item.type === 'flight'}}">
+                    <text class="item-desc" wx:if="{{!item.showFullDesc}}">{{item.description}}</text>
+                    <text class="item-desc" wx:else>{{item.description}}</text>
+                    <text class="expand-btn" wx:if="{{item.description && item.description.length > 50}}" bindtap="toggleDescription" data-index="{{index}}">{{item.showFullDesc ? '收起' : '展开'}}</text>
+                  </view>
+                  <view class="item-desc-container" wx:else>
+                    <text class="item-desc" wx:if="{{!item.showFullDesc}}">{{item.description}}</text>
+                    <text class="item-desc" wx:else>{{item.description}}</text>
+                    <text class="expand-btn" wx:if="{{item.description && item.description.length > 50}}" bindtap="toggleDescription" data-index="{{index}}">{{item.showFullDesc ? '收起' : '展开'}}</text>
+                  </view>
                 </view>
 
                 <!-- 右上角菜单按钮 -->

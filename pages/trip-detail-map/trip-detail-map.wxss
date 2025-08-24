@@ -512,6 +512,32 @@
   margin-bottom: 0; /* 移除下边距，让space-between控制间距 */
 }
 
+.item-desc-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.item-desc.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expand-btn {
+  font-size: 18rpx;
+  color: #007aff;
+  background: none;
+  border: none;
+  padding: 4rpx 8rpx;
+  cursor: pointer;
+  align-self: flex-start;
+  text-decoration: underline;
+}
+
 .item-name,
 .item-number {
   font-size: 28rpx;
@@ -568,6 +594,52 @@
 
 /* 确保item-card有正确的间距 */
 
+/* 费用信息样式 */
+.cost-info {
+  font-size: 24rpx;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+/* 小贴士样式 */
+.tips-info {
+  font-size: 22rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 行程亮点样式 */
+.trip-highlights {
+  margin-top: 20rpx;
+  padding: 0 20rpx;
+}
+
+.highlights-section {
+  background: #ffffff;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.08);
+  border: 1rpx solid #f0f0f0;
+}
+
+.highlights-list {
+  margin-top: 16rpx;
+}
+
+.highlight-item {
+  background: #f8f9fa;
+  border-radius: 6rpx;
+  padding: 12rpx 16rpx;
+  margin-bottom: 12rpx;
+  border-left: 4rpx solid #007aff;
+}
+
+.highlight-text {
+  font-size: 22rpx;
+  color: #333;
+  line-height: 1.4;
+}
 
 /* 调整分类图标的颜色 */
 .food-icon {
@@ -593,6 +665,18 @@
 
 .accommodation-icon {
   background: #ff5722;
+  color: white;
+}
+
+/* 早餐图标样式 */
+.food-icon[data-type="breakfast"] {
+  background: #ff9800;
+  color: white;
+}
+
+/* 住宿图标样式 */
+.hotel-icon {
+  background: #9c27b0;
   color: white;
 }
 
@@ -769,7 +853,7 @@
   pointer-events: none;
   transition: all 0.3s ease;
   width: 280rpx; /* 恢复到原本的图片大小 */
-  height: 360rpx; /* 恢复到原本的图片大小 */
+  height: 400rpx; /* 恢复到原本的图片大小 */
   background: transparent;
   padding: 0;
   box-sizing: border-box;

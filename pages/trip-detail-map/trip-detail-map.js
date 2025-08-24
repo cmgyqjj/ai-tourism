@@ -533,28 +533,32 @@
             const tripData = JSON.parse(decodeURIComponent(options.tripData));
             console.log('接收到的行程数据:', tripData);
             
-            // 更新行程天数数据
-            this.setData({
-                tripDays: tripData.days || this.data.tripDays,
-                allDayInfo: tripData.allDayInfo || this.data.allDayInfo,
-                currentDayInfo: tripData.dayInfo || this.data.currentDayInfo
-            });
-            
-            console.log('设置后的tripDays:', this.data.tripDays);
-            
-            // 如果有行程信息，更新参与者数据
-            if (tripData.tripInfo) {
-            this.updateParticipants(tripData.tripInfo);
+            // 处理从新接口获取的数据
+            if (tripData.newPlanData) {
+                this.processNewPlanData(tripData);
+                // 新接口数据已经包含了地图数据，不需要重新初始化
+            } else if (tripData.rawPlanData) {
+                // 处理原有格式的数据
+                this.processBackupPlanData(tripData);
+                // 原有格式需要初始化地图
+                this.initMapData();
+            } else {
+                // 处理原有格式的数据
+                this.processOriginalTripData(tripData);
+                // 原有格式需要初始化地图
+                this.initMapData();
             }
             
-            // 动态生成行程标题和时长
-            this.generateTripTitle();
-            
-            // 初始化地图数据
-            this.initMapData();
+            // 只有在没有新接口数据时才生成默认标题
+            if (!tripData.newPlanData && !tripData.rawPlanData) {
+                this.generateTripTitle();
+            }
             
         } catch (e) {
             console.error('解析行程数据失败:', e);
+            // 解析失败时使用默认数据
+            this.generateTripTitle();
+            this.initMapData();
         }
         } else {
         // 没有传入数据时，使用默认数据并初始化地图
@@ -563,20 +567,784 @@
         this.initMapData();
         }
         
-        // 加载第一天的行程信息
-        this.loadDayInfo(1);
-        
         // 调试：打印当前数据状态
         console.log('=== 页面加载完成后的数据状态 ===');
         console.log('tripDays:', this.data.tripDays);
         console.log('tripTitle:', this.data.tripTitle);
         console.log('currentDayInfo:', this.data.currentDayInfo);
+        
+        // 如果有数据，加载第一天的行程信息
+        if (this.data.allDayInfo && this.data.allDayInfo.length > 0) {
+            this.loadDayInfo(1);
+        }
+    },
+
+    /**
+     * 处理从新接口获取的行程数据
+     */
+    processNewPlanData(tripData) {
+        console.log('处理新接口数据:', tripData);
+        
+        const newPlanData = tripData.newPlanData;
+        console.log('newPlanData详情:', newPlanData);
+        console.log('scheduleCount:', newPlanData.scheduleCount);
+        console.log('cities:', newPlanData.cities);
+        console.log('planTitle:', newPlanData.planTitle);
+        
+        // 构建行程天数数据
+        const tripDays = [];
+        for (let i = 0; i < newPlanData.scheduleCount; i++) {
+            const dayNumber = i + 1;
+            const city = newPlanData.cities[i] || '未知城市';
+            
+            tripDays.push({
+                day: dayNumber,
+                date: this.generateDateFromDay(dayNumber),
+                route: city,
+                weather: '☀️' // 默认天气
+            });
+        }
+        
+        console.log('生成的tripDays:', tripDays);
+        
+        // 构建详细的天数信息
+        const allDayInfo = [];
+        for (let i = 0; i < newPlanData.scheduleCount; i++) {
+            const dayNumber = i + 1;
+            const city = newPlanData.cities[i] || '未知城市';
+            
+            allDayInfo.push({
+                day: dayNumber,
+                route: city,
+                flight: newPlanData.transports[i] || null,
+                accommodation: newPlanData.hotels[i] || '',
+                items: this.generateNewDayItems(newPlanData, i),
+                // 添加更多详细信息
+                morning: {
+                    项目名称: newPlanData.morningActivities[i] || '',
+                    交通情况: newPlanData.morningTransports[i] || ''
+                },
+                afternoon: {
+                    项目名称: newPlanData.afternoonActivities[i] || '',
+                    交通情况: newPlanData.afternoonTransports[i] || ''
+                },
+                evening: {
+                    项目名称: newPlanData.eveningActivities[i] || '',
+                    交通情况: newPlanData.eveningTransports[i] || ''
+                },
+                breakfast: {
+                    餐厅名称: newPlanData.breakfastRestaurants[i] || '',
+                    人均消费: newPlanData.breakfastCosts[i] || 0
+                },
+                lunch: {
+                    餐厅名称: newPlanData.lunchRestaurants[i] || '',
+                    人均消费: newPlanData.lunchCosts[i] || 0
+                },
+                dinner: {
+                    餐厅名称: newPlanData.dinnerRestaurants[i] || '',
+                    人均消费: newPlanData.dinnerCosts[i] || 0
+                },
+                dailyCost: this.calculateDailyCost(newPlanData, i),
+                tips: newPlanData.tips[i] || ''
+            });
+        }
+        
+        // 更新页面数据 - 完全替换所有数据
+        this.setData({
+            selectedDay: 1, // 确保第一天被选中
+            tripDays: tripDays,
+            allDayInfo: allDayInfo,
+            currentDayInfo: allDayInfo[0] || this.data.currentDayInfo,
+            tripTitle: newPlanData.planTitle || '个性化行程',
+            tripDuration: `${newPlanData.scheduleCount}天${Math.max(0, newPlanData.scheduleCount - 1)}晚`,
+            // 添加预算信息
+            totalBudget: newPlanData.totalBudget || '未知',
+            // 添加亮点信息
+            highlights: newPlanData.highlights || [],
+            // 添加特色体验
+            specialExperience: newPlanData.specialExperience || '未知',
+            // 添加其他信息
+            planSummary: newPlanData.planSummary || '',
+            costFeeling: newPlanData.costFeeling || '',
+            dailyBudget: newPlanData.dailyBudget || '',
+            experience: newPlanData.experience || ''
+        });
+        
+        console.log('=== 新接口数据处理完成 ===');
+        console.log('设置的tripTitle:', newPlanData.planTitle || '个性化行程');
+        console.log('设置的tripDays:', tripDays);
+        console.log('设置的allDayInfo:', allDayInfo);
+        console.log('设置的currentDayInfo:', allDayInfo[0]);
+        
+        // 更新参与者信息
+        if (tripData.tripInfo) {
+            this.updateParticipants(tripData.tripInfo);
+        }
+        
+        // 更新地图数据
+        this.updateMapDataFromNewPlan(newPlanData);
+        
+        console.log('处理后的新接口行程数据:', {
+            tripDays: tripDays,
+            allDayInfo: allDayInfo
+        });
+        
+        // 加载第一天的行程信息
+        this.loadDayInfo(1);
+    },
+
+    /**
+     * 获取随机图片URL
+     */
+    getRandomImage() {
+        const imageUrls = [
+            'https://p0.meituan.net/hackathonqjj/b0b3f56d5243193c30b25383bdfc06fe8617.jpg',
+            'https://p0.meituan.net/hackathonqjj/91d9acff677c4c2e3a0e49bff62958469687.jpg',
+            'https://p0.meituan.net/hackathonqjj/36e106545213901be68225209dc792f98111.jpg',
+            'https://p0.meituan.net/hackathonqjj/06d1221cd56e11868d74d78a3c19ccbe7893.jpg',
+            'https://p0.meituan.net/hackathonqjj/8853e9ee246b137f340fcfc263c3232913795.jpg',
+            'https://p0.meituan.net/hackathonqjj/7e8f249b7226f05e59a767190a7cec0710394.jpg',
+            'https://p0.meituan.net/hackathonqjj/1018f08cf1fafd49a1dc515017ad4bb410433.jpg',
+            'https://p0.meituan.net/hackathonqjj/3641e32f49005c73b14eeac0141b21799571.jpg',
+            'https://p0.meituan.net/hackathonqjj/370fabbb8fbc38a2845c965632952d3d6456.jpg',
+            'https://p0.meituan.net/hackathonqjj/c5205a9621d09841f6e788c25de547f010610.jpg',
+            'https://p0.meituan.net/hackathonqjj/f61396fc083191fa7c63934c1feecc428802.jpg',
+            'https://p0.meituan.net/hackathonqjj/660548731143f53f1bd52b90bfcd33bb11831.jpg',
+            'https://p0.meituan.net/hackathonqjj/f44f509b45e69ca3d9bd22918b2a3fc69254.jpg',
+            'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png',
+            'https://p0.meituan.net/hackathonqjj/2d287c0699d66732e751a23fdfc35a459621.jpg',
+            'https://p0.meituan.net/hackathonqjj/763ca8195649603bde6abaf8904d5cf67077.jpg',
+            'https://p0.meituan.net/hackathonqjj/48867a7d438c39f6d4d3127c47974e7d9783.jpg',
+            'https://p0.meituan.net/hackathonqjj/3482b71e416958d6c6f44a71ab45d07411168.jpg',
+            'https://p0.meituan.net/hackathonqjj/2628893e3d859ceb76a5c9a23e05013f10034.jpg',
+            'https://p0.meituan.net/hackathonqjj/4cb9ccccacbe00b24f974efcfca3593f9887.jpg',
+            'https://p1.meituan.net/hackathonqjj/df2198a131a3317216c1b90d9899a9a710103.jpg',
+            'https://p0.meituan.net/hackathonqjj/41e3167e843855c3417227b45edbe35d12163.jpg',
+            'https://p0.meituan.net/hackathonqjj/9d364bb5a0c540d3d8b1f0b8270cb89d9870.jpg',
+            'https://p0.meituan.net/hackathonqjj/11da78369f9230d7942fa0dfbf69fb5511205.jpg',
+            'https://p1.meituan.net/hackathonqjj/997494569b8683af39e09003466740d78966.jpg',
+            'https://p1.meituan.net/hackathonqjj/2c3e428daa842dcfc21027b3e0c8a06f11131.jpg',
+            'https://p0.meituan.net/hackathonqjj/3cd75b633a7c2c02c4f8fd8802a991a810255.jpg',
+            'https://p0.meituan.net/hackathonqjj/81ccfc8d3fc50d6a261b9fd66577c24a8744.jpg'
+        ];
+        
+        // 随机选择一个图片URL
+        const randomIndex = Math.floor(Math.random() * imageUrls.length);
+        return imageUrls[randomIndex];
+    },
+
+    /**
+     * 安全截断文本
+     */
+    truncateText(text, maxLength = 20) {
+        if (!text || typeof text !== 'string') {
+            return text || '';
+        }
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + '...';
+    },
+
+    /**
+     * 根据天数生成日期
+     */
+    generateDateFromDay(dayNumber) {
+        const now = new Date();
+        const futureDate = new Date(now.getTime() + (dayNumber - 1) * 24 * 60 * 60 * 1000);
+        const month = (futureDate.getMonth() + 1).toString().padStart(2, '0');
+        const date = futureDate.getDate().toString().padStart(2, '0');
+        return `${month}月${date}日`;
+    },
+
+    /**
+     * 计算每日费用
+     */
+    calculateDailyCost(newPlanData, dayIndex) {
+        const breakfastCost = newPlanData.breakfastCosts[dayIndex] || 0;
+        const lunchCost = newPlanData.lunchCosts[dayIndex] || 0;
+        const dinnerCost = newPlanData.dinnerCosts[dayIndex] || 0;
+        
+        // 可以添加其他费用，如门票、交通等
+        return breakfastCost + lunchCost + dinnerCost;
+    },
+
+    /**
+     * 生成新接口的每日项目
+     */
+    generateNewDayItems(newPlanData, dayIndex) {
+        const items = [];
+        
+        // 1. 早通勤（如果有跨城市交通）
+        if (newPlanData.transports[dayIndex] && 
+            newPlanData.transports[dayIndex] !== '市内交通' && 
+            newPlanData.transports[dayIndex] !== '市内电车') {
+            items.push({
+                type: 'flight',
+                icon: '✈️',
+                category: '交通',
+                name: this.truncateText(newPlanData.transports[dayIndex], 10),
+                description: '交通安排',
+                distance: '0.0',
+                time: '0',
+                location: '交通信息',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 2. 早餐
+        if (newPlanData.breakfastRestaurants[dayIndex]) {
+            items.push({
+                type: 'food',
+                icon: '🍳',
+                category: '早餐',
+                name: this.truncateText(newPlanData.breakfastRestaurants[dayIndex], 10),
+                price: newPlanData.breakfastCosts[dayIndex]?.toString() || '0',
+                distance: '0.1',
+                time: '5',
+                location: newPlanData.breakfastRestaurants[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 3. 上午景点
+        if (newPlanData.morningActivities[dayIndex]) {
+            items.push({
+                type: 'attraction',
+                icon: '🏛️',
+                category: '景点',
+                name: this.truncateText(newPlanData.morningActivities[dayIndex], 10),
+                description: this.truncateText(newPlanData.morningTransports[dayIndex] || '', 15),
+                distance: '0.5',
+                time: '15',
+                location: newPlanData.morningActivities[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 4. 午通勤（市内交通）
+        if (newPlanData.afternoonTransports[dayIndex] && 
+            newPlanData.afternoonTransports[dayIndex] !== '园区内步行' && 
+            newPlanData.afternoonTransports[dayIndex] !== '步行') {
+            items.push({
+                type: 'flight',
+                icon: '🚇',
+                category: '交通',
+                name: this.truncateText(newPlanData.afternoonTransports[dayIndex], 10),
+                description: '前往下午景点',
+                distance: '0.3',
+                time: '10',
+                location: '市内交通',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 5. 中餐
+        if (newPlanData.lunchRestaurants[dayIndex]) {
+            items.push({
+                type: 'food',
+                icon: '🍽️',
+                category: '午餐',
+                name: this.truncateText(newPlanData.lunchRestaurants[dayIndex], 10),
+                price: newPlanData.lunchCosts[dayIndex]?.toString() || '0',
+                distance: '0.3',
+                time: '8',
+                location: newPlanData.lunchRestaurants[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 6. 下午景点
+        if (newPlanData.afternoonActivities[dayIndex]) {
+            items.push({
+                type: 'attraction',
+                icon: '🎭',
+                category: '景点',
+                name: this.truncateText(newPlanData.afternoonActivities[dayIndex], 10),
+                description: this.truncateText(newPlanData.afternoonTransports[dayIndex] || '', 15),
+                distance: '0.8',
+                time: '20',
+                location: newPlanData.afternoonActivities[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 7. 晚通勤（市内交通）
+        if (newPlanData.eveningTransports[dayIndex] && 
+            newPlanData.eveningTransports[dayIndex] !== '园区内步行' && 
+            newPlanData.eveningTransports[dayIndex] !== '步行') {
+            items.push({
+                type: 'flight',
+                icon: '🚇',
+                category: '交通',
+                name: this.truncateText(newPlanData.eveningTransports[dayIndex], 10),
+                description: '前往晚上景点',
+                distance: '0.4',
+                time: '12',
+                location: '市内交通',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 8. 晚餐
+        if (newPlanData.dinnerRestaurants[dayIndex] && newPlanData.dinnerRestaurants[dayIndex] !== '无') {
+            items.push({
+                type: 'food',
+                icon: '🍷',
+                category: '晚餐',
+                name: this.truncateText(newPlanData.dinnerRestaurants[dayIndex], 20),
+                price: newPlanData.dinnerCosts[dayIndex]?.toString() || '0',
+                distance: '0.5',
+                time: '10',
+                location: newPlanData.dinnerRestaurants[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 9. 晚上景点
+        if (newPlanData.eveningActivities[dayIndex] && newPlanData.eveningActivities[dayIndex] !== '无') {
+            items.push({
+                type: 'attraction',
+                icon: '🌙',
+                category: '景点',
+                name: this.truncateText(newPlanData.eveningActivities[dayIndex], 10),
+                description: this.truncateText(newPlanData.eveningTransports[dayIndex] || '', 15),
+                distance: '1.2',
+                time: '25',
+                location: newPlanData.eveningActivities[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 10. 住宿
+        if (newPlanData.hotels[dayIndex] && newPlanData.hotels[dayIndex] !== '无') {
+            items.push({
+                type: 'hotel',
+                icon: '🏨',
+                category: '住宿',
+                name: this.truncateText(newPlanData.hotels[dayIndex], 10),
+                description: '住宿建议',
+                distance: '0.2',
+                time: '3',
+                location: newPlanData.hotels[dayIndex],
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        return items;
+    },
+
+    /**
+     * 处理从备用接口获取的行程数据
+     */
+    processBackupPlanData(tripData) {
+        console.log('处理备用接口数据:', tripData);
+        
+        const rawPlanData = tripData.rawPlanData;
+        const tripArrangements = tripData.tripArrangements || rawPlanData.行程安排 || [];
+        
+        // 构建行程天数数据
+        const tripDays = tripArrangements.map((day, index) => {
+            const dayNumber = index + 1;
+            const dateInfo = day.日期 || `第${dayNumber}天`;
+            const city = day.城市 || '未知城市';
+            
+            return {
+                day: dayNumber,
+                date: this.extractDateFromString(dateInfo),
+                route: city,
+                weather: '☀️' // 默认天气
+            };
+        });
+        
+        // 构建详细的天数信息
+        const allDayInfo = tripArrangements.map((day, index) => {
+            const dayNumber = index + 1;
+            const city = day.城市 || '未知城市';
+            
+            return {
+                day: dayNumber,
+                route: city,
+                flight: day.交通方式 || null,
+                accommodation: day.住宿地点 || '',
+                items: this.generateDayItems(day),
+                // 添加更多详细信息
+                morning: day.游玩项目?.上午 || {},
+                afternoon: day.游玩项目?.下午 || {},
+                evening: day.游玩项目?.晚上 || {},
+                breakfast: day.餐饮?.早餐 || {},
+                lunch: day.餐饮?.午餐 || {},
+                dinner: day.餐饮?.晚餐 || {},
+                dailyCost: day.费用?.日均总费用 || 0,
+                tips: day.小贴士和注意事项 || ''
+            };
+        });
+        
+        // 更新页面数据 - 完全替换所有数据
+        this.setData({
+            selectedDay: 1, // 确保第一天被选中
+            tripDays: tripDays,
+            allDayInfo: allDayInfo,
+            currentDayInfo: allDayInfo[0] || this.data.currentDayInfo,
+            tripTitle: rawPlanData.行程关键信息?.方案标题 || '个性化行程',
+            tripDuration: `${tripArrangements.length}天${Math.max(0, tripArrangements.length - 1)}晚`,
+            // 添加预算信息
+            totalBudget: rawPlanData.行程关键信息?.预算价格?.总价 || '未知',
+            // 添加亮点信息
+            highlights: rawPlanData.行程关键信息?.方案亮点?.亮点 || [],
+            // 添加特色体验
+            specialExperience: rawPlanData.独家体验?.特色体验 || []
+        });
+        
+        console.log('=== 备用接口数据处理完成 ===');
+        console.log('设置的tripTitle:', rawPlanData.行程关键信息?.方案标题 || '个性化行程');
+        console.log('设置的tripDays:', tripDays);
+        console.log('设置的allDayInfo:', allDayInfo);
+        console.log('设置的currentDayInfo:', allDayInfo[0]);
+        
+        // 更新参与者信息
+        if (tripData.tripInfo) {
+            this.updateParticipants(tripData.tripInfo);
+        }
+        
+        // 更新地图数据
+        this.updateMapDataFromPlan(tripArrangements);
+        
+        console.log('处理后的行程数据:', {
+            tripDays: tripDays,
+            allDayInfo: allDayInfo
+        });
+    },
+
+    /**
+     * 根据新接口数据更新地图
+     */
+    updateMapDataFromNewPlan(newPlanData) {
+        if (!newPlanData || !newPlanData.cities || newPlanData.cities.length === 0) {
+            return;
+        }
+        
+        // 提取所有城市信息
+        const cities = newPlanData.cities.filter(city => city);
+        const uniqueCities = [...new Set(cities)];
+        
+        // 生成地图标记点（这里使用模拟坐标，实际应用中应该根据城市名获取真实坐标）
+        const markers = uniqueCities.map((city, index) => ({
+            id: index + 1,
+            longitude: 116.397128 + (index * 0.01), // 模拟坐标
+            latitude: 39.916527 + (index * 0.01),
+            title: city,
+            width: 40,
+            height: 40,
+            callout: {
+                content: `📍 ${city}`,
+                color: '#ffffff',
+                fontSize: 14,
+                borderRadius: 4,
+                bgColor: '#00ff00',
+                padding: 8,
+                display: 'ALWAYS'
+            }
+        }));
+        
+        // 生成路线连线
+        const polyline = [{
+            points: markers.map(marker => ({
+                longitude: marker.longitude,
+                latitude: marker.latitude
+            })),
+            color: '#FF6B6B',
+            width: 4,
+            arrowLine: true
+        }];
+        
+        // 更新地图中心点为第一个城市
+        const mapCenter = markers.length > 0 ? {
+            longitude: markers[0].longitude,
+            latitude: markers[0].latitude
+        } : this.data.mapCenter;
+        
+        this.setData({
+            mapMarkers: markers,
+            mapPolyline: polyline,
+            mapCenter: mapCenter
+        });
+        
+        console.log('新接口地图数据更新完成:', { markers, polyline, mapCenter });
+    },
+
+    /**
+     * 根据行程数据更新地图
+     */
+    updateMapDataFromPlan(tripArrangements) {
+        if (!tripArrangements || tripArrangements.length === 0) {
+            return;
+        }
+        
+        // 提取所有城市信息
+        const cities = tripArrangements.map(day => day.城市).filter(city => city);
+        const uniqueCities = [...new Set(cities)];
+        
+        // 生成地图标记点（这里使用模拟坐标，实际应用中应该根据城市名获取真实坐标）
+        const markers = uniqueCities.map((city, index) => ({
+            id: index + 1,
+            longitude: 116.397128 + (index * 0.01), // 模拟坐标
+            latitude: 39.916527 + (index * 0.01),
+            title: city,
+            width: 40,
+            height: 40,
+            callout: {
+                content: `📍 ${city}`,
+                color: '#ffffff',
+                fontSize: 14,
+                borderRadius: 4,
+                bgColor: '#00ff00',
+                padding: 8,
+                display: 'ALWAYS'
+            }
+        }));
+        
+        // 生成路线连线
+        const polyline = [{
+            points: markers.map(marker => ({
+                longitude: marker.longitude,
+                latitude: marker.latitude
+            })),
+            color: '#FF6B6B',
+            width: 4,
+            arrowLine: true
+        }];
+        
+        // 更新地图中心点为第一个城市
+        const mapCenter = markers.length > 0 ? {
+            longitude: markers[0].longitude,
+            latitude: markers[0].latitude
+        } : this.data.mapCenter;
+        
+        this.setData({
+            mapMarkers: markers,
+            mapPolyline: polyline,
+            mapCenter: mapCenter
+        });
+        
+        console.log('地图数据更新完成:', { markers, polyline, mapCenter });
+    },
+
+    /**
+     * 处理原有格式的行程数据
+     */
+    processOriginalTripData(tripData) {
+        console.log('处理原有格式数据:', tripData);
+        
+        // 更新行程天数数据
+        this.setData({
+            tripDays: tripData.days || this.data.tripDays,
+            allDayInfo: tripData.allDayInfo || this.data.allDayInfo,
+            currentDayInfo: tripData.dayInfo || this.data.currentDayInfo
+        });
+        
+        console.log('设置后的tripDays:', this.data.tripDays);
+        
+        // 如果有行程信息，更新参与者数据
+        if (tripData.tripInfo) {
+            this.updateParticipants(tripData.tripInfo);
+        }
+    },
+
+    /**
+     * 从日期字符串中提取日期信息
+     */
+    extractDateFromString(dateString) {
+        // 匹配日期格式：第1天（2025-06-01）
+        const dateMatch = dateString.match(/\((\d{4}-\d{2}-\d{2})\)/);
+        if (dateMatch) {
+            const date = new Date(dateMatch[1]);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${month}月${day}日`;
+        }
+        
+        // 如果没有日期信息，返回默认格式
+        return `${(new Date().getMonth() + 1).toString().padStart(2, '0')}月${new Date().getDate().toString().padStart(2, '0')}日`;
+    },
+
+    /**
+     * 切换描述展开/收起状态
+     */
+    toggleDescription(e) {
+        const index = e.currentTarget.dataset.index;
+        const items = this.data.currentDayInfo.items;
+        
+        if (items[index]) {
+            items[index].showFullDesc = !items[index].showFullDesc;
+            
+            this.setData({
+                'currentDayInfo.items': items
+            });
+        }
+    },
+
+    /**
+     * 生成每日行程项目
+     */
+    generateDayItems(day) {
+        const items = [];
+        
+        // 添加上午项目
+        if (day.游玩项目?.上午) {
+            const morning = day.游玩项目.上午;
+            items.push({
+                type: 'attraction',
+                icon: '🏛️',
+                category: '景点',
+                name: this.truncateText(morning.项目名称 || '上午项目', 10),
+                description: this.truncateText(morning.交通情况 || '', 15),
+                distance: '0.5',
+                time: '15',
+                location: morning.项目名称 || '',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 添加下午项目
+        if (day.游玩项目?.下午) {
+            const afternoon = day.游玩项目.下午;
+            items.push({
+                type: 'attraction',
+                icon: '🎭',
+                category: '景点',
+                name: this.truncateText(afternoon.项目名称 || '下午项目', 10),
+                description: this.truncateText(afternoon.交通情况 || '', 15),
+                distance: '0.8',
+                time: '20',
+                location: afternoon.项目名称 || '',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 添加晚上项目
+        if (day.游玩项目?.晚上) {
+            const evening = day.游玩项目.晚上;
+            items.push({
+                type: 'attraction',
+                icon: '🌙',
+                category: '景点',
+                name: this.truncateText(evening.项目名称 || '晚上项目', 10),
+                description: this.truncateText(evening.交通情况 || '', 15),
+                distance: '1.2',
+                time: '25',
+                location: evening.项目名称 || '',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 添加餐饮信息
+        if (day.餐饮?.早餐) {
+            const breakfast = day.餐饮.早餐;
+            items.push({
+                type: 'food',
+                icon: '🍳',
+                category: '早餐',
+                name: this.truncateText(breakfast.餐厅名称 || '早餐', 10),
+                price: breakfast.人均消费?.toString() || '0',
+                distance: '0.1',
+                time: '5',
+                location: breakfast.餐厅名称 || '',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        if (day.餐饮?.午餐) {
+            const lunch = day.餐饮.午餐;
+            items.push({
+                type: 'food',
+                icon: '🍽️',
+                category: '午餐',
+                name: this.truncateText(lunch.餐厅名称 || '午餐', 20),
+                price: lunch.人均消费?.toString() || '0',
+                distance: '0.3',
+                time: '8',
+                location: lunch.餐厅名称 || '',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        if (day.餐饮?.晚餐) {
+            const dinner = day.餐饮.晚餐;
+            items.push({
+                type: 'food',
+                icon: '🍷',
+                category: '晚餐',
+                name: this.truncateText(dinner.餐厅名称 || '晚餐', 20),
+                price: dinner.人均消费?.toString() || '0',
+                distance: '0.5',
+                time: '10',
+                location: dinner.餐厅名称 || '',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 添加住宿信息
+        if (day.住宿地点) {
+            items.push({
+                type: 'hotel',
+                icon: '🏨',
+                category: '住宿',
+                name: this.truncateText(day.住宿地点, 20),
+                description: '住宿建议',
+                distance: '0.2',
+                time: '3',
+                location: day.住宿地点,
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        // 添加交通信息
+        if (day.交通方式 && day.交通方式 !== '市内地铁' && day.交通方式 !== '市内电车') {
+            items.push({
+                type: 'flight',
+                icon: '✈️',
+                category: '交通',
+                name: this.truncateText(day.交通方式, 20),
+                description: '交通安排',
+                distance: '0.0',
+                time: '0',
+                location: '交通信息',
+                image: this.getRandomImage(),
+                showFullDesc: false
+            });
+        }
+        
+        return items;
     },
 
     /**
      * 生成行程标题和时长
      */
     generateTripTitle() {
+        // 如果已经有备用接口设置的标题，就不要覆盖
+        if (this.data.tripTitle && this.data.tripTitle !== '个性化行程') {
+            console.log('已有备用接口标题，跳过生成:', this.data.tripTitle);
+            return;
+        }
+        
         const { tripDays } = this.data;
         console.log('generateTripTitle - tripDays:', tripDays);
         
@@ -777,10 +1545,6 @@
      */
     viewTripDetails() {
         console.log('查看行程详情');
-        wx.showToast({
-        title: '行程详情功能开发中',
-        icon: 'none'
-        });
     },
 
     /**
@@ -816,12 +1580,21 @@
             return;
         }
 
-        // 直接使用 allDayInfo 中的数据，因为它已经包含了正确的结构
+        // 使用备用接口的完整数据结构
         const dayInfo = {
             route: existingDayInfo.route || '',
             flight: existingDayInfo.flight || null,
             accommodation: existingDayInfo.accommodation || '',
-            items: existingDayInfo.items || []
+            items: existingDayInfo.items || [],
+            // 添加更多详细信息
+            morning: existingDayInfo.morning || {},
+            afternoon: existingDayInfo.afternoon || {},
+            evening: existingDayInfo.evening || {},
+            breakfast: existingDayInfo.breakfast || {},
+            lunch: existingDayInfo.lunch || {},
+            dinner: existingDayInfo.dinner || {},
+            dailyCost: existingDayInfo.dailyCost || 0,
+            tips: existingDayInfo.tips || ''
         };
 
         this.setData({

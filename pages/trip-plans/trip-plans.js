@@ -112,7 +112,7 @@ Page({
       accommodation: '巴黎香格里拉酒店 - 豪华套房',
       food: [
         {
-          image: '/images/shoye/logo.png',
+          image: 'https://p0.meituan.net/hackathonqjj/c5205a9621d09841f6e788c25de547f010610.jpg',
           name: '法式餐厅',
           price: 200,
           distance: 0.5,
@@ -122,7 +122,7 @@ Page({
       ],
       attractions: [
         {
-          image: '/images/shoye/logo.png',
+          image: 'https://p0.meituan.net/hackathonqjj/660548731143f53f1bd52b90bfcd33bb11831.jpg',
           name: '埃菲尔铁塔',
           description: '巴黎地标建筑',
           distance: 1.2,
@@ -132,7 +132,7 @@ Page({
       ],
       hotels: [
         {
-          image: '/images/shoye/logo.png',
+          image: 'https://p0.meituan.net/hackathonqjj/f61396fc083191fa7c63934c1feecc428802.jpg',
           name: '巴黎香格里拉酒店',
           price: 1500,
           nights: 1
@@ -146,7 +146,7 @@ Page({
     return {
       title: '行程计划 - 去哪 Whatever',
       path: 'pages/trip-plans/trip-plans',
-      imageUrl: '/images/shoye/logo.png'
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
     }
   },
 
@@ -154,7 +154,7 @@ Page({
   onShareTimeline() {
     return {
       title: '行程计划 - 去哪 Whatever',
-      imageUrl: '/images/shoye/logo.png'
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
     }
   }
 }) 

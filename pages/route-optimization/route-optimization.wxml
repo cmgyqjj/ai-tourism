@@ -104,7 +104,7 @@
   <view class="thinking-state" wx:if="{{currentState === 'thinking'}}">
     <view class="thinking-container">
       <view class="thinking-header">
-        <image class="ai-avatar" src="/images/route-optimization/ai.png" />
+        <image class="ai-avatar" src="https://p0.meituan.net/hackathonqjj/1f80a8749cf500a99c5d24805ab395aa16044.png" />
         <text class="thinking-title">AI正在思考中...</text>
       </view>
       
