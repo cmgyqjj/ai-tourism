@@ -6,7 +6,7 @@ Page({
     
     // 当前步骤
     currentStep: 6,
-    totalSteps: 13,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
@@ -264,16 +264,16 @@ Page({
     console.log('选择的旅行心情影响因素:', selectedTexts)
     
     // 将行程信息传递给下一个页面
-    const nextPageUrl = `/pages/trip-questions-6/trip-questions-6?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
+    const nextPageUrl = `/pages/trip-questions-8/trip-questions-8?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
     
     // 跳转到下一个问题页面
     wx.redirectTo({
       url: nextPageUrl,
       success: () => {
-        console.log('跳转到第6个问题页面成功')
+        console.log('跳转到第8个问题页面成功')
       },
       fail: (error) => {
-        console.error('跳转到第6个问题页面失败:', error)
+        console.error('跳转到第8个问题页面失败:', error)
         wx.showToast({
           title: '页面跳转失败',
           icon: 'none',

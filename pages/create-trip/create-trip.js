@@ -1248,7 +1248,7 @@ Page({
 
     return {
       title: `邀请你加入${this.data.selectedDestination}${this.data.flexibleDurationText}旅行`,
-      path: `/pages/trip-detail/trip-detail?tripId=${tripId}`,
+      path: `/pages/index/index?teamId=${tripId}`,
       imageUrl: '/images/img.png',
     }
   },

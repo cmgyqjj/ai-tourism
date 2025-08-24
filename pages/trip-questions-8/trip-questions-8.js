@@ -5,8 +5,8 @@ Page({
     pageTitle: '',
     
     // 当前步骤
-    currentStep: 9,
-    totalSteps: 13,
+    currentStep: 7,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '宝，你们的住宿预算范围是？',
+      title: ' 晚你接受的价格区间是？（单选）',
       options: [
         { id: 1, text: '¥ 100–500 (经济型)', selected: false },
         { id: 2, text: '¥ 500–1000 (性价比型)', selected: false },

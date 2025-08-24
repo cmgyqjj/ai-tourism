@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '你的旅行性格标签是? (可多选)',
+      title: 'Pick 你的旅行偏好（多选）',
       options: [
         { id: 1, text: '打卡J人', icon: '📢', selected: false },
         { id: 2, text: '佛系玩家', icon: '☕', selected: false },
