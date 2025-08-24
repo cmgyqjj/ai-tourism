@@ -4,9 +4,7 @@ Page({
     sidebarOpen: false, // 侧边栏开关状态
     showShareModal: false, // 分享弹窗状态
     shareStats: {
-      wechatCount: 0,    // 微信分享次数
-      timelineCount: 0,  // 朋友圈分享次数
-      copyCount: 0       // 复制链接次数
+      wechatCount: 0    // 微信分享次数
     },
 
     // 行程标题和时长 - 改成团队版
@@ -219,50 +217,13 @@ Page({
         ]
       }
     ],
-
+    
     // Current selected day's trip info
     currentDayInfo: {
-      day: 1,
-      route: '北京—巴黎',
-      flight: '机场 巴黎 - 戴高乐机场',
-      accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
-      items: [
-        {
-          type: 'food',
-          icon: '🍽️',
-          category: '美食',
-          name: '花神咖啡馆',
-          price: '100',
-          description: '正宗法式咖啡和甜点',
-          image: '/images/cafe.png',
-          location: 'Café de Flore, Paris',
-          image: 'https://p0.meituan.net/hackathonqjj/066f1f168c7a71a45bf97c3771862cab74240.png'
-        },
-        {
-          type: 'attraction',
-          icon: '🏔️',
-          category: '景点',
-          name: '塞纳河',
-          description: '夜游塞纳河拍照打卡',
-          image: '/images/seine.jpg',
-          location: 'Seine River, Paris',
-          distance: '1.2',
-          time: '5'
-        },
-        {
-          type: 'hotel',
-          icon: '🏨',
-          category: '住宿',
-          name: 'Prais万豪(第7区)',
-          nights: '1',
-          price: '1028',
-          description: '豪华酒店，位置优越',
-          image: '/images/hotel.jpg',
-          location: 'Marriott Hotel, Paris',
-          distance: '2.1',
-          time: '8'
-        }
-      ]
+        route: '',
+        flight: null,
+        accommodation: '',
+        items: []
     }
   },
 
@@ -304,6 +265,15 @@ Page({
       this.generateTripTitle();
       this.initMapData();
     }
+
+    // 加载第一天的行程信息
+    this.loadDayInfo(1);
+
+    // 调试：打印当前数据状态
+    console.log('=== 页面加载完成后的数据状态 ===');
+    console.log('tripDays:', this.data.tripDays);
+    console.log('tripTitle:', this.data.tripTitle);
+    console.log('currentDayInfo:', this.data.currentDayInfo);
   },
 
   /**
@@ -436,13 +406,22 @@ Page({
   loadDayInfo(day) {
     console.log('加载第', day, '天的行程信息');
     
-    // Directly get the trip info for the selected day from allDayInfo
-    const dayInfo = this.data.allDayInfo.find(item => item.day === day);
+    // 直接从 allDayInfo 中获取对应天数的行程信息
+    const existingDayInfo = this.data.allDayInfo.find(item => item.day === day);
 
-    if (!dayInfo) {
+    if (!existingDayInfo) {
       console.error('未找到第', day, '天的行程信息');
       return;
     }
+
+    // 直接使用 allDayInfo 中的数据，因为它已经包含了正确的结构
+    const dayInfo = {
+      route: existingDayInfo.route || '',
+      flight: existingDayInfo.flight || null,
+      accommodation: existingDayInfo.accommodation || '',
+      items: existingDayInfo.items || []
+    };
+
     // Update the current selected day's trip info
     this.setData({
       currentDayInfo: dayInfo
@@ -494,7 +473,7 @@ Page({
   viewItemDetail(index) {
     const item = this.data.currentDayInfo.items[index];
     console.log('查看项目详情:', item);
-
+    
     wx.showToast({
       title: '详情功能开发中',
       icon: 'none'
@@ -507,7 +486,7 @@ Page({
   addToFavorites(index) {
     const item = this.data.currentDayInfo.items[index];
     console.log('添加到收藏:', item);
-
+    
     wx.showToast({
       title: '已添加到收藏',
       icon: 'success'
@@ -520,7 +499,7 @@ Page({
   shareItem(index) {
     const item = this.data.currentDayInfo.items[index];
     console.log('分享项目:', item);
-
+    
     wx.showToast({
       title: '分享功能开发中',
       icon: 'none'
@@ -533,7 +512,7 @@ Page({
   navigateToLocation(e) {
     const location = e.currentTarget.dataset.location;
     console.log('导航到位置:', location);
-
+    
     wx.showToast({
       title: '导航功能开发中',
       icon: 'none'
@@ -550,24 +529,46 @@ Page({
   },
 
   /**
-   * 路线优化
+   * 路线优化 - 跳转到路线优化页面
    */
   onRouteOptimization() {
-    console.log('路线优化');
-    wx.showToast({
-      title: '路线优化功能开发中',
-      icon: 'none'
+    console.log('跳转到路线优化页面');
+
+    // 跳转到路线优化页面
+    wx.navigateTo({
+      url: '/pages/route-optimization/route-optimization',
+      success: () => {
+        console.log('成功跳转到路线优化页面');
+      },
+      fail: (error) => {
+        console.error('跳转失败:', error);
+        wx.showToast({
+          title: '跳转失败，请重试',
+          icon: 'none'
+        });
+      }
     });
   },
 
   /**
-   * 攻略PK
+   * 攻略PK - 跳转到攻略PK页面
    */
   onStrategyPK() {
-    console.log('攻略PK');
-    wx.showToast({
-      title: '攻略PK功能开发中',
-      icon: 'none'
+    console.log('跳转到攻略PK页面');
+
+    // 跳转到攻略PK页面
+    wx.navigateTo({
+      url: '/pages/strategy-pk/strategy-pk',
+      success: () => {
+        console.log('成功跳转到攻略PK页面');
+      },
+      fail: (error) => {
+        console.error('跳转失败:', error);
+        wx.showToast({
+          title: '跳转失败，请重试',
+          icon: 'none'
+        });
+      }
     });
   },
 
@@ -622,7 +623,7 @@ Page({
    */
   shareToFriend() {
     console.log('分享到微信');
-    this.updateShareStats('wechatCount');
+    this.updateWechatShareCount();
     wx.showToast({
       title: '分享成功',
       icon: 'success'
@@ -630,51 +631,20 @@ Page({
     this.hideShareModal();
   },
 
-  /**
-   * 分享到朋友圈
-   */
-  shareToTimeline() {
-    console.log('分享到朋友圈');
-    this.updateShareStats('timelineCount');
-    wx.showToast({
-      title: '分享成功',
-      icon: 'success'
-    });
-    this.hideShareModal();
-  },
+
+
+
 
   /**
-   * 复制链接
+   * 更新微信分享统计
    */
-  copyLink() {
-    console.log('复制链接');
-    this.updateShareStats('copyCount');
-
-    // 生成分享链接
-    const shareUrl = `https://miniprogram.com/pages/team-strategy/team-strategy?tripId=${Date.now()}&shared=true&type=copy`;
-
-    wx.setClipboardData({
-      data: shareUrl,
-      success: () => {
-        wx.showToast({
-          title: '链接已复制',
-          icon: 'success'
-        });
-        this.hideShareModal();
-      }
-    });
-  },
-
-  /**
-   * 更新分享统计
-   */
-  updateShareStats(type) {
+  updateWechatShareCount() {
     const shareStats = { ...this.data.shareStats };
-    shareStats[type]++;
+    shareStats.wechatCount++;
     this.setData({
       shareStats
     });
-    console.log('分享统计更新:', shareStats);
+    console.log('微信分享统计更新:', shareStats);
   },
 
   /**
@@ -709,6 +679,10 @@ Page({
 
   onShow() {
     console.log('团队攻略页面显示');
+    console.log('当前tripDays数据:', this.data.tripDays);
+
+    // 重新加载当前选中天数的信息
+    this.loadDayInfo(this.data.selectedDay);
   },
 
   onHide() {
@@ -730,14 +704,5 @@ Page({
     };
   },
 
-  /**
-   * 分享到朋友圈
-   */
-  onShareTimeline() {
-    return {
-      title: this.data.tripTitle,
-      path: '/pages/team-strategy/team-strategy',
-      imageUrl: '/images/share-cover.jpg'
-    };
-  }
+
 });

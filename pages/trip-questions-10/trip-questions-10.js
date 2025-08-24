@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '在外每餐预算是? (单选)',
+      title: '在外每日餐预算是？（单选）',
       options: [
         { id: 1, text: '¥ 100以下', selected: false },
         { id: 2, text: '¥ 100-200', selected: false },
@@ -93,15 +93,12 @@ Page({
     if (destination && duration && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
-      const companionCountNum = parseInt(companionCount) || 0
-      const totalPeople = companionCountNum + 1 // 搭子数量 + 自己
-      
-      if (totalPeople === 1) {
+      if (companionCount === '1') {
         companionText = '1人'
-      } else if (totalPeople === 2) {
+      } else if (companionCount === '2') {
         companionText = '2人组'
       } else {
-        companionText = `${totalPeople}人组`
+        companionText = `${companionCount}人组`
       }
       
       // 格式化时长显示，只显示天数

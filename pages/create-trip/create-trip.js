@@ -871,7 +871,7 @@ Page({
         placeholder: `+` // 占位符文本
       })
     }
-    
+
     this.setData({
       companionCount,
       remainingCompanions,
@@ -1040,7 +1040,7 @@ Page({
       title: '创建行程中...',
       mask: true
     })
-    
+
     // 调用创建团队接口
     this.createTeam(userId, companionCount+1, this.data.flexibleDurationText, this.data.selectedDestination)
   },
@@ -1097,7 +1097,7 @@ Page({
             })
             console.log('团队ID已保存:', res.data.data.teamId)
           }
-          
+
           // 构建行程信息
           const tripInfo = {
             destination: this.data.selectedDestination,
@@ -1114,7 +1114,7 @@ Page({
           // 保存到本地存储
           wx.setStorageSync('currentTripInfo', tripInfo)
           console.log('行程信息已保存到本地存储:', tripInfo)
-          
+
           // 延迟跳转，让用户看到成功提示
           setTimeout(() => {
             this.navigateToQuestions()
@@ -1174,7 +1174,7 @@ Page({
             })
             console.log('团队ID已保存:', res.data.data.teamId)
             console.log('团队已创建标记:', true)
-            
+
             // 保存行程信息到本地存储
             const tripInfo = {
               destination: this.data.selectedDestination,
@@ -1257,7 +1257,7 @@ Page({
     // 直接存储到缓存，供所有问题页面使用
     wx.setStorageSync('currentTripInfo', tripInfo)
     console.log('行程信息已保存到缓存:', tripInfo)
-    
+
     // 跳转到第一个问题页面（不再传递tripInfo参数）
     wx.navigateTo({
       url: '/pages/trip-questions-1/trip-questions-1'
@@ -1277,7 +1277,7 @@ Page({
 
     // 获取搭子数量
     const companionCount = parseInt(this.data.companionCount)
-    
+
     // 如果搭子数量为0，不应该分享，直接返回
     if (companionCount === 0) {
       return {
@@ -1286,7 +1286,7 @@ Page({
         imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
       }
     }
-    
+
     // 设置分享状态为true
     this.setData({
       hasShared: true

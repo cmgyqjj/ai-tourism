@@ -209,7 +209,7 @@ Page({
     
     return {
       title: `邀请你加入${tripInfo.destination}${tripInfo.duration}旅行`,
-      path: `/pages/trip-detail/trip-detail?tripId=${tripInfo.id}`,
+      path: `/pages/index/index?teamId=${tripInfo.id}`,
       imageUrl: '/images/img.png'
     }
   },

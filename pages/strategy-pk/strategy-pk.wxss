@@ -655,6 +655,12 @@
     color: #666;
     border: 1rpx solid #e0e0e0;
   }
+
+  .action-btn.export {
+    background-color: #4CAF50;
+    color: #fff;
+    border: 1rpx solid #4CAF50;
+  }
   
   .action-btn.primary {
     background-color: #333;
@@ -1625,4 +1631,14 @@
 /* 未投票状态 - 蓝色下划线 */
 .not-voted-text {
   text-decoration-color: #007AFF !important;
+}
+
+/* 隐藏的 Canvas 样式 */
+.page-canvas {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 750px;
+  height: 1334px;
+  z-index: -1;
 }

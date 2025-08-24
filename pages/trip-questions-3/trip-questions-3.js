@@ -94,7 +94,7 @@ Page({
       let companionText = ''
       const companionCountNum = parseInt(companionCount) || 0
       const totalPeople = companionCountNum + 1 // 搭子数量 + 自己
-      
+
       if (totalPeople === 1) {
         companionText = '1人'
       } else if (totalPeople === 2) {
