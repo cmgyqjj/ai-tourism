@@ -262,7 +262,7 @@ Page({
         break;
       case 'plan':
         wx.navigateTo({
-          url: '/pages/index/index',
+          url: '/pages/trip-plans/trip-plans',
           success: () => {
             console.log('跳转到行程计划页面成功');
           },

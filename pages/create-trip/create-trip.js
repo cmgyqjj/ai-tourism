@@ -8,12 +8,21 @@ Page({
     companionCount: '', // 旅行搭子数量
     userAvatar: '', // 当前用户头像，为空时显示占位符
     remainingCompanions: 0, // 还需要添加的搭子数量
+    companionAvatars: [], // 搭子头像列表
+    hasShared: false, // 是否已经分享过
     tabType: 'single', // 'single' 或 'multiple'
     searchKeyword: '',
     currentCategory: 'current',
     currentCategoryName: '当前位置',
     currentTeamId: '', // 当前团队ID
     hasCreatedTeam: false, // 是否已经通过分享创建了团队
+    teamInfo: {
+      id: '',
+      name: '',
+      destination: '',
+      duration: '',
+      maxMembers: 4
+    },
     // 多选目的地相关数据
     selectedDestinations: [], // 多选模式下已选择的目的地
     // 时间选择器相关数据
@@ -853,12 +862,24 @@ Page({
     
     const remainingCompanions = Math.max(0, parseInt(companionCount))
     
+    // 生成搭子头像列表
+    const companionAvatars = []
+    for (let i = 0; i < parseInt(companionCount); i++) {
+      companionAvatars.push({
+        id: i + 1,
+        avatarUrl: '', // 暂时为空，后续可以通过分享获取
+        placeholder: `+` // 占位符文本
+      })
+    }
+    
     this.setData({
       companionCount,
-      remainingCompanions
+      remainingCompanions,
+      companionAvatars,
+      hasShared: false // 重置分享状态
     })
     
-    console.log('搭子数量已更新:', companionCount, '剩余搭子数:', remainingCompanions)
+    console.log('搭子数量已更新:', companionCount, '剩余搭子数:', remainingCompanions, '搭子头像:', companionAvatars)
   },
 
   // 搭子数量输入框获得焦点
@@ -1013,20 +1034,35 @@ Page({
       return
     }
     
-    // 只有在搭子数=0时才调用创建团队接口
-    if (companionCount === 0) {
-      // 显示加载提示
-      wx.showLoading({
-        title: '创建行程中...',
-        mask: true
-      })
-      
-      // 调用创建团队接口
-      this.createTeam(userId, companionCount+1, this.data.flexibleDurationText, this.data.selectedDestination)
+    // 无论搭子数量多少，都调用创建团队接口
+    // 显示加载提示
+    wx.showLoading({
+      title: '创建行程中...',
+      mask: true
+    })
+    
+    // 调用创建团队接口
+    this.createTeam(userId, companionCount+1, this.data.flexibleDurationText, this.data.selectedDestination)
+  },
+
+  /**
+   * 计算天数
+   */
+  calculateDays() {
+    let days = 0
+    if (this.data.flexibleDurationText.includes('天')) {
+      // 灵活天数模式：提取数字
+      const daysMatch = this.data.flexibleDurationText.match(/(\d+)天/)
+      days = daysMatch ? parseInt(daysMatch[1]) : 0
+    } else if (this.data.selectedRange && this.data.selectedRange.days) {
+      // 固定日期模式：使用已计算的天数
+      days = this.data.selectedRange.days
     } else {
-      // 搭子数>0时，直接跳转，不调用接口
-      this.navigateToQuestions()
+      // 尝试从flexibleDurationText中提取数字
+      const numberMatch = this.data.flexibleDurationText.match(/(\d+)/)
+      days = numberMatch ? parseInt(numberMatch[1]) : 0
     }
+    return days
   },
 
   /**
@@ -1053,10 +1089,20 @@ Page({
             duration: 1500
           })
           
+          // 保存团队ID到页面数据中
+          if (res.data.data && res.data.data.teamId) {
+            this.setData({
+              currentTeamId: res.data.data.teamId,
+              hasCreatedTeam: true // 标记已经创建了团队
+            })
+            console.log('团队ID已保存:', res.data.data.teamId)
+          }
+          
           // 构建行程信息
           const tripInfo = {
             destination: this.data.selectedDestination,
             duration: this.data.flexibleDurationText,
+            days: this.calculateDays(), // 计算天数
             companionCount: this.data.companionCount,
             currentUser: {
               avatarUrl: wx.getStorageSync('userInfo')?.avatarUrl || '',
@@ -1065,11 +1111,13 @@ Page({
             teamId: res.data.data?.teamId || null // 保存团队ID
           }
           
+          // 保存到本地存储
+          wx.setStorageSync('currentTripInfo', tripInfo)
+          console.log('行程信息已保存到本地存储:', tripInfo)
+          
           // 延迟跳转，让用户看到成功提示
           setTimeout(() => {
-            wx.navigateTo({
-              url: `/pages/trip-questions-1/trip-questions-1?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
-            })
+            this.navigateToQuestions()
           }, 1500)
         } else {
           wx.showToast({
@@ -1126,6 +1174,22 @@ Page({
             })
             console.log('团队ID已保存:', res.data.data.teamId)
             console.log('团队已创建标记:', true)
+            
+            // 保存行程信息到本地存储
+            const tripInfo = {
+              destination: this.data.selectedDestination,
+              duration: this.data.flexibleDurationText,
+              days: this.calculateDays(), // 计算天数
+              companionCount: this.data.companionCount,
+              teamId: res.data.data.teamId,
+              currentUser: {
+                avatarUrl: wx.getStorageSync('userInfo')?.avatarUrl || '',
+                nickName: wx.getStorageSync('userInfo')?.nickName || '我'
+              }
+            }
+            wx.setStorageSync('currentTripInfo', tripInfo)
+            wx.setStorageSync('tripInfo', tripInfo)
+            console.log('分享行程信息已保存到本地存储:', tripInfo)
           }
         } else {
           wx.showToast({
@@ -1154,10 +1218,35 @@ Page({
    * 直接跳转到问题页面（不调用接口）
    */
   navigateToQuestions() {
+    // 检查必要信息是否完整
+    if (!this.data.selectedDestination || !this.data.flexibleDurationText || !this.data.companionCount) {
+      wx.showToast({
+        title: '请先完善行程信息',
+        icon: 'none'
+      })
+      return
+    }
+
+    // 计算天数
+    let days = 0
+    if (this.data.flexibleDurationText.includes('天')) {
+      // 灵活天数模式：提取数字
+      const daysMatch = this.data.flexibleDurationText.match(/(\d+)天/)
+      days = daysMatch ? parseInt(daysMatch[1]) : 0
+    } else if (this.data.selectedRange && this.data.selectedRange.days) {
+      // 固定日期模式：使用已计算的天数
+      days = this.data.selectedRange.days
+    } else {
+      // 尝试从flexibleDurationText中提取数字
+      const numberMatch = this.data.flexibleDurationText.match(/(\d+)/)
+      days = numberMatch ? parseInt(numberMatch[1]) : 0
+    }
+
     // 构建行程信息
     const tripInfo = {
       destination: this.data.selectedDestination,
       duration: this.data.flexibleDurationText,
+      days: days, // 添加天数字段
       companionCount: this.data.companionCount,
       currentUser: {
         avatarUrl: wx.getStorageSync('userInfo')?.avatarUrl || '',
@@ -1165,9 +1254,13 @@ Page({
       }
     }
     
-    // 直接跳转到第一个问题页面
+    // 直接存储到缓存，供所有问题页面使用
+    wx.setStorageSync('currentTripInfo', tripInfo)
+    console.log('行程信息已保存到缓存:', tripInfo)
+    
+    // 跳转到第一个问题页面（不再传递tripInfo参数）
     wx.navigateTo({
-      url: `/pages/trip-questions-1/trip-questions-1?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
+      url: '/pages/trip-questions-1/trip-questions-1'
     })
   },
 
@@ -1178,24 +1271,26 @@ Page({
       return {
         title: '邀请你一起规划旅行',
         path: '/pages/create-trip/create-trip',
-        imageUrl: '/images/img.png'
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
       }
     }
 
-    // 检查搭子数量，分享队伍至少需要有一个搭子
+    // 获取搭子数量
     const companionCount = parseInt(this.data.companionCount)
+    
+    // 如果搭子数量为0，不应该分享，直接返回
     if (companionCount === 0) {
-      wx.showToast({
-        title: '分享队伍至少需要有一个搭子',
-        icon: 'none',
-        duration: 2000
-      })
       return {
         title: '邀请你一起规划旅行',
         path: '/pages/create-trip/create-trip',
-        imageUrl: '/images/img.png'
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
       }
     }
+    
+    // 设置分享状态为true
+    this.setData({
+      hasShared: true
+    })
 
     // 获取当前用户信息
     const userId = wx.getStorageSync('userId')
@@ -1207,7 +1302,7 @@ Page({
       return {
         title: '邀请你一起规划旅行',
         path: '/pages/create-trip/create-trip',
-        imageUrl: '/images/img.png'
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png'
       }
     }
 
@@ -1246,10 +1341,13 @@ Page({
       }
     }
 
+    // 如果已经有团队ID，使用真实的团队ID；否则使用临时ID（后续会被更新）
+    const teamId = this.data.currentTeamId || tripId
+
     return {
       title: `邀请你加入${this.data.selectedDestination}${this.data.flexibleDurationText}旅行`,
-      path: `/pages/trip-detail/trip-detail?tripId=${tripId}`,
-      imageUrl: '/images/img.png',
+      path: `/pages/team-invite/team-invite?userId=${userId}&teamId=${teamId}`,
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
     }
   },
 
@@ -1258,7 +1356,7 @@ Page({
     if (!this.data.selectedDestination || !this.data.flexibleDurationText || !this.data.companionCount) {
       return {
         title: '邀请你一起规划旅行',
-        imageUrl: '/images/img.png',
+        imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
       }
     }
 
@@ -1290,7 +1388,7 @@ Page({
 
     return {
       title: `邀请你加入${this.data.selectedDestination}${this.data.flexibleDurationText}旅行`,
-      imageUrl: '/images/img.png',
+      imageUrl: 'https://p0.meituan.net/hackathonqjj/730cb1b192741b985e8c3546b4edf5a6227855.png',
       query: `tripId=${tripId}`
     }
   },

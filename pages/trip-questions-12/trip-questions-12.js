@@ -50,38 +50,45 @@ Page({
       return
     }
     
-    // 处理传递的行程信息
-    if (options.tripInfo) {
-      try {
-        const tripInfo = JSON.parse(decodeURIComponent(options.tripInfo))
-        this.setData({
-          tripInfo: tripInfo
-        })
-        
-        // 生成动态页面标题
-        this.generatePageTitle()
-        
-        // 生成用户头像列表
-        this.generateUserAvatars()
-        
-        console.log('接收到的行程信息:', tripInfo)
-      } catch (error) {
-        console.error('解析行程信息失败:', error)
-        // 使用默认标题
-        this.setData({
-          pageTitle: '创建行程'
-        })
-      }
-    } else {
-      // 没有行程信息时使用默认标题
-      this.setData({
-        pageTitle: '创建行程'
-      })
-    }
+    // 直接从缓存中读取行程信息
+    this.loadTripInfoFromCache()
     
     // 初始化页面数据
     this.initPageData()
   },
+
+  // 从缓存中加载行程信息
+  loadTripInfoFromCache() {
+    const tripInfo = wx.getStorageSync('currentTripInfo')
+    
+    if (tripInfo && tripInfo.destination && tripInfo.duration) {
+      this.setData({
+        tripInfo: tripInfo
+      })
+      
+      // 生成动态页面标题
+      this.generatePageTitle()
+      
+      // 生成用户头像列表
+      this.generateUserAvatars()
+      
+      console.log('从缓存加载的行程信息:', tripInfo)
+    } else {
+      console.error('缓存中没有找到有效的行程信息')
+      wx.showToast({
+        title: '请先创建行程',
+        icon: 'none',
+        duration: 2000
+      })
+      
+      // 延迟返回创建行程页面
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 2000)
+    }
+  },
+
+
 
   // 生成动态页面标题
   generatePageTitle() {
@@ -270,6 +277,16 @@ Page({
   generateTrip() {
     console.log('生成行程')
     
+    // 检查tripInfo是否完整
+    if (!this.data.tripInfo || !this.data.tripInfo.destination || !this.data.tripInfo.duration) {
+      wx.showToast({
+        title: '行程信息不完整，请返回重新创建',
+        icon: 'none',
+        duration: 3000
+      })
+      return
+    }
+    
     // 收集所有问题的答案
     const allAnswers = this.collectAllQuestionAnswers()
     console.log('收集到的所有问题答案:', allAnswers)
@@ -400,7 +417,8 @@ Page({
           
           // 准备行程数据
           const tripData = {
-            days: this.generateTripDays(),
+            destination: this.data.tripInfo.destination, // 添加目的地
+            days: this.generateTripDays(), // 使用计算的天数
             dayInfo: this.generateDayInfo(),
             tripInfo: this.data.tripInfo // 传递完整的行程信息
           }
@@ -439,12 +457,22 @@ Page({
 
   // 生成行程天数数据
   generateTripDays() {
-    const { duration } = this.data.tripInfo
+    const { duration, days } = this.data.tripInfo
     console.log('原始duration值:', duration, '类型:', typeof duration)
+    console.log('原始days值:', days, '类型:', typeof days)
+    console.log('完整的tripInfo:', this.data.tripInfo)
     
-    let days = 12 // 默认值
+    // 优先使用days字段
+    if (days && days > 0) {
+      console.log('使用days字段:', days)
+      return days
+    }
     
-    if (typeof duration === 'string') {
+    let calculatedDays = 12 // 默认值
+    
+    if (!duration) {
+      console.error('duration为空，使用默认值12天')
+    } else if (typeof duration === 'string') {
       // 检查是否是日期范围格式（如：2025年1月1日 - 2025年1月12日）
       const dateRangeMatch = duration.match(/(\d{4})年(\d{1,2})月(\d{1,2})日\s*-\s*(\d{4})年(\d{1,2})月(\d{1,2})日/)
       
@@ -462,44 +490,32 @@ Page({
         
         // 计算天数差（包含开始和结束日期）
         const timeDiff = endDate.getTime() - startDate.getTime()
-        days = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1
+        calculatedDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1
         
         console.log('日期范围解析:', {
           startDate: startDate.toDateString(),
           endDate: endDate.toDateString(),
-          calculatedDays: days
+          calculatedDays: calculatedDays
         })
-      } else {
-        // 检查是否是"X天"格式
+      } else if (duration.includes('天')) {
+        // 灵活天数模式：提取数字
         const daysMatch = duration.match(/(\d+)天/)
         if (daysMatch) {
-          days = parseInt(daysMatch[1])
-        } else {
-          // 尝试提取任何数字
-          const numberMatch = duration.match(/(\d+)/)
-          if (numberMatch) {
-            days = parseInt(numberMatch[1])
-          }
+          calculatedDays = parseInt(daysMatch[1])
+          console.log('灵活天数模式，提取到天数:', calculatedDays)
+        }
+      } else {
+        // 尝试提取其他数字
+        const numberMatch = duration.match(/(\d+)/)
+        if (numberMatch) {
+          calculatedDays = parseInt(numberMatch[1])
+          console.log('其他格式，提取到数字:', calculatedDays)
         }
       }
-    } else if (typeof duration === 'number') {
-      days = duration
     }
     
-    console.log('解析后的天数:', days)
-    
-    const tripDays = []
-    for (let i = 1; i <= days; i++) {
-      tripDays.push({
-        day: i,
-        date: this.formatDate(i),
-        route: this.data.tripInfo.destination || '北京 > 巴黎',
-        weather: this.getRandomWeather()
-      })
-    }
-    
-    console.log('生成的行程天数:', tripDays.length, '天')
-    return tripDays
+    console.log('最终计算的天数:', calculatedDays)
+    return calculatedDays
   },
 
   // 生成日期信息
@@ -539,8 +555,11 @@ Page({
 
   // 生成当天行程信息
   generateDayInfo() {
+    console.log('generateDayInfo - tripInfo:', this.data.tripInfo)
+    console.log('generateDayInfo - destination:', this.data.tripInfo?.destination)
+    
     return {
-      route: this.data.tripInfo.destination || '北京—巴黎',
+      route: this.data.tripInfo?.destination || '北京—巴黎',
       flight: '机场 巴黎 - 戴高乐机场',
       accommodation: '住宿建议 巴黎景区附近 (1,7,9区)',
       food: [

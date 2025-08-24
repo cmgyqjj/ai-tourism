@@ -63,67 +63,42 @@ Page({
       return
     }
     
-    // 处理传递的行程信息
-    if (options.tripInfo) {
-      try {
-        const tripInfo = JSON.parse(decodeURIComponent(options.tripInfo))
-        console.log('解析后的tripInfo:', tripInfo)
-        
-        if (tripInfo && Object.keys(tripInfo).length > 0) {
-          this.setData({
-            tripInfo: tripInfo
-          })
-          
-          // 生成动态页面标题
-          this.generatePageTitle()
-          
-          // 生成用户头像列表
-          this.generateUserAvatars()
-          
-          console.log('接收到的行程信息:', tripInfo)
-        } else {
-          console.error('tripInfo数据为空或无效')
-          wx.showToast({
-            title: '行程信息无效，请重新开始',
-            icon: 'none'
-          })
-          setTimeout(() => {
-            wx.navigateBack({
-              delta: 3
-            })
-          }, 2000)
-          return
-        }
-      } catch (error) {
-        console.error('解析行程信息失败:', error)
-        wx.showToast({
-          title: '行程信息解析失败，请重新开始',
-          icon: 'none'
-        })
-        setTimeout(() => {
-          wx.navigateBack({
-            delta: 3
-          })
-        }, 2000)
-        return
-      }
-    } else {
-      // 没有行程信息时返回上一页
-      console.error('没有接收到tripInfo参数')
-      wx.showToast({
-        title: '缺少行程信息，请重新开始',
-        icon: 'none'
-      })
-      setTimeout(() => {
-        wx.navigateBack({
-          delta: 3
-        })
-      }, 2000)
-      return
-    }
+    // 直接从缓存中读取行程信息
+    this.loadTripInfoFromCache()
     
     // 初始化页面数据
     this.initPageData()
+  },
+
+  // 从缓存中加载行程信息
+  loadTripInfoFromCache() {
+    const tripInfo = wx.getStorageSync('currentTripInfo')
+    
+    if (tripInfo && tripInfo.destination && tripInfo.duration) {
+      this.setData({
+        tripInfo: tripInfo
+      })
+      
+      // 生成动态页面标题
+      this.generatePageTitle()
+      
+      // 生成用户头像列表
+      this.generateUserAvatars()
+      
+      console.log('从缓存加载的行程信息:', tripInfo)
+    } else {
+      console.error('缓存中没有找到有效的行程信息')
+      wx.showToast({
+        title: '请先创建行程',
+        icon: 'none',
+        duration: 2000
+      })
+      
+      // 延迟返回创建行程页面
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 2000)
+    }
   },
 
   // 生成动态页面标题
@@ -311,12 +286,9 @@ Page({
     
     console.log('选择的人生必去景点:', selectedTexts)
     
-    // 将行程信息传递给下一个页面
-    const nextPageUrl = `/pages/trip-questions-5/trip-questions-5?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
-    
-    // 跳转到下一个问题页面
+    // 直接跳转到下一个问题页面（不再传递tripInfo参数）
     wx.redirectTo({
-      url: nextPageUrl,
+      url: '/pages/trip-questions-5/trip-questions-5',
       success: () => {
         console.log('跳转到第5个问题页面成功')
       },

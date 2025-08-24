@@ -47,44 +47,51 @@ Page({
       return
     }
     
-    // 处理传递的行程信息
-    if (options.tripInfo) {
-      try {
-        const tripInfo = JSON.parse(decodeURIComponent(options.tripInfo))
-        this.setData({
-          tripInfo: tripInfo
-        })
-        
-        // 生成动态页面标题
-        this.generatePageTitle()
-        
-        // 生成用户头像列表
-        this.generateUserAvatars()
-        
-        console.log('接收到的行程信息:', tripInfo)
-      } catch (error) {
-        console.error('解析行程信息失败:', error)
-        // 使用默认标题
-        this.setData({
-          pageTitle: '创建行程'
-        })
-      }
-    } else {
-      // 没有行程信息时使用默认标题
-      this.setData({
-        pageTitle: '创建行程'
-      })
-    }
+    // 直接从缓存中读取行程信息
+    this.loadTripInfoFromCache()
     
     // 初始化页面数据
     this.initPageData()
   },
 
+  // 从缓存中加载行程信息
+  loadTripInfoFromCache() {
+    const tripInfo = wx.getStorageSync('currentTripInfo')
+    
+    if (tripInfo && tripInfo.destination && tripInfo.duration) {
+      this.setData({
+        tripInfo: tripInfo
+      })
+      
+      // 生成动态页面标题
+      this.generatePageTitle()
+      
+      // 生成用户头像列表
+      this.generateUserAvatars()
+      
+      console.log('从缓存加载的行程信息:', tripInfo)
+    } else {
+      console.error('缓存中没有找到有效的行程信息')
+      wx.showToast({
+        title: '请先创建行程',
+        icon: 'none',
+        duration: 2000
+      })
+      
+      // 延迟返回创建行程页面
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 2000)
+    }
+  },
+
+
+
   // 生成动态页面标题
   generatePageTitle() {
-    const { destination, duration, companionCount } = this.data.tripInfo
+    const { destination, duration, days, companionCount } = this.data.tripInfo
     
-    if (destination && duration && companionCount) {
+    if (destination && (duration || days) && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
       const companionCountNum = parseInt(companionCount) || 0
@@ -98,11 +105,19 @@ Page({
         companionText = `${totalPeople}人组`
       }
       
-      // 格式化时长显示，只显示天数
+      // 格式化时长显示，优先使用days字段
       let durationText = ''
-      if (duration.includes('天')) {
-        // 如果已经是"X天"格式，直接使用
-        durationText = duration
+      if (days && days > 0) {
+        // 如果有days字段，直接使用
+        durationText = `${days}日`
+      } else if (duration.includes('天')) {
+        // 如果已经是"X天"格式，提取数字
+        const daysMatch = duration.match(/(\d+)天/)
+        if (daysMatch) {
+          durationText = daysMatch[1] + '日'
+        } else {
+          durationText = '几日'
+        }
       } else if (duration.includes('年') && duration.includes('月') && duration.includes('日')) {
         // 如果是完整日期格式，提取天数
         const daysMatch = duration.match(/(\d+)天/)
@@ -248,7 +263,7 @@ Page({
 
   // 下一步
   nextStep() {
-    const { selectedOptions, tripInfo } = this.data
+    const { selectedOptions } = this.data
     
     if (selectedOptions.length === 0) {
       wx.showToast({
@@ -265,12 +280,9 @@ Page({
     
     console.log('选择的同行人关系:', selectedTexts)
     
-    // 将行程信息传递给下一个页面
-    const nextPageUrl = `/pages/trip-questions-2/trip-questions-2?tripInfo=${encodeURIComponent(JSON.stringify(tripInfo))}`
-    
-    // 跳转到下一个问题页面
+    // 直接跳转到下一个问题页面（不再传递tripInfo参数）
     wx.redirectTo({
-      url: nextPageUrl,
+      url: '/pages/trip-questions-2/trip-questions-2',
       success: () => {
         console.log('跳转到第2个问题页面成功')
       },

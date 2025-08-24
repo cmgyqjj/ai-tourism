@@ -24,7 +24,8 @@
     "pages/strategy-pk/strategy-pk",
     "pages/route-optimization/route-optimization",
     "pages/featured-topics/featured-topics",
-    "pages/trip-plans/trip-plans"
+    "pages/trip-plans/trip-plans",
+    "pages/team-invite/team-invite"
   ],
   "window": {
     "navigationBarTextStyle": "black",

@@ -1,0 +1,359 @@
+<!--index.wxml-->
+<scroll-view class="page-scroll" scroll-y="true" enhanced="true" show-scrollbar="false">
+  <view class="container">
+    <!-- 导航栏 -->
+    <view class="nav-bar">
+      <view class="nav-left">
+        <view class="logo-container">
+          <image class="logo-text" src="https://p0.meituan.net/hackathonqjj/31157c98c67a6f042e07e8ea3560ddf8177263.gif" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="search-btn">
+        <image class="search-icon" src="https://p0.meituan.net/hackathonqjj/157776f28d521dccfa0b4118c95164ac1456.png" mode="aspectFit"></image>
+      </view>
+    </view>
+
+    <view class="main-content">
+      <!-- 测试按钮 -->
+      <view class="test-section">
+        <button class="test-btn" bindtap="showTeamInviteModal">显示团队邀请弹窗</button>
+      </view>
+      
+      <!-- URL参数显示 -->
+      <view class="url-params" wx:if="{{urlParams.teamId || urlParams.userId}}">
+        <view class="param-item">
+          <text class="param-label">Team ID:</text>
+          <text class="param-value">{{urlParams.teamId}}</text>
+        </view>
+        <view class="param-item">
+          <text class="param-label">User ID:</text>
+          <text class="param-value">{{urlParams.userId}}</text>
+        </view>
+      </view>
+      
+      <!-- 灵感专题 -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">灵感专题</text>
+          <view class="more-btn" bindtap="viewMoreTopics">
+            <text>更多</text>
+            <text class="arrow">></text>
+          </view>
+        </view>
+        
+        <scroll-view class="topic-scroll" scroll-x="true" enhanced="true" show-scrollbar="false" >
+          <view class="topic-item">
+            <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/2f1dc53abad23b9373ae0e042892d542610565.png" mode="aspectFit"></image>
+          </view>
+          
+          <view class="topic-item">
+            <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/fe9a93058bfb4556ad509dc7efe7153a603269.png" mode="aspectFit"></image>
+          </view>
+          
+          <view class="topic-item">
+            <image class="topic-image" src="https://p0.meituan.net/hackathonqjj/fe9a93058bfb4556ad509dc7efe7153a603269.png" mode="aspectFit"></image>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- 我的行程 -->
+      <view class="section">
+        <view class="section-header">
+          <text class="section-title">我的行程</text>
+        </view>
+        
+        <view class="trip-list">
+          <!-- 法意12日游 -->
+          <view class="trip-item" bindtap="viewTripDetailMap">
+            <view class="trip-left">
+              <view class="trip-header">
+                <text class="trip-title">法意12日舒适游</text>
+              </view>
+              <view class="trip-details">
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">12天11晚</text>
+                  </view>
+                </view>
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">16个地点</text>
+                  </view>
+                </view>
+                <view class="participants">
+                  <view class="participant-avatars">
+                    <image class="participant-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+                    <image class="participant-avatar" src="https://p0.meituan.net/hackathonqjj/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
+                    <image class="participant-avatar" src="https://p0.meituan.net/hackathonqjj/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
+                    <view class="trip-status">进行中...</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="trip-right">
+              <image class="trip-scenery" src="https://p0.meituan.net/hackathonqjj/1321a7f38543ea9619ea9a91d73fc15c121844.png" mode="aspectFill"></image>
+            </view>
+          </view>
+          
+          <!-- 日本7日游 -->
+          <view class="trip-item">
+            <view class="trip-left">
+              <view class="trip-header">
+                <text class="trip-title">日本7日深度游</text>
+              </view>
+              <view class="trip-details">
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">7天6晚</text>
+                  </view>
+                </view>
+                <view class="trip-info-row">
+                  <view class="info-item">
+                    <text class="info-label">12个地点</text>
+                  </view>
+                </view>
+                <view class="participants">
+                  <view class="participant-avatars">
+                    <image class="participant-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+                    <image class="participant-avatar" src="https://p0.meituan.net/hackathonqjj/8a15ba3f510ddce04a0ffd2bbb6597cc3361.png" mode="aspectFill"></image>
+                    <view class="trip-status">进行中...</view>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="trip-right">
+              <image class="trip-scenery" src="https://p0.meituan.net/hackathonqjj/1321a7f38543ea9619ea9a91d73fc15c121844.png" mode="aspectFill"></image>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 底部导航栏 -->
+<view class="bottom-nav">
+  <view class="nav-item" bindtap="goToPlan">
+    <image class="nav-image" src="https://p0.meituan.net/hackathonqjj/57b26ae32ae1d1dd796337aac4ce67482337.png" mode="aspectFit" />
+  </view>
+  
+  <view class="nav-item active" bindtap="showAiModal">
+    <image class="nav-image-center" src="https://p0.meituan.net/hackathonqjj/33fcf7ac3b2ae0e7356f8e04dc33928e42045.png" mode="aspectFit" />
+  </view>
+  
+  <view class="nav-item" bindtap="goToLogin">
+    <image class="nav-image" src="https://p0.meituan.net/hackathonqjj/b57c1137f38dc4710c3188203622e43d4427.png" mode="aspectFit" />
+  </view>
+</view>
+
+<!-- 悬浮框遮罩层 -->
+<view class="modal-overlay" wx:if="{{showModal}}" bindtap="hideModal">
+  <!-- 创建新行程卡片 -->
+  <view class="modal-card white-card" catchtap="createNewTrip">
+    <view class="card-content">
+      <view class="card-title">创建新行程</view>
+      <view class="card-subtitle">支持多人协作、交通信息查询</view>
+    </view>
+    <view class="card-button">
+      <text class="plus-icon">+</text>
+    </view>
+  </view>
+  
+  <!-- 编辑过往方案卡片 -->
+  <view class="modal-card black-card" catchtap="editPastPlans">
+    <view class="card-content">
+      <view class="card-title">编辑过往方案</view>
+      <view class="card-subtitle">支持多人协作、交通信息查询</view>
+    </view>
+    <view class="card-button">
+      <text class="edit-icon">✏️</text>
+    </view>
+  </view>
+  
+  <!-- 关闭按钮 -->
+  <view class="close-button" bindtap="hideModal">
+    <text class="close-icon">✕</text>
+  </view>
+</view>
+
+<!-- 团队邀请弹窗 -->
+<cover-view class="invite-modal" wx:if="{{invite.open}}" bindtap="onModalBackgroundTap">
+  <cover-view class="invite-content" catchtap="stopPropagation">
+    <!-- 弹窗头部 -->
+    <cover-view class="invite-header">
+      <cover-view class="invite-title-container">
+        <text class="invite-title">🎯 团队邀请</text>
+        <text class="invite-subtitle">邀请你加入旅行团队</text>
+      </cover-view>
+      <cover-view class="close-btn" bindtap="declineInvite">
+        <text class="close-icon">✕</text>
+      </cover-view>
+    </cover-view>
+    
+    <!-- 行程信息卡片 -->
+    <cover-view class="trip-info-card">
+      <cover-view class="destination-row">
+        <cover-view class="destination-icon">🌍</cover-view>
+        <cover-view class="destination-info">
+          <text class="destination-text">{{teamInfo.place}}</text>
+          <text class="duration-text">{{teamInfo.duration}}</text>
+        </cover-view>
+      </cover-view>
+      <cover-view class="member-count-row">
+        <cover-view class="count-icon">👥</cover-view>
+        <text class="count-text">{{teamInfo.memberCount}}/{{teamInfo.maxMembers}}人</text>
+        <cover-view class="count-badge {{teamInfo.memberCount >= teamInfo.maxMembers ? 'full' : 'available'}}">
+          {{teamInfo.maxMembers - teamInfo.memberCount}}个名额
+        </cover-view>
+      </cover-view>
+    </cover-view>
+    
+    <!-- 团队成员展示 -->
+    <cover-view class="team-members-section">
+      <cover-view class="members-header">
+        <text class="members-title">团队成员</text>
+        <text class="members-count">({{teamInfo.memberCount}}人)</text>
+      </cover-view>
+      <cover-view class="avatars-container">
+        <cover-view 
+          wx:for="{{teamInfo.members}}" 
+          wx:key="id"
+          class="member-item"
+        >
+          <image 
+            class="member-avatar" 
+            src="{{item.avatarUrl}}" 
+            mode="aspectFill"
+          ></image>
+          <text class="member-name">{{item.nickName || '成员' + (index + 1)}}</text>
+          <cover-view wx:if="{{index === 0}}" class="creator-badge">团长</cover-view>
+        </cover-view>
+        
+        <!-- 空位显示 -->
+        <cover-view 
+          wx:for="{{teamInfo.maxMembers - teamInfo.memberCount}}" 
+          wx:key="*this"
+          class="member-item empty-slot"
+        >
+          <cover-view class="empty-avatar">
+            <text class="plus-icon">+</text>
+          </cover-view>
+          <text class="empty-text">待加入</text>
+        </cover-view>
+      </cover-view>
+    </cover-view>
+    
+    <!-- 状态提示 -->
+    <cover-view class="status-tips" wx:if="{{teamInfo.expired || teamInfo.full || teamInfo.alreadyIn}}">
+      <cover-view class="tip-icon">
+        <text wx:if="{{teamInfo.expired}}">⏰</text>
+        <text wx:if="{{teamInfo.full}}">🚫</text>
+        <text wx:if="{{teamInfo.alreadyIn}}">✅</text>
+      </cover-view>
+      <text class="tip-text" wx:if="{{teamInfo.expired}}">邀请已过期，无法加入</text>
+      <text class="tip-text" wx:if="{{teamInfo.full}}">团队已满员，无法加入</text>
+      <text class="tip-text" wx:if="{{teamInfo.alreadyIn}}">你已在团队中</text>
+    </cover-view>
+    
+    <!-- 操作按钮 -->
+    <cover-view class="invite-actions">
+      <button 
+        class="action-btn decline-btn" 
+        bindtap="declineInvite"
+        hover-class="btn-hover"
+      >
+        <text class="btn-icon">⏰</text>
+        <text class="btn-text">稍后再说</text>
+      </button>
+      <button 
+        class="action-btn accept-btn {{(teamInfo.expired || teamInfo.full || teamInfo.alreadyIn) ? 'disabled' : ''}}" 
+        bindtap="acceptInvite"
+        disabled="{{teamInfo.expired || teamInfo.full || teamInfo.alreadyIn}}"
+        hover-class="btn-hover"
+      >
+        <text class="btn-icon" wx:if="{{!invite.loading}}">🎯</text>
+        <text class="btn-text" wx:if="{{invite.loading}}">加入中...</text>
+        <text class="btn-text" wx:else>立即加入</text>
+      </button>
+    </cover-view>
+  </cover-view>
+</cover-view>
+
+<!-- 满员提示弹窗 -->
+<cover-view class="full-team-modal" wx:if="{{fullTeamModal.open}}" bindtap="onModalBackgroundTap">
+  <cover-view class="full-team-content" catchtap="stopPropagation">
+    <!-- 满员图标 -->
+    <cover-view class="full-team-icon">
+      <text class="full-team-emoji">😅</text>
+    </cover-view>
+    
+    <!-- 满员标题 -->
+    <cover-view class="full-team-title">
+      <text class="title-text">opps, 来晚了~</text>
+    </cover-view>
+    
+    <!-- 满员说明 -->
+    <cover-view class="full-team-description">
+      <text class="desc-text">本次成团人数已满,当前</text>
+      <text class="desc-text">人数已超上限!</text>
+    </cover-view>
+    
+    <!-- 关闭按钮 -->
+    <cover-view class="full-team-close" bindtap="closeFullTeamModal">
+      <text class="full-team-close-icon">✕</text>
+    </cover-view>
+  </cover-view>
+</cover-view>
+
+<!-- 团队邀请弹窗 -->
+<view class="team-invite-modal" wx:if="{{teamInviteModal.show}}" bindtap="hideTeamInviteModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <!-- 头像区域 -->
+    <view class="avatars-section">
+      <view class="avatar-item">
+        <image class="avatar-image" src="{{teamInviteModal.initiatorAvatar}}" mode="aspectFill"></image>
+        <view class="avatar-label">发起人</view>
+      </view>
+      <view class="avatar-connector"></view>
+      <view class="avatar-item">
+        <image wx:if="{{hasUserInfo && userInfo.avatarUrl}}" class="avatar-image" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="avatar-placeholder">+</view>
+        <view class="avatar-label">队友</view>
+      </view>
+    </view>
+    
+    <!-- 内容区域 -->
+    <view class="content-section">
+      <view class="team-title">{{teamInviteModal.teamName}}</view>
+      <view class="invite-text">邀请你加入[{{teamInviteModal.tripInfo}}] 攻略团队</view>
+      <view class="action-text">快去生成攻略吧~</view>
+      
+      <!-- API状态显示 -->
+      <view class="api-status" wx:if="{{urlParams.teamId}}">
+        <view class="status-loading" wx:if="{{apiStatus.loading}}">
+          <text class="loading-text">检查加入状态中...</text>
+        </view>
+        <view class="status-success" wx:elif="{{apiStatus.canJoin}}">
+          <text class="success-text">✓ 可以加入团队</text>
+        </view>
+        <view class="status-error" wx:elif="{{apiStatus.error}}">
+          <text class="error-text">✗ {{apiStatus.error}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 按钮区域 -->
+    <view class="buttons-section">
+      <button class="accept-btn" bindtap="acceptInvite">
+        <text class="btn-icon">✓</text>
+        <text class="btn-text">加入</text>
+      </button>
+      <button class="reject-btn" bindtap="rejectInvite">
+        <text class="btn-text">拒绝</text>
+      </button>
+    </view>
+  </view>
+  
+  <!-- 关闭按钮 -->
+  <view class="close-icon" bindtap="hideTeamInviteModal">✕</view>
+</view>

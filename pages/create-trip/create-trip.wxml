@@ -73,14 +73,18 @@
           <image wx:if="{{userAvatar}}" src="{{userAvatar}}" class="avatar-image" />
           <view wx:else class="avatar-placeholder">👤</view>
         </view>
-        <view class="add-friends">
-          <view class="add-icon">+</view>
-          <text class="add-text">+{{remainingCompanions}}</text>
+        <!-- 显示搭子头像 -->
+        <view wx:for="{{companionAvatars}}" wx:key="index" class="companion-avatar">
+          <image wx:if="{{item.avatarUrl}}" src="{{item.avatarUrl}}" class="avatar-image" />
+          <view wx:else class="avatar-placeholder">{{item.placeholder}}</view>
         </view>
       </view>
       <view class="share-buttons">
-        <button class="share-wechat-btn" open-type="share">分享微信群</button>
-        <button class="do-myself-btn" bindtap="doItMyself">
+        <button class="share-wechat-btn" open-type="share" wx:if="{{companionCount > 0}}">分享微信群</button>
+        <button class="do-myself-btn" bindtap="doItMyself" wx:if="{{companionCount > 0 && hasShared}}">
+          <text class="do-myself-text">自己搞定</text>
+        </button>
+        <button class="do-myself-btn" bindtap="doItMyself" wx:if="{{companionCount == 0}}">
           <text class="do-myself-text">自己搞定</text>
         </button>
       </view>
