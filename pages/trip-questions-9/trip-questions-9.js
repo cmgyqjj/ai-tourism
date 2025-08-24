@@ -5,8 +5,8 @@ Page({
     pageTitle: '',
     
     // 当前步骤
-    currentStep: 10,
-    totalSteps: 13,
+    currentStep: 8,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '每日就餐你最在意的是?',
+      title: '每日就餐你最在意的是? (单选)',
       options: [
         { id: 1, text: '本地特色美食 (评分优先)', icon: '', selected: false },
         { id: 2, text: '口味不挑 (距离景点/交通点近/便捷优先)', icon: '', selected: false },
@@ -86,12 +86,15 @@ Page({
     if (destination && duration && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
-      if (companionCount === '1') {
+      const companionCountNum = parseInt(companionCount) || 0
+      const totalPeople = companionCountNum + 1 // 搭子数量 + 自己
+      
+      if (totalPeople === 1) {
         companionText = '1人'
-      } else if (companionCount === '2') {
+      } else if (totalPeople === 2) {
         companionText = '2人组'
       } else {
-        companionText = `${companionCount}人组`
+        companionText = `${totalPeople}人组`
       }
       
       // 格式化时长显示，只显示天数

@@ -5,8 +5,8 @@ Page({
     pageTitle: '',
     
     // 当前步骤
-    currentStep: 13,
-    totalSteps: 13,
+    currentStep: 11,
+    totalSteps: 11,
     
     // 行程信息
     tripInfo: {
@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '是否有需要特别照顾的情况? (多选)',
+      title: '是否有需要特别照顾的情况?(多选)',
       options: [
         { id: 1, text: '同行有儿童 (需亲子设施)', icon: '', selected: false },
         { id: 2, text: '同行有老人/行动不便者 (需无障碍通道)', icon: '', selected: false },
@@ -90,12 +90,15 @@ Page({
     if (destination && duration && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
-      if (companionCount === '1') {
+      const companionCountNum = parseInt(companionCount) || 0
+      const totalPeople = companionCountNum + 1 // 搭子数量 + 自己
+      
+      if (totalPeople === 1) {
         companionText = '1人'
-      } else if (companionCount === '2') {
+      } else if (totalPeople === 2) {
         companionText = '2人组'
       } else {
-        companionText = `${companionCount}人组`
+        companionText = `${totalPeople}人组`
       }
       
       // 格式化时长显示，只显示天数
@@ -299,39 +302,17 @@ Page({
     // 动态收集所有缓存的问题和答案
     const allAnswers = {}
     
-    // 遍历所有可能的问题页面缓存键
-    for (let i = 1; i <= 12; i++) {
+    // 定义新的问题编号顺序（跳过6和7）
+    const questionNumbers = [1, 2, 3, 3.5, 4, 5, 8, 9, 10, 11, 12]
+    
+    for (let questionNumber of questionNumbers) {
       let cacheKey = ''
-      if (i === 3) {
+      
+      if (questionNumber === 3.5) {
         // 处理3.5的情况
         cacheKey = 'tripQuestions3_5SelectedOptions'
-        const answers = wx.getStorageSync(cacheKey) || []
-        if (answers.length > 0) {
-          const answerTexts = answers.map(answer => {
-            if (typeof answer === 'object' && answer.text) {
-              return answer.text
-            } else if (typeof answer === 'string') {
-              return answer
-            } else if (typeof answer === 'object') {
-              return answer.content || answer.name || answer.value || JSON.stringify(answer)
-            } else {
-              return String(answer)
-            }
-          }).join('、')
-          
-          const questionTitle = this.getQuestionTitle(3.5)
-          allAnswers[questionTitle] = answerTexts
-          console.log(`${questionTitle}的答案:`, answerTexts)
-        } else {
-          const questionTitle = this.getQuestionTitle(3.5)
-          allAnswers[questionTitle] = '未回答'
-          console.log(`${questionTitle}: 未回答`)
-        }
-        
-        // 处理第3个问题
-        cacheKey = 'tripQuestions3SelectedOptions'
       } else {
-        cacheKey = `tripQuestions${i}SelectedOptions`
+        cacheKey = `tripQuestions${questionNumber}SelectedOptions`
       }
       
       const answers = wx.getStorageSync(cacheKey) || []
@@ -354,14 +335,14 @@ Page({
           else {
             return String(answer)
           }
-        }).join('、')
+        }).join('#') // 使用#进行分割拼接
         
         // 使用问题页面的实际标题作为键
-        const questionTitle = this.getQuestionTitle(i)
+        const questionTitle = this.getQuestionTitle(questionNumber)
         allAnswers[questionTitle] = answerTexts
         console.log(`${questionTitle}的答案:`, answerTexts)
       } else {
-        const questionTitle = this.getQuestionTitle(i)
+        const questionTitle = this.getQuestionTitle(questionNumber)
         allAnswers[questionTitle] = '未回答'
         console.log(`${questionTitle}: 未回答`)
       }
@@ -375,19 +356,17 @@ Page({
    */
   getQuestionTitle(questionNumber) {
     const titles = {
-      1: '你和本次同行人的关系（可多选）',
-      2: '你的旅行性格标签是? (可多选)',
-      3: '本次以哪种交通方式为主? (多选)',
-      3.5: '宝，你们想要什么主题的旅行？',
+      1: '你和本次同行人的关系?(多选)',
+      2: 'Pick你的旅行偏好 (多选)',
+      3: 'Pick你的交通方式 (多选)',
+      3.5: '希望本次是什么旅行主题? (多选)',
       4: '本次旅行有哪些是你个人特别想去的「人生必去景点」?(多选)',
       5: '以下哪些体验会严重影响你的旅行心情? (Ai将优化行程,避免踩雷)',
-      6: '住宿你最关注的点 (可多选):',
-      7: '希望如何安排住宿预算?',
-      8: '宝，你们的住宿预算范围是？',
-      9: '每日就餐你最在意的是?',
-      10: '在外每餐预算是?',
-      11: '你的每日活动倾向: (单选)',
-      12: '是否有需要特别照顾的情况？'
+      8: '住宿1晚你接受的价格区间是? ',
+      9: '每日就餐你最在意的是? (单选)',
+      10: '在外每餐预算是? (单选)',
+      11: '你的每日活动倾向?(单选)',
+      12: '是否有需要特别照顾的情况?(多选)'
     }
     return titles[questionNumber] || `问题${questionNumber}`
   },

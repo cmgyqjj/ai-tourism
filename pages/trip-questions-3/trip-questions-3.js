@@ -24,7 +24,7 @@ Page({
     
     // 问题数据
     question: {
-      title: '本次以哪种交通方式为主? (多选)',
+      title: 'Pick你的交通方式 (多选)',
       options: [
         { id: 1, text: '飞机', icon: '✈️', selected: false },
         { id: 2, text: '高铁/火车', icon: '🚄', selected: false },
@@ -90,12 +90,15 @@ Page({
     if (destination && duration && companionCount) {
       // 格式化搭子数量显示
       let companionText = ''
-      if (companionCount === '1') {
+      const companionCountNum = parseInt(companionCount) || 0
+      const totalPeople = companionCountNum + 1 // 搭子数量 + 自己
+      
+      if (totalPeople === 1) {
         companionText = '1人'
-      } else if (companionCount === '2') {
+      } else if (totalPeople === 2) {
         companionText = '2人组'
       } else {
-        companionText = `${companionCount}人组`
+        companionText = `${totalPeople}人组`
       }
       
       // 格式化时长显示，只显示天数
